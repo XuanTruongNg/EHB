@@ -1,0 +1,54 @@
+import { Box, Button } from '@mui/material';
+import { buttonText } from 'core/constant/button';
+import logoImage from '../assets/img/TPP-logo.png';
+
+const AuthLogin = () => {
+  return (
+    <Box
+      sx={{
+        width: '100%',
+        height: '100vh',
+        backgroundColor: '#003676',
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+      }}
+    >
+      <Box
+        sx={{
+          display: 'flex',
+          flexDirection: 'column',
+          rowGap: '64px',
+          backgroundColor: '#fff',
+          padding: '60px 180px',
+          borderRadius: '10px',
+        }}
+      >
+        <Box
+          component="img"
+          alt="company-logo"
+          src={logoImage}
+          sx={{ maxWidth: 400, maxHeight: 116 }}
+        />
+        <Button
+          variant="contained"
+          sx={{
+            fontWeight: 600,
+            fontSize: '20px',
+            height: 80,
+            borderRadius: '10px',
+            backgroundColor: '#34C86F',
+            ':hover': {
+              backgroundColor: '#34C86F',
+              opacity: 0.8,
+            },
+          }}
+        >
+          {buttonText.LOGIN_TPP}
+        </Button>
+      </Box>
+    </Box>
+  );
+};
+
+export default AuthLogin;

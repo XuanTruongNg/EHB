@@ -1,11 +1,11 @@
 import { Navigate } from 'react-router-dom';
 import Demo from 'pages/Demo';
 import Home from 'pages/Home';
-import Login from 'pages/Login';
 import NotFoundPage from 'pages/NotFoundPage';
 import EmptyLayout from 'core/layout/EmptyLayout';
 import UnAuthGuard from 'core/guard/UnAuth';
 import AuthGuard from 'core/guard/Auth';
+import AuthLogin from 'pages/AuthLogin';
 
 export interface SingleRoute {
   path?: string;
@@ -22,10 +22,10 @@ export const ROUTES: SingleRoute[] = [
     component: <EmptyLayout />,
     guard: <UnAuthGuard />,
     children: [
-      { path: '', component: <Navigate to="/404-not-found" /> },
+      { path: '', component: <Navigate to="/404-not-found" replace={true} /> },
       {
         path: 'login',
-        component: <Login />,
+        component: <AuthLogin />,
       },
     ],
   },
@@ -38,6 +38,6 @@ export const ROUTES: SingleRoute[] = [
   { path: '/404-not-found', component: <NotFoundPage /> },
   {
     path: '*',
-    component: <Navigate to="/404-not-found" />,
+    component: <Navigate to="/404-not-found" replace={true} />,
   },
 ];
