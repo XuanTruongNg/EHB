@@ -10,3 +10,12 @@ export const getTokenApi = (
     code,
   });
 };
+
+export const getRefreshTokenApi = (
+  refreshToken: string
+): ApiResponse<TokenResponse> | null => {
+  const url = '/update-token';
+  return http.post(url, {
+    refresh_token: refreshToken,
+  });
+};

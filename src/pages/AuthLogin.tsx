@@ -30,7 +30,7 @@ const AuthLogin = () => {
         <Box
           component="img"
           alt="company-logo"
-          src="/asset/img/TPP-logo.png"
+          src="/asset/images/TPP-logo.png"
           sx={{ maxWidth: 400, maxHeight: 116 }}
         />
         <Button

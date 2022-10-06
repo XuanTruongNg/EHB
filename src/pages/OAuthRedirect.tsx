@@ -14,9 +14,10 @@ const OAuthRedirect: React.FunctionComponent<CasdoorRedirectProps> = () => {
     const code = params.get('code');
     if (code) {
       getTokenApi(code)?.then((res) => {
+        console.log('res', res);
         saveAuthKeyIntoLocalStorage(res.data);
         dispatch(userActions.setToken(res.data));
-        navigate('/home');
+        navigate('/');
       });
     }
   }, [dispatch, navigate, params]);

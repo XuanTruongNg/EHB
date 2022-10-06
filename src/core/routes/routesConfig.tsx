@@ -19,7 +19,7 @@ export interface SingleRoute {
 // In routes, that should have component when path is not null
 export const ROUTES: SingleRoute[] = [
   { path: '/', component: <Home /> },
-  { path: '/casdoor-redirect', component: <OAuthRedirect /> },
+  { path: '/oauth-redirect', component: <OAuthRedirect /> },
   {
     path: '/auth',
     component: <EmptyLayout />,
