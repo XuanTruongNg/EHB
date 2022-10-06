@@ -25,3 +25,4 @@ yarn-error.log*
 
 # additional files
 **/**.env**
+.vscode/**

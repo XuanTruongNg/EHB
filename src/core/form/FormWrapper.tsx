@@ -1,9 +1,9 @@
 import { FieldValues, FormProvider, UseFormReturn } from 'react-hook-form';
-import { CustomFC } from '../interface/component';
 
-interface FormWrapperProps<T extends FieldValues> extends CustomFC {
+interface FormWrapperProps<T extends FieldValues> {
   methods: UseFormReturn<T>;
   onSubmit: (data: T) => void;
+  children: React.ReactNode;
 }
 
 const FormWrapper = <T extends FieldValues>({

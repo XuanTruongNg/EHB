@@ -1,8 +1,12 @@
 import { Box, Button } from '@mui/material';
 import { buttonText } from 'core/constant/button';
+import { getLoginCasdoorUrl } from 'util/url';
 import logoImage from '../assets/img/TPP-logo.png';
 
 const AuthLogin = () => {
+  const handleLogin = () => {
+    window.location.href = getLoginCasdoorUrl();
+  };
   return (
     <Box
       sx={{
@@ -43,6 +47,7 @@ const AuthLogin = () => {
               opacity: 0.8,
             },
           }}
+          onClick={handleLogin}
         >
           {buttonText.LOGIN_TPP}
         </Button>

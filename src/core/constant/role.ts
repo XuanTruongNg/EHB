@@ -1,0 +1,1 @@
+export type role = 'ROLE_ADMIN' | 'ROLE_EMPLOYEE' | 'ROLE_PROJECT_MANAGER';

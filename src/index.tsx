@@ -9,10 +9,13 @@ import { store } from './core/store';
 import './index.css';
 import { ThemeProvider } from '@mui/material';
 import theme from './core/config/MUI/index';
+import { injectStore } from 'core/api';
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
 );
+
+injectStore(store);
 
 const queryClient = new QueryClient();
 

@@ -6,6 +6,7 @@ import EmptyLayout from 'core/layout/EmptyLayout';
 import UnAuthGuard from 'core/guard/UnAuth';
 import AuthGuard from 'core/guard/Auth';
 import AuthLogin from 'pages/AuthLogin';
+import OAuthRedirect from 'pages/OAuthRedirect';
 
 export interface SingleRoute {
   path?: string;
@@ -17,6 +18,7 @@ export interface SingleRoute {
 // In routes, that should have component when path is not null
 export const ROUTES: SingleRoute[] = [
   { path: '/', component: <Home /> },
+  { path: '/casdoor-redirect', component: <OAuthRedirect /> },
   {
     path: '/auth',
     component: <EmptyLayout />,

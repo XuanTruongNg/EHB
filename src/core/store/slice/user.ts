@@ -1,11 +1,11 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { getAuthKeyFromLocalStorage } from 'util/';
 import { UserState } from '../../interface/redux';
 
 const initialState: UserState = {
   isTriedLogin: false,
-  user: {
-    id: '',
-  },
+  user: null,
+  token: getAuthKeyFromLocalStorage(),
 };
 
 const reducer = createSlice({
@@ -22,8 +22,10 @@ const reducer = createSlice({
     setUser: (state, { payload }: PayloadAction<UserState['user']>) => {
       state.user = payload;
     },
+    setToken: (state, { payload }: PayloadAction<UserState['token']>) => {
+      state.token = payload;
+    },
   },
-  extraReducers: (builder) => {},
 });
 export const userActions = {
   ...reducer.actions,

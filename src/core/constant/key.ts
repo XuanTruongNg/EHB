@@ -1,3 +1,5 @@
 export const KEYS = Object.freeze({
-  AUTH_KEY: 'authorization',
+  HEADER_CASDOOR: 'x-casdoor-client-id',
+  HEADER_AUTHORIZATION: 'authorization',
+  AUTH_STORAGE: 'auth_storage',
 });
