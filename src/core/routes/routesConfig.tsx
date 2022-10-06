@@ -4,8 +4,9 @@ import Home from 'pages/Home';
 import NotFoundPage from 'pages/NotFoundPage';
 import EmptyLayout from 'core/layout/EmptyLayout';
 import UnAuthGuard from 'core/guard/UnAuth';
-import AuthGuard from 'core/guard/Auth';
 import AuthLogin from 'pages/AuthLogin';
+import Layout from 'core/layout/Layout';
+import AuthGuard from 'core/guard/Auth';
 import OAuthRedirect from 'pages/OAuthRedirect';
 
 export interface SingleRoute {
@@ -33,7 +34,25 @@ export const ROUTES: SingleRoute[] = [
   },
   {
     path: '/dashboard',
-    component: <EmptyLayout />,
+    component: <Layout />,
+    guard: <AuthGuard />,
+    children: [{ path: '', component: <Demo /> }],
+  },
+  {
+    path: '/project',
+    component: <Layout />,
+    guard: <AuthGuard />,
+    children: [{ path: '', component: <Demo /> }],
+  },
+  {
+    path: '/resource',
+    component: <Layout />,
+    guard: <AuthGuard />,
+    children: [{ path: '', component: <Demo /> }],
+  },
+  {
+    path: '/time-sheet',
+    component: <Layout />,
     guard: <AuthGuard />,
     children: [{ path: '', component: <Demo /> }],
   },

@@ -1,7 +1,6 @@
 import { Box, Button } from '@mui/material';
 import { buttonText } from 'core/constant/button';
 import { getLoginCasdoorUrl } from 'util/url';
-import logoImage from '../assets/img/TPP-logo.png';
 
 const AuthLogin = () => {
   const handleLogin = () => {
@@ -12,7 +11,7 @@ const AuthLogin = () => {
       sx={{
         width: '100%',
         height: '100vh',
-        backgroundColor: '#003676',
+        backgroundColor: 'primary.main',
         display: 'flex',
         justifyContent: 'center',
         alignItems: 'center',
@@ -31,7 +30,7 @@ const AuthLogin = () => {
         <Box
           component="img"
           alt="company-logo"
-          src={logoImage}
+          src="/asset/img/TPP-logo.png"
           sx={{ maxWidth: 400, maxHeight: 116 }}
         />
         <Button
@@ -41,9 +40,9 @@ const AuthLogin = () => {
             fontSize: '20px',
             height: 80,
             borderRadius: '10px',
-            backgroundColor: '#34C86F',
+            backgroundColor: 'secondary.main',
             ':hover': {
-              backgroundColor: '#34C86F',
+              backgroundColor: 'secondary.main',
               opacity: 0.8,
             },
           }}
