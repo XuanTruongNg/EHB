@@ -23,3 +23,13 @@ export const selectUserRoleNames = createSelector(selectUserRole, (roles) => {
   if (!roles) return null;
   return roles.map((r) => r.name);
 });
+// TODO: check expiration of token in future
+export const selectIsAuthenticated = createSelector(
+  selectUserStore,
+  (userStore) => {
+    const access_token = userStore.token?.access_token;
+
+    if (!access_token) return null;
+    return access_token;
+  }
+);

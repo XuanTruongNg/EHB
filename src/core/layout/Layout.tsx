@@ -1,37 +1,42 @@
+import AddCircleOutlineOutlinedIcon from '@mui/icons-material/AddCircleOutlineOutlined';
+import PendingActionsRoundedIcon from '@mui/icons-material/PendingActionsRounded';
+import PersonAddOutlinedIcon from '@mui/icons-material/PersonAddOutlined';
 import { Grid } from '@mui/material';
+import { ReactComponent as ChartIcon } from 'common/icon/chart-icon.svg';
 import Header from 'components/Header';
 import Sidebar from 'components/Sidebar';
+import {
+  ROLE_ADMIN,
+  ROLE_EMPLOYEE,
+  ROLE_PROJECT_MANAGER,
+} from 'core/constant/role';
+import { NavigationItem } from 'core/interface/navigation';
 import { useMemo } from 'react';
 import { Outlet } from 'react-router-dom';
-import PersonAddOutlinedIcon from '@mui/icons-material/PersonAddOutlined';
-import AddCircleOutlineOutlinedIcon from '@mui/icons-material/AddCircleOutlineOutlined';
-import { ReactComponent as ChartIcon } from 'common/icon/chart-icon.svg';
-import PendingActionsRoundedIcon from '@mui/icons-material/PendingActionsRounded';
-import { NavigationItem } from 'core/interface/navigation';
 
 const Layout = () => {
   const NavigationItem: NavigationItem[] = useMemo(
     () => [
       {
-        acceptRoles: ['PM'],
+        acceptRoles: [ROLE_PROJECT_MANAGER, ROLE_ADMIN],
         icon: <ChartIcon />,
         text: 'Dashboard',
         path: '/dashboard',
       },
       {
-        acceptRoles: ['PM'],
+        acceptRoles: [ROLE_PROJECT_MANAGER, ROLE_ADMIN],
         icon: <AddCircleOutlineOutlinedIcon />,
         text: 'Projects',
         path: '/project',
       },
       {
-        acceptRoles: ['PM'],
+        acceptRoles: [ROLE_PROJECT_MANAGER, ROLE_ADMIN],
         icon: <PersonAddOutlinedIcon />,
         text: 'Resources',
         path: '/resource',
       },
       {
-        acceptRoles: ['PM'],
+        acceptRoles: [ROLE_ADMIN, ROLE_EMPLOYEE],
         icon: <PendingActionsRoundedIcon />,
         text: 'Timesheet',
         path: '/time-sheet',

@@ -1,5 +1,7 @@
+import { Role } from 'core/interface/role';
+
 export interface NavigationItem {
-  acceptRoles: string[];
+  acceptRoles: Role[];
   icon: JSX.Element;
   text: string;
   path: string;

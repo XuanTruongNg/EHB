@@ -1,5 +1,7 @@
 import { Box, Typography } from '@mui/material';
 import { NavigationItem } from 'core/interface/navigation';
+import { useAppSelector } from 'core/store';
+import { selectUserRoleNames } from 'core/store/selector';
 import { FC } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 
@@ -10,6 +12,7 @@ interface Props {
 const Header: FC<Props> = ({ navigationItems }) => {
   const navigate = useNavigate();
   const router = useLocation();
+  const userRoles = useAppSelector(selectUserRoleNames);
   return (
     <Box
       sx={{
@@ -22,25 +25,31 @@ const Header: FC<Props> = ({ navigationItems }) => {
       }}
     >
       <Box sx={{ display: 'flex', columnGap: '64px' }}>
-        {navigationItems.map((item, index) => {
-          const isSelected = router.pathname === item.path;
-          return (
-            <Typography
-              key={index}
-              sx={{
-                color: isSelected ? 'pink' : 'common.white',
-                fontSize: 20,
-                fontWeight: 600,
-                cursor: 'pointer',
-              }}
-              onClick={() => {
-                navigate(item.path, { replace: true });
-              }}
-            >
-              {item.text}
-            </Typography>
-          );
-        })}
+        {navigationItems
+          .filter((item) =>
+            item.acceptRoles.some((acceptRole) =>
+              userRoles?.includes(acceptRole)
+            )
+          )
+          .map((item) => {
+            const isSelected = router.pathname === item.path;
+            return (
+              <Typography
+                key={item.text}
+                sx={{
+                  color: isSelected ? 'pink' : 'common.white',
+                  fontSize: 20,
+                  fontWeight: 600,
+                  cursor: 'pointer',
+                }}
+                onClick={() => {
+                  navigate(item.path);
+                }}
+              >
+                {item.text}
+              </Typography>
+            );
+          })}
       </Box>
       <Box
         sx={{
