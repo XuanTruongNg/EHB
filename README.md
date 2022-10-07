@@ -1,20 +1,31 @@
-# Introduction 
-TODO: Give a short introduction of your project. Let this section explain the objectives or the motivation behind this project. 
+# 👨🏽‍💻 RMS portal
 
-# Getting Started
-TODO: Guide users through getting your code up and running on their own system. In this section you can talk about:
-1.	Installation process
-2.	Software dependencies
-3.	Latest releases
-4.	API references
+## 📌 Features
 
-# Build and Test
-TODO: Describe and show how to build your code and run the tests. 
+This project is updated with:
 
-# Contribute
-TODO: Explain how other users and developers can contribute to make your code better. 
+- [React 18x](https://reactjs.org)
+- [Antd 5x](https://ant.design/)
+- React Query
+- Redux
+- Axios
 
-If you want to learn more about creating good readme files then refer the following [guidelines](https://docs.microsoft.com/en-us/azure/devops/repos/git/create-a-readme?view=azure-devops). You can also seek inspiration from the below readme files:
-- [ASP.NET Core](https://github.com/aspnet/Home)
-- [Visual Studio Code](https://github.com/Microsoft/vscode)
-- [Chakra Core](https://github.com/Microsoft/ChakraCore)
+## 🧐 Getting Started
+
+1. Check if your [Node.js](https://nodejs.org/) version is >= 16.
+2. Clone this repository.
+3. Create an env setting `cp env-example .env`.
+4. You can use `npm` or `yarn` for package manager. ex:
+
+- NPM
+  - Run `npm install` to install the dependencies.
+  - Run `npm start` for development.
+  - Run `npm run build` for build.
+
+Open http://localhost:3000 with your browser to see the result.
+
+## CORS issues:
+
+- if you run into CORS issue in development, follow this instruction:
+  - add "proxy" : "gateway url here" in package.json
+  - go to src/core/api/http.ts and remove baseURL property on axios.create function
