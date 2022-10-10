@@ -1,69 +1,72 @@
-import AddCircleOutlineOutlinedIcon from '@mui/icons-material/AddCircleOutlineOutlined';
-import PendingActionsRoundedIcon from '@mui/icons-material/PendingActionsRounded';
+import { Grid, Box } from '@mui/material';
+import NavBar from 'core/layout/NavBar';
+import Sidebar from 'core/layout/Sidebar';
+import { useMemo } from 'react';
+import { Outlet } from 'react-router-dom';
 import PersonAddOutlinedIcon from '@mui/icons-material/PersonAddOutlined';
-import { Grid } from '@mui/material';
+import AddCircleOutlineOutlinedIcon from '@mui/icons-material/AddCircleOutlineOutlined';
 import { ReactComponent as ChartIcon } from 'common/icon/chart-icon.svg';
-import Header from 'components/Header';
-import Sidebar from 'components/Sidebar';
+import PendingActionsRoundedIcon from '@mui/icons-material/PendingActionsRounded';
+import { NavigationItem } from 'core/interface/navigation';
 import {
   ROLE_ADMIN,
   ROLE_EMPLOYEE,
   ROLE_PROJECT_MANAGER,
 } from 'core/constant/role';
-import { NavigationItem } from 'core/interface/navigation';
-import { useMemo } from 'react';
-import { Outlet } from 'react-router-dom';
-
+import { DASHBOARD, PROJECT, RESOURCE, TIME_SHEET } from 'core/constant';
 const Layout = () => {
-  const NavigationItem: NavigationItem[] = useMemo(
+  const navigationItem: NavigationItem[] = useMemo(
     () => [
       {
         acceptRoles: [ROLE_PROJECT_MANAGER, ROLE_ADMIN],
         icon: <ChartIcon />,
         text: 'Dashboard',
-        path: '/dashboard',
+        path: DASHBOARD,
       },
       {
         acceptRoles: [ROLE_PROJECT_MANAGER, ROLE_ADMIN],
         icon: <AddCircleOutlineOutlinedIcon />,
         text: 'Projects',
-        path: '/project',
+        path: PROJECT,
       },
       {
         acceptRoles: [ROLE_PROJECT_MANAGER, ROLE_ADMIN],
         icon: <PersonAddOutlinedIcon />,
         text: 'Resources',
-        path: '/resource',
+        path: RESOURCE,
       },
       {
         acceptRoles: [ROLE_ADMIN, ROLE_EMPLOYEE],
         icon: <PendingActionsRoundedIcon />,
         text: 'Timesheet',
-        path: '/time-sheet',
+        path: TIME_SHEET,
       },
     ],
     []
   );
   return (
-    <>
-      <Header navigationItems={NavigationItem} />
-      <Grid container sx={{ minHeight: '100vh', overflow: 'auto' }}>
+    <Box sx={{ display: 'flex', flexDirection: 'column', height: '100vh' }}>
+      <NavBar navigationItems={navigationItem} />
+
+      <Grid container sx={{ overflow: 'auto', flex: 1 }}>
         <Grid
           xs="auto"
+          item
           sx={{
-            borderRight: '1px solid gray',
+            borderRight: '1px solid #C1C1C1',
           }}
         >
-          <Sidebar navigationItems={NavigationItem} />
+          <Sidebar navigationItems={navigationItem} />
         </Grid>
         <Grid
           xs
+          item
           sx={{ display: 'flex', flexDirection: 'column', height: '100%' }}
         >
           <Outlet />
         </Grid>
       </Grid>
-    </>
+    </Box>
   );
 };
 

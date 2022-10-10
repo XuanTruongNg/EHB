@@ -9,7 +9,7 @@ interface Props {
   navigationItems: NavigationItem[];
 }
 
-const Header: FC<Props> = ({ navigationItems }) => {
+const NavBar: FC<Props> = ({ navigationItems }) => {
   const navigate = useNavigate();
   const router = useLocation();
   const userRoles = useAppSelector(selectUserRoleNames);
@@ -20,7 +20,8 @@ const Header: FC<Props> = ({ navigationItems }) => {
         justifyContent: 'space-between',
         alignItems: 'center',
         px: '32px',
-        height: 72,
+        width: '100%',
+        height: 60,
         backgroundColor: 'primary.main',
       }}
     >
@@ -38,7 +39,6 @@ const Header: FC<Props> = ({ navigationItems }) => {
                 key={item.text}
                 sx={{
                   color: isSelected ? 'pink' : 'common.white',
-                  fontSize: 20,
                   fontWeight: 600,
                   cursor: 'pointer',
                 }}
@@ -70,4 +70,4 @@ const Header: FC<Props> = ({ navigationItems }) => {
   );
 };
 
-export default Header;
+export default NavBar;

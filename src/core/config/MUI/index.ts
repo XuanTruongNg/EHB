@@ -7,13 +7,28 @@ export const theme = createTheme({
     },
     secondary: {
       main: '#35CA4D',
+      light: '#BBB8B8',
     },
     common: {
       black: '#000',
       white: '#fff',
     },
   },
-  components: {},
+  components: {
+    MuiButton: {
+      defaultProps: {
+        variant: 'contained',
+      },
+      styleOverrides: {
+        sizeMedium: {
+          width: 170,
+          height: 40,
+          borderRadius: '5px',
+          fontWeight: 600,
+        },
+      },
+    },
+  },
   typography: {
     fontFamily: ['Inter', 'sans-serif'].join(','),
     fontWeightBold: '500',

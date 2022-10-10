@@ -36,6 +36,7 @@ const AuthLogin = () => {
         <Button
           variant="contained"
           sx={{
+            width: '100%',
             fontWeight: 600,
             fontSize: '20px',
             height: 80,

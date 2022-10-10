@@ -9,9 +9,19 @@ import EmptyLayout from 'core/layout/EmptyLayout';
 import Layout from 'core/layout/Layout';
 import AuthLogin from 'pages/AuthLogin';
 import Demo from 'pages/Demo';
+import Resource from 'pages/Resource';
 import NotFoundPage from 'pages/NotFoundPage';
 import OAuthRedirect from 'pages/OAuthRedirect';
 import { Navigate } from 'react-router-dom';
+import {
+  AUTH,
+  NOT_FOUND_PAGE,
+  LOGIN,
+  DASHBOARD,
+  PROJECT,
+  RESOURCE,
+  TIME_SHEET,
+} from 'core/constant';
 
 export interface SingleRoute {
   path?: string;
@@ -29,44 +39,44 @@ export const ROUTES: SingleRoute[] = [
     component: <OAuthRedirect />,
   },
   {
-    path: '/auth',
+    path: AUTH,
     component: <EmptyLayout />,
     guard: <UnAuthGuard />,
     children: [
-      { path: '', component: <Navigate to="/404-not-found" replace={true} /> },
+      { path: '', component: <Navigate to={NOT_FOUND_PAGE} replace={true} /> },
       {
-        path: 'login',
+        path: LOGIN,
         component: <AuthLogin />,
       },
     ],
   },
   {
-    path: '/dashboard',
+    path: DASHBOARD,
     component: <Layout />,
     guard: <AuthGuard acceptRoles={[ROLE_PROJECT_MANAGER, ROLE_ADMIN]} />,
     children: [{ path: '', component: <Demo /> }],
   },
   {
-    path: '/project',
+    path: PROJECT,
     component: <Layout />,
     guard: <AuthGuard acceptRoles={[ROLE_PROJECT_MANAGER, ROLE_ADMIN]} />,
     children: [{ path: '', component: <Demo /> }],
   },
   {
-    path: '/resource',
+    path: RESOURCE,
     component: <Layout />,
     guard: <AuthGuard acceptRoles={[ROLE_PROJECT_MANAGER, ROLE_ADMIN]} />,
-    children: [{ path: '', component: <Demo /> }],
+    children: [{ path: '', component: <Resource /> }],
   },
   {
-    path: '/time-sheet',
+    path: TIME_SHEET,
     component: <Layout />,
     guard: <AuthGuard acceptRoles={[ROLE_ADMIN, ROLE_EMPLOYEE]} />,
     children: [{ path: '', component: <Demo /> }],
   },
-  { path: '/404-not-found', component: <NotFoundPage /> },
+  { path: NOT_FOUND_PAGE, component: <NotFoundPage /> },
   {
     path: '*',
-    component: <Navigate to="/404-not-found" replace={true} />,
+    component: <Navigate to={NOT_FOUND_PAGE} replace={true} />,
   },
 ];
