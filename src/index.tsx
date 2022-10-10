@@ -17,16 +17,24 @@ const root = ReactDOM.createRoot(
 
 injectStore(store);
 
-const queryClient = new QueryClient();
+export const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      refetchOnWindowFocus: false,
+    },
+  },
+});
 
 root.render(
-  <ThemeProvider theme={theme}>
-    <BrowserRouter>
-      <QueryClientProvider client={queryClient}>
-        <Provider store={store}>
-          <App />
-        </Provider>
-      </QueryClientProvider>
-    </BrowserRouter>
-  </ThemeProvider>
+  <React.StrictMode>
+    <ThemeProvider theme={theme}>
+      <BrowserRouter>
+        <QueryClientProvider client={queryClient}>
+          <Provider store={store}>
+            <App />
+          </Provider>
+        </QueryClientProvider>
+      </BrowserRouter>
+    </ThemeProvider>
+  </React.StrictMode>
 );

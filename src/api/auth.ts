@@ -4,7 +4,7 @@ import { TokenResponse } from 'core/interface/redux';
 
 export const getTokenApi = (
   code: string
-): ApiResponse<TokenResponse> | null => {
+): ApiResponse<TokenResponse> => {
   const url = '/get-token';
   return http.post(url, {
     code,
@@ -13,7 +13,7 @@ export const getTokenApi = (
 
 export const getRefreshTokenApi = (
   refreshToken: string
-): ApiResponse<TokenResponse> | null => {
+): ApiResponse<TokenResponse> => {
   const url = '/update-token';
   return http.post(url, {
     refresh_token: refreshToken,

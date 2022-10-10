@@ -1,4 +1,5 @@
 export const config = {
+  SERVER_URL: process.env.REACT_APP_SERVER_URL,
   // GATEWAY
   GATEWAY_URL: process.env.REACT_APP_GATEWAY_URL || 'http://localhost:4000',
 
