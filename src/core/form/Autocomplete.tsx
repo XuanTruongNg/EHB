@@ -5,23 +5,23 @@ import {
   TextField,
   AutocompleteProps,
 } from '@mui/material';
-import { Controller, RegisterOptions, useFormContext } from 'react-hook-form';
-import { Option } from 'core/interface/selectOption';
+import { Controller, useFormContext } from 'react-hook-form';
+
+interface option {
+  value: number;
+  label: string;
+}
 
 type IAutocomplete = Omit<
   AutocompleteProps<any, any, any, any>,
   'renderInput'
 > & {
   name: string;
-  options: Option[];
+  options: option[];
   placeholder: string;
   title: string;
   width?: number;
   isMultiple?: boolean;
-  rules?: Exclude<
-    RegisterOptions,
-    'valueAsNumber' | 'valueAsDate' | 'setValueAs'
-  >;
 };
 
 const AutocompleteC: React.FunctionComponent<IAutocomplete> = ({
@@ -32,7 +32,6 @@ const AutocompleteC: React.FunctionComponent<IAutocomplete> = ({
   placeholder,
   options,
   isMultiple,
-  rules,
   ...rest
 }) => {
   const { control, setValue } = useFormContext();
@@ -50,17 +49,21 @@ const AutocompleteC: React.FunctionComponent<IAutocomplete> = ({
         name={name}
         control={control}
         defaultValue={defaultValue}
-        rules={rules}
+        rules={{ required: true }}
         render={({ field }) => {
           return (
             <Autocomplete
               {...field}
               {...rest}
-              sx={{ ...rest.sx, width }}
+              sx={{ width }}
+              disableClearable
+              multiple={isMultiple}
+              defaultValue={defaultValue}
               getOptionLabel={(option) => option.label}
+              // isOptionEqualToValue={(option, value) => option.id === value.id}
               onChange={(_, data) => {
                 if (isMultiple) {
-                  const multiple = data.map((item: Option) => item.value);
+                  const multiple = data.map((item: option) => item.value);
                   setValue(name, multiple);
                 } else {
                   setValue(name, data.value);

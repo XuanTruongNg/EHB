@@ -15,12 +15,14 @@ import OAuthRedirect from 'pages/OAuthRedirect';
 import { Navigate } from 'react-router-dom';
 import {
   AUTH,
+  OAUTH_REDIRECT,
   NOT_FOUND_PAGE,
   LOGIN,
   DASHBOARD,
   PROJECT,
   RESOURCE,
   TIME_SHEET,
+  AUTH_LOGIN,
 } from 'core/constant';
 
 export interface SingleRoute {
@@ -32,9 +34,9 @@ export interface SingleRoute {
 
 // In routes, that should have component when path is not null
 export const ROUTES: SingleRoute[] = [
-  { path: '/', component: <Navigate to="/auth/login" replace={true} /> },
+  { path: '/', component: <Navigate to={AUTH_LOGIN} replace={true} /> },
   {
-    path: '/oauth-redirect',
+    path: OAUTH_REDIRECT,
     guard: <UnAuthGuard />,
     component: <OAuthRedirect />,
   },

@@ -1,8 +1,16 @@
 import { http } from 'core/api';
-import { AddResource, ResourceResponse } from 'core/interface/resource';
-import { ApiResponse } from 'core/interface/api';
+import { ApiResponse, FilterParams } from 'core/interface/api';
+import { Resource } from 'core/interface/models';
+import { AddResource, ResourcesResponse } from 'core/interface/resource';
 
-export const createResource = (data: AddResource): ApiResponse<ResourceResponse> => {
-  const url = '/rms/api/resources';
+const url = '/rms/api/resources';
+
+export const createResource = (data: AddResource): ApiResponse<Resource> => {
   return http.post(url, data);
+};
+
+export const getResources = (
+  params?: FilterParams<Resource>
+): ApiResponse<ResourcesResponse> => {
+  return http.get(url, { params });
 };

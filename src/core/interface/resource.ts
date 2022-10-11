@@ -1,26 +1,19 @@
-import { DepartmentResponse } from './department';
-import { HardSkillResponse } from './hardSkill';
-import { RoleResponse } from './resourceRole';
+import { GetListResponse } from './api';
+import { HardSkill } from './models';
+import { Base } from './models/base';
+import { Resource } from './models/resource';
 
-export interface ResourceResponse {
-  id: number;
-  createdAt: string;
-  updatedAt: string;
-  isDeleted: boolean;
-  name: string;
-  code: string;
-  remainBandwidth: number;
-  yearsOfExperience: number;
-  uuid: string;
-  departments: DepartmentResponse;
-  resourcesRoles: RoleResponse;
-  resourcesHardSkills: HardSkillResponse[];
+// TODO: remove when backend finish DTO
+export interface TempResource extends Omit<Resource, 'resourcesHardSkills'> {
+  resourcesHardSkills: ({
+    hardSkills: HardSkill;
+  } & Base)[];
 }
 
-export interface AddResource {
-  resourceName: string;
+export interface ResourcesResponse extends GetListResponse<TempResource> {}
+
+export interface AddResource
+  extends Pick<Resource, 'name' | 'uuid' | 'yearsOfExperience'> {
   departmentId: number;
   hardSkillIds: number[];
-  yearsOfExperience: number;
-  uuid: string;
 }

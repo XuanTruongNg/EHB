@@ -1,9 +1,12 @@
-import { Controller, RegisterOptions, useFormContext } from 'react-hook-form';
-import { SelectProps, Select, Chip } from '@mui/material';
+import { Box, Chip, Select, SelectProps } from '@mui/material';
 import MenuItem from '@mui/material/MenuItem';
-import { Box } from '@mui/material';
-import { Option } from 'core/interface/selectOption';
+import { Controller, RegisterOptions, useFormContext } from 'react-hook-form';
 import FieldWrapper from './FieldWrapper';
+
+interface Option {
+  value: number;
+  label: string;
+}
 
 type ISelectMultiple = SelectProps & {
   name: string;
@@ -25,10 +28,13 @@ const SelectMultipleC: React.FunctionComponent<ISelectMultiple> = ({
   rules,
   ...rest
 }) => {
-  const { control } = useFormContext();
+  const {
+    control,
+    formState: { errors },
+  } = useFormContext();
 
   return (
-    <FieldWrapper title={title}>
+    <FieldWrapper title={title} name={name}>
       <Controller
         name={name}
         control={control}
@@ -36,47 +42,58 @@ const SelectMultipleC: React.FunctionComponent<ISelectMultiple> = ({
         rules={rules}
         render={({ field }) => {
           return (
-            <Select
-              {...field}
-              {...rest}
-              renderValue={(selected) => {
-                const selectedItemValues: Option['value'][] = selected;
-                return (
-                  <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5 }}>
-                    {selectedItemValues?.map((value) => {
-                      const label =
-                        options.find((option) => option.value === value)
-                          ?.label || '';
-                      return <Chip key={value} label={label} />;
-                    })}
-                  </Box>
-                );
-              }}
-              multiple={true}
+            <Box
               sx={{
-                '& .MuiSelect-select .notranslate::after': placeholder
-                  ? {
-                      content: `"${placeholder}"`,
-                      opacity: 0.42,
-                    }
-                  : {},
-                width: 400,
-                ...rest.sx,
-              }}
-              MenuProps={{
-                sx: {
-                  height: 250,
-                },
+                display: 'flex',
+                flexDirection: 'column',
+                rowGap: errors ? '12px' : 0,
               }}
             >
-              {options.map((option) => {
-                return (
-                  <MenuItem key={option.value} value={option.value}>
-                    {option.label}
-                  </MenuItem>
-                );
-              })}
-            </Select>
+              <Select
+                {...field}
+                {...rest}
+                error={!!errors[name]}
+                renderValue={(selected) => {
+                  const selectedItemValues: Option['value'][] = selected;
+                  return (
+                    <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5 }}>
+                      {selectedItemValues?.map((value) => {
+                        const label =
+                          options.find((option) => option.value === value)
+                            ?.label || '';
+                        return <Chip key={value} label={label} />;
+                      })}
+                    </Box>
+                  );
+                }}
+                multiple={true}
+                placeholder={placeholder}
+                sx={{
+                  '& .MuiSelect-select .notranslate::after': placeholder
+                    ? {
+                        content: `"${placeholder}"`,
+
+                        opacity: 0.42,
+                      }
+                    : {},
+
+                  width: 400,
+                }}
+                MenuProps={{
+                  sx: {
+                    height: 250,
+                  },
+                }}
+              >
+                {options.map((option) => {
+                  return (
+                    <MenuItem key={option.value} value={option.value}>
+                      {option.label}
+                    </MenuItem>
+                  );
+                })}
+              </Select>
+            </Box>
           );
         }}
       />

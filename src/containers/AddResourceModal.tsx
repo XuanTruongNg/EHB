@@ -1,37 +1,61 @@
-import FormWrapper from 'core/form/FormWrapper';
-import TextFieldC from 'core/form/TextField';
-import { FC, useMemo } from 'react';
-import { useForm } from 'react-hook-form';
-import ModalWrapper from '../components/ModalWrapper';
-import { Button, Box } from '@mui/material';
-import Stack from '@mui/material/Stack';
+import { yupResolver } from '@hookform/resolvers/yup';
 import ClearIcon from '@mui/icons-material/Clear';
-import { buttonText } from 'core/constant';
+import { Box, Button } from '@mui/material';
+import Stack from '@mui/material/Stack';
 import {
+  addResourcePlaceholder,
+  addResourceText,
+  buttonText,
+} from 'core/constant';
+import FormWrapper from 'core/form/FormWrapper';
+import SelectC from 'core/form/Select';
+import SelectMultipleC from 'core/form/SelectMultiple';
+import TextFieldC from 'core/form/TextField';
+import { AddResource } from 'core/interface/resource';
+import {
+  useCreateResource,
   useGetDepartment,
   useGetHardSkill,
   useGetRole,
-  useCreateResource,
 } from 'hooks';
-import SelectC from 'core/form/Select';
-import SelectMultipleC from 'core/form/SelectMultiple';
-import { addResourceText, addResourcePlaceholder } from 'core/constant';
+import { FC, useMemo } from 'react';
+import { useForm } from 'react-hook-form';
 import uuid from 'react-uuid';
+import * as yup from 'yup';
+import ModalWrapper from '../components/ModalWrapper';
 
 interface Props {
   isOpen: boolean;
   setIsOpen: (isOpen: boolean) => void;
 }
 
-interface AddResourceI {
-  resourceName: string;
-  departmentId: number;
-  hardSkillIds: number[];
-  yearsOfExperience: number;
-}
-
+const schema = yup.object({
+  name: yup.string().min(5).label('Resouce name'),
+  departmentId: yup
+    .number()
+    .transform((_, val) => (typeof val === 'number' ? val : null))
+    .required()
+    .label('Department')
+    .nullable(),
+  roleId: yup
+    .number()
+    .transform((_, val) => (typeof val === 'number' ? val : null))
+    .required()
+    .label('Role')
+    .nullable(),
+  hardSkillIds: yup.array().min(1).label('Hard skills'),
+  yearsOfExperience: yup
+    .number()
+    .transform((_, val) => (typeof val === 'number' ? val : null))
+    .required()
+    .label('Years of experience')
+    .min(0)
+    .nullable(),
+});
 const AddResourceModal: FC<Props> = ({ isOpen, setIsOpen }) => {
-  const methods = useForm<AddResourceI>({});
+  const methods = useForm<AddResource>({
+    resolver: yupResolver(schema),
+  });
   const { data: departments } = useGetDepartment();
   const { data: roles } = useGetRole();
   const { data: hardSkills } = useGetHardSkill();
@@ -62,7 +86,7 @@ const AddResourceModal: FC<Props> = ({ isOpen, setIsOpen }) => {
 
   const addResource = useCreateResource();
 
-  const onSubmit = (data: AddResourceI) => {
+  const onSubmit = (data: AddResource) => {
     //TODO handle get uuid later
     const randomUuid: string = uuid();
     addResource({ ...data, uuid: randomUuid });
@@ -89,7 +113,7 @@ const AddResourceModal: FC<Props> = ({ isOpen, setIsOpen }) => {
       <FormWrapper onSubmit={onSubmit} methods={methods}>
         <Stack spacing={3} sx={{ py: '32px', px: '64px' }}>
           <TextFieldC
-            name="resourceName"
+            name="name"
             title={addResourceText.NAME}
             placeholder={addResourcePlaceholder.NAME}
             type="text"
@@ -117,7 +141,6 @@ const AddResourceModal: FC<Props> = ({ isOpen, setIsOpen }) => {
             title={addResourceText.YOE}
             placeholder={addResourcePlaceholder.YOE}
             type="number"
-            defaultValue={0}
             sx={{ width: 200 }}
           />
         </Stack>

@@ -1,8 +1,12 @@
-import { Controller, RegisterOptions, useFormContext } from 'react-hook-form';
-import { SelectProps, Select } from '@mui/material';
+import { Box, Select, SelectProps } from '@mui/material';
 import MenuItem from '@mui/material/MenuItem';
-import { Option } from 'core/interface/selectOption';
+import { Controller, RegisterOptions, useFormContext } from 'react-hook-form';
 import FieldWrapper from './FieldWrapper';
+
+interface Option {
+  value: number;
+  label: string;
+}
 
 type ISelect = SelectProps & {
   name: string;
@@ -24,10 +28,13 @@ const SelectC: React.FunctionComponent<ISelect> = ({
   rules,
   ...rest
 }) => {
-  const { control } = useFormContext();
+  const {
+    control,
+    formState: { errors },
+  } = useFormContext();
 
   return (
-    <FieldWrapper title={title}>
+    <FieldWrapper title={title} name={name}>
       <Controller
         name={name}
         control={control}
@@ -35,33 +42,48 @@ const SelectC: React.FunctionComponent<ISelect> = ({
         rules={rules}
         render={({ field }) => {
           return (
-            <Select
-              {...field}
-              {...rest}
+            <Box
               sx={{
-                '& .MuiSelect-select .notranslate::after': placeholder
-                  ? {
-                      content: `"${placeholder}"`,
-                      opacity: 0.42,
-                    }
-                  : {},
-                width: 400,
-                ...rest.sx,
-              }}
-              MenuProps={{
-                sx: {
-                  height: 250,
-                },
+                display: 'flex',
+                flexDirection: 'column',
+                rowGap: errors ? '12px' : 0,
               }}
             >
-              {options.map((option) => {
-                return (
-                  <MenuItem key={option.value} value={option.value}>
-                    {option.label}
-                  </MenuItem>
-                );
-              })}
-            </Select>
+              <Select
+                {...field}
+                {...rest}
+                onChange={(e) => {
+                  console.log(e);
+                  field.onChange(e);
+                }}
+                error={!!errors[name]}
+                defaultValue={defaultValue}
+                placeholder={placeholder}
+                sx={{
+                  '& .MuiSelect-select .notranslate::after': placeholder
+                    ? {
+                        content: `"${placeholder}"`,
+
+                        opacity: 0.42,
+                      }
+                    : {},
+                  width: 400,
+                }}
+                MenuProps={{
+                  sx: {
+                    height: 250,
+                  },
+                }}
+              >
+                {options.map((option) => {
+                  return (
+                    <MenuItem key={option.value} value={option.value}>
+                      {option.label}
+                    </MenuItem>
+                  );
+                })}
+              </Select>
+            </Box>
           );
         }}
       />
