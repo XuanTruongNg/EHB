@@ -1,4 +1,5 @@
 import { GridColDef, GridValidRowModel } from '@mui/x-data-grid';
+import { ObjectLiteral } from './api';
 
 interface Column<T extends GridValidRowModel, V extends string = ''>
   extends Omit<GridColDef<T>, 'field'> {
@@ -10,7 +11,7 @@ export type Columns<
   ExtraColums extends string = ''
 > = Column<T, ExtraColums>[];
 
-type Row<T extends {}> = { id: number | string } & Partial<{
+type Row<T extends ObjectLiteral> = { id: number | string } & Partial<{
   [key in keyof T]: any;
 }>;
-export type Rows<T extends {}> = Row<T>[];
+export type Rows<T extends ObjectLiteral> = Row<T>[];

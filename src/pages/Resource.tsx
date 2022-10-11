@@ -1,26 +1,27 @@
 import { Box, Button } from '@mui/material';
-import DatagridC from 'components/Datagrid';
+import DatagridC, { PaginationData } from 'components/Datagrid';
 import NavBar from 'components/NavBar';
 import SearchBar from 'components/SearchBar';
 import AddResourceModal from 'containers/AddResourceModal';
 import { buttonText, navBarText } from 'core/constant';
 import { resourceText } from 'core/constant/resource';
 import { HEADER_MARGIN } from 'core/constant/spacing';
+import { FilterParams } from 'core/interface/api';
 import { Resource as ResourceModel } from 'core/interface/models';
 import { Columns, Rows } from 'core/interface/table';
 import { useGetResource } from 'hooks';
-import { useMemo, useState } from 'react';
+import { useCallback, useMemo, useState } from 'react';
 
 const { headerColumnText } = resourceText;
 
 const Resource = () => {
   const [isOpen, setIsOpen] = useState(false);
 
-  const [searchterm, setSearchterm] = useState<string>('');
+  const [filterData, setFilterData] = useState<
+    FilterParams<ResourceModel> | undefined
+  >(undefined);
 
-  const { data: resources, isFetching } = useGetResource({
-    searchData: searchterm,
-  });
+  const { data: resources, isFetching } = useGetResource(filterData);
 
   const resourceColumns = useMemo<Columns<ResourceModel>>(
     () => [
@@ -80,6 +81,31 @@ const Resource = () => {
     [resources]
   );
 
+  const handleTableChange = useCallback(
+    (data: PaginationData<ResourceModel>) => {
+      const { page, pageSize } = data;
+      const sort = data.sort[0];
+      let order: 'ASC' | 'DESC' | undefined;
+      let orderBy: keyof ResourceModel | undefined;
+      switch (sort?.sort) {
+        case 'asc':
+          order = 'ASC';
+          orderBy = sort.field;
+          break;
+        case 'desc':
+          order = 'DESC';
+          orderBy = sort.field;
+          break;
+        default:
+          order = undefined;
+          orderBy = undefined;
+          break;
+      }
+      setFilterData({ page, pageSize, order, orderBy });
+    },
+    []
+  );
+
   return (
     <>
       <NavBar title={navBarText.RESOURCES} height={60} />
@@ -109,13 +135,25 @@ const Resource = () => {
             {buttonText.ADD_RESOURCE}
           </Button>
 
-          <SearchBar onChange={setSearchterm} />
+          <SearchBar
+            onChange={(searchData) =>
+              setFilterData((prev) => ({
+                ...prev,
+                searchData,
+                page: 0,
+                order: undefined,
+                orderBy: undefined,
+              }))
+            }
+          />
         </Box>
         <Box sx={{ minHeight: 630, width: '100%' }}>
           <DatagridC
             columns={resourceColumns}
             rows={resourceRows}
             loading={isFetching}
+            rowCount={resources?.count || 0}
+            onChange={handleTableChange}
           />
         </Box>
       </Box>

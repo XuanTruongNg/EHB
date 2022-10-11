@@ -1,26 +1,50 @@
 import { Stack } from '@mui/material';
-import { DataGrid, DataGridProps, GridRowsProp } from '@mui/x-data-grid';
+import { DataGrid, DataGridProps, GridSortItem } from '@mui/x-data-grid';
 import { resourceText } from 'core/constant/resource';
-import { FC, useState } from 'react';
+import { ObjectLiteral } from 'core/interface/api';
+import { Rows } from 'core/interface/table';
+import { useEffect, useState } from 'react';
 
-interface Props extends DataGridProps {
-  rows: GridRowsProp<{ id: string | number }>;
+interface GridSortItemC<T> extends Omit<GridSortItem, 'field'> {
+  field: keyof T;
+}
+export interface PaginationData<T> {
+  page: number;
+  pageSize: number;
+  sort: GridSortItemC<T>[];
 }
 
-const DatagridC: FC<Props> = ({
+interface Props<T extends ObjectLiteral> extends Omit<DataGridProps, 'rows'> {
+  rows: Rows<T>;
+  onChange?: (paginationData: PaginationData<T>) => void;
+}
+
+const DatagridC = <T extends ObjectLiteral>({
   disableColumnMenu = true,
   hideFooterSelectedRowCount = true,
   pagination = true,
   rowsPerPageOptions = [10, 20, 50, 100],
+  paginationMode = 'server',
+  onChange,
   ...rest
-}) => {
-  const [pageSize, setPageSize] = useState<number>(rowsPerPageOptions[0] || 10);
+}: Props<T>) => {
+  const [paginationData, setPaginationData] = useState<PaginationData<T>>({
+    pageSize: rowsPerPageOptions[0] || 10,
+    page: 0,
+    sort: [],
+  });
+
+  useEffect(() => {
+    onChange && onChange(paginationData);
+  }, [paginationData, onChange]);
+
   return (
     <DataGrid
       {...rest}
       disableColumnMenu={disableColumnMenu}
       hideFooterSelectedRowCount={hideFooterSelectedRowCount}
       pagination={pagination}
+      paginationMode={paginationMode}
       components={{
         NoRowsOverlay: () => (
           <Stack
@@ -34,11 +58,20 @@ const DatagridC: FC<Props> = ({
         ),
         ...rest.components,
       }}
-      pageSize={pageSize}
-      onPageSizeChange={(newPageSize: number) => setPageSize(newPageSize)}
       rowsPerPageOptions={
         rowsPerPageOptions.length ? rowsPerPageOptions : undefined
       }
+      pageSize={paginationData.pageSize}
+      onPageSizeChange={(pageSize) => {
+        setPaginationData((prev) => ({ ...prev, pageSize }));
+      }}
+      onPageChange={(page) => {
+        setPaginationData((prev) => ({ ...prev, page }));
+      }}
+      sortingMode="server"
+      onSortModelChange={(e: GridSortItemC<T>[]) => {
+        setPaginationData((prev) => ({ ...prev, sort: e }));
+      }}
       sx={{
         '& .FirstColumn-DataGrid': {
           borderRight: '1px solid rgba(224, 224, 224, 1)',
