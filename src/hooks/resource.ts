@@ -1,11 +1,10 @@
 import { useMutation } from 'react-query';
 import { createResource } from '../api';
-import { AddResource } from 'core/interface/resource';
 import { queryClient } from 'index';
 
 export const useCreateResource = () => {
   const { mutate: addResource } = useMutation(createResource, {
-    onSuccess: (data: AddResource) => {
+    onSuccess: (data) => {
       const message = 'success';
       alert(message);
     },

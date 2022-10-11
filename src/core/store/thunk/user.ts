@@ -13,7 +13,7 @@ export const getCurrentUserThunk = (): AppThunk<Promise<void>> => {
         } else {
           reject(new Error('Token not found'));
         }
-      }, 3000);
+      }, 300);
     });
   };
 };

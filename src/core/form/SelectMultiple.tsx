@@ -1,4 +1,4 @@
-import { Controller, useFormContext } from 'react-hook-form';
+import { Controller, RegisterOptions, useFormContext } from 'react-hook-form';
 import { SelectProps, Select, Chip } from '@mui/material';
 import MenuItem from '@mui/material/MenuItem';
 import { Box } from '@mui/material';
@@ -10,15 +10,19 @@ type ISelectMultiple = SelectProps & {
   options: Option[];
   placeholder: string;
   title: string;
+  rules?: Exclude<
+    RegisterOptions,
+    'valueAsNumber' | 'valueAsDate' | 'setValueAs'
+  >;
 };
 
 const SelectMultipleC: React.FunctionComponent<ISelectMultiple> = ({
   name,
   title,
-
   defaultValue = [],
   placeholder,
   options,
+  rules,
   ...rest
 }) => {
   const { control } = useFormContext();
@@ -29,6 +33,7 @@ const SelectMultipleC: React.FunctionComponent<ISelectMultiple> = ({
         name={name}
         control={control}
         defaultValue={defaultValue}
+        rules={rules}
         render={({ field }) => {
           return (
             <Select

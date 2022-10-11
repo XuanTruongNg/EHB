@@ -1,4 +1,4 @@
-import { Controller, useFormContext } from 'react-hook-form';
+import { Controller, RegisterOptions, useFormContext } from 'react-hook-form';
 import { SelectProps, Select } from '@mui/material';
 import MenuItem from '@mui/material/MenuItem';
 import { Option } from 'core/interface/selectOption';
@@ -9,6 +9,10 @@ type ISelect = SelectProps & {
   options: Option[];
   placeholder: string;
   title: string;
+  rules?: Exclude<
+    RegisterOptions,
+    'valueAsNumber' | 'valueAsDate' | 'setValueAs'
+  >;
 };
 
 const SelectC: React.FunctionComponent<ISelect> = ({
@@ -17,6 +21,7 @@ const SelectC: React.FunctionComponent<ISelect> = ({
   defaultValue = '',
   placeholder,
   options,
+  rules,
   ...rest
 }) => {
   const { control } = useFormContext();
@@ -27,6 +32,7 @@ const SelectC: React.FunctionComponent<ISelect> = ({
         name={name}
         control={control}
         defaultValue={defaultValue}
+        rules={rules}
         render={({ field }) => {
           return (
             <Select

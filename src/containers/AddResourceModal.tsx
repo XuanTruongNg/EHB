@@ -93,7 +93,6 @@ const AddResourceModal: FC<Props> = ({ isOpen, setIsOpen }) => {
             title={addResourceText.NAME}
             placeholder={addResourcePlaceholder.NAME}
             type="text"
-            rules={{ required: true, minLength: 5 }}
           />
           <SelectC
             name="departmentId"
@@ -119,7 +118,6 @@ const AddResourceModal: FC<Props> = ({ isOpen, setIsOpen }) => {
             placeholder={addResourcePlaceholder.YOE}
             type="number"
             defaultValue={0}
-            rules={{ required: true }}
             sx={{ width: 200 }}
           />
         </Stack>

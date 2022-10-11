@@ -1,11 +1,8 @@
 import { http } from 'core/api';
-import { config } from 'core/constant/config';
-import { AddResource } from 'core/interface/resource';
+import { AddResource, ResourceResponse } from 'core/interface/resource';
+import { ApiResponse } from 'core/interface/api';
 
-export const createResource = async (data: AddResource) => {
-  const { data: response } = await http.post(
-    `${config.SERVER_URL}/resources`,
-    data
-  );
-  return response.data;
+export const createResource = (data: AddResource): ApiResponse<ResourceResponse> => {
+  const url = '/rms/api/resources';
+  return http.post(url, data);
 };
