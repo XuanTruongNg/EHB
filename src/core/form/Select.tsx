@@ -9,6 +9,8 @@ type ISelect = SelectProps & {
   options: SelectOptions[];
   placeholder: string;
   title: string;
+  labelWidth?: string;
+  labelMargin?: string;
   rules?: Exclude<
     RegisterOptions,
     'valueAsNumber' | 'valueAsDate' | 'setValueAs'
@@ -22,6 +24,8 @@ const SelectC: React.FunctionComponent<ISelect> = ({
   placeholder,
   options,
   rules,
+  labelWidth,
+  labelMargin,
   ...rest
 }) => {
   const {
@@ -30,7 +34,12 @@ const SelectC: React.FunctionComponent<ISelect> = ({
   } = useFormContext();
 
   return (
-    <FieldWrapper title={title} name={name}>
+    <FieldWrapper
+      title={title}
+      name={name}
+      margin={labelMargin}
+      width={labelWidth}
+    >
       <Controller
         name={name}
         control={control}

@@ -1,36 +1,33 @@
 import { Box, Button } from '@mui/material';
-import { GridCellParams } from '@mui/x-data-grid';
 import DatagridC, { TableOnChangeData } from 'components/Datagrid';
 import NavBar from 'components/NavBar';
 import SearchBar from 'components/SearchBar';
-import ResourceModal from 'containers/ResourceModal';
+import AddProjectModal from 'containers/AddProjectModal';
 import { buttonText, navBarText } from 'core/constant';
-import { resourceText } from 'core/constant/resource';
+import { projectText } from 'core/constant/project';
 import { HEADER_MARGIN } from 'core/constant/spacing';
 import { FilterParams, PaginationData } from 'core/interface/api';
-import { Resource as ResourceModel } from 'core/interface/models';
+import { Project as ProjectModel } from 'core/interface/models';
 import { Columns, Rows } from 'core/interface/table';
-import { useGetResource } from 'hooks';
+import { useGetProject } from 'hooks';
+import moment from 'moment';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 
-const { headerColumnText } = resourceText;
+const { headerColumnText } = projectText;
 
-type SPagination = PaginationData<ResourceModel> | undefined;
-type SFilter = FilterParams<ResourceModel> | undefined;
+type SPagination = PaginationData<ProjectModel> | undefined;
+type SFilter = FilterParams<ProjectModel> | undefined;
 
-const Resource = () => {
-  const [modelControl, setModelControl] = useState<'ADD' | 'EDIT' | null>(null);
+const Project = () => {
+  const [isOpen, setIsOpen] = useState(false);
 
-  const [selectedValue, setSelectedValue] = useState<number>(-1);
-
-  // TODO: find a better solution in future
   const [searchData, setSearchData] = useState<string | undefined>(undefined);
   const [paginationData, setPaginationData] = useState<SPagination>(undefined);
   const [filterData, setFilterData] = useState<SFilter>(undefined);
 
-  const { data: resources, isFetching } = useGetResource(filterData);
+  const { data: projects, isFetching } = useGetProject(filterData);
 
-  const resourceColumns = useMemo<Columns<ResourceModel>>(
+  const projectColumns = useMemo<Columns<ProjectModel>>(
     () => [
       {
         field: 'code',
@@ -41,28 +38,40 @@ const Resource = () => {
       },
       {
         field: 'name',
-        headerName: headerColumnText.RESOURCE_NAME,
+        headerName: headerColumnText.PROJECT_NAME,
         flex: 1,
       },
       {
-        field: 'resourcesRoles',
-        headerName: headerColumnText.ROLE,
+        field: 'projectManager',
+        headerName: headerColumnText.PROJECT_MANAGER,
         flex: 1,
       },
       {
-        field: 'departments',
-        headerName: headerColumnText.DEPARTMENT,
+        field: 'resourcesProjects',
+        headerName: headerColumnText.ASSIGNED_RESOURCES,
         flex: 1,
       },
       {
-        field: 'resourcesHardSkills',
-        headerName: headerColumnText.HARD_SKILLS,
+        field: 'startDate',
+        headerName: headerColumnText.START_DATE,
         flex: 1,
         sortable: false,
       },
       {
-        field: 'yearsOfExperience',
-        headerName: headerColumnText.YEARS_EXP,
+        field: 'endDate',
+        headerName: headerColumnText.END_DATE,
+        flex: 1,
+        sortable: false,
+      },
+      {
+        field: 'projectTypes',
+        headerName: headerColumnText.PROJECT_TYPE,
+        flex: 1,
+        sortable: false,
+      },
+      {
+        field: 'creator',
+        headerName: headerColumnText.CREATED_BY,
         flex: 1,
         sortable: false,
       },
@@ -70,30 +79,30 @@ const Resource = () => {
     []
   );
 
-  const resourceRows = useMemo<Rows<ResourceModel>>(
+  const projectRows = useMemo<Rows<ProjectModel>>(
     () =>
-      resources?.data.map((item) => {
+      projects?.data.map((item) => {
         return {
           id: item.id,
           code: item.code,
           name: item.name,
-          resourcesRoles: item.resourcesRoles.title,
-          departments: item.departments.title,
-          resourcesHardSkills: item.resourcesHardSkills.map(
-            (item) => item.hardSkills.title
-          ),
-          yearsOfExperience: item.yearsOfExperience,
+          projectManager: item.projectManager.name,
+          resourcesProjects: item.resourcesProjects.length,
+          startDate: moment(item.startDate).format('DD-MM-YYYY'),
+          endDate: moment(item.endDate).format('DD-MM-YYYY'),
+          projectTypes: item.projectTypes.name,
+          creator: item.creator.name,
         };
       }) || [],
-    [resources]
+    [projects]
   );
 
   const handleTableChange = useCallback(
-    (data: TableOnChangeData<ResourceModel>) => {
+    (data: TableOnChangeData<ProjectModel>) => {
       const { page, pageSize } = data;
       const sort = data.sort[0];
       let order: 'ASC' | 'DESC' | undefined;
-      let orderBy: keyof ResourceModel | undefined;
+      let orderBy: keyof ProjectModel | undefined;
       switch (sort?.sort) {
         case 'asc':
           order = 'ASC';
@@ -115,22 +124,15 @@ const Resource = () => {
 
   const handleSearch = useCallback((searchData: string) => {
     setSearchData(searchData || undefined);
-    setPaginationData((prev) => ({ ...prev, page: 0 }));
   }, []);
 
   useEffect(() => {
     setFilterData({ ...paginationData, searchData });
   }, [paginationData, searchData]);
 
-  const onCellClick = (params: GridCellParams) => {
-    const { row } = params;
-    setSelectedValue(row.id);
-    setModelControl('EDIT');
-  };
-
   return (
     <>
-      <NavBar title={navBarText.RESOURCES} height={60} />
+      <NavBar title={navBarText.PROJECTS} height={60} />
       <Box
         sx={{
           display: 'flex',
@@ -152,39 +154,27 @@ const Resource = () => {
                 opacity: 0.8,
               },
             }}
-            onClick={() => setModelControl('ADD')}
+            onClick={() => setIsOpen((isOpen) => !isOpen)}
           >
-            {buttonText.ADD_RESOURCE}
+            {buttonText.ADD_PROJECT}
           </Button>
 
           <SearchBar onChange={handleSearch} />
         </Box>
         <Box sx={{ minHeight: 650, width: '100%' }}>
           <DatagridC
-            columns={resourceColumns}
-            rows={resourceRows}
+            columns={projectColumns}
+            rows={projectRows}
             loading={isFetching}
-            onCellClick={onCellClick}
-            rowCount={resources?.count ?? -1}
+            rowCount={projects?.count ?? -1}
             onChange={handleTableChange}
             page={filterData?.page}
           />
         </Box>
       </Box>
-      <ResourceModal
-        isOpen={modelControl === 'ADD'}
-        modelControl={setModelControl}
-        type={'ADD'}
-        id={undefined}
-      />
-      <ResourceModal
-        isOpen={modelControl === 'EDIT'}
-        modelControl={setModelControl}
-        id={selectedValue}
-        type={'EDIT'}
-      />
+      <AddProjectModal isOpen={isOpen} setIsOpen={setIsOpen} />
     </>
   );
 };
 
-export default Resource;
+export default Project;

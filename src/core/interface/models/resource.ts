@@ -11,5 +11,5 @@ export interface Resource extends Pick<Base, 'id'> {
   uuid: string;
   departments: Department;
   resourcesRoles: ResourceRole;
-  resourcesHardSkills: HardSkill;
+  resourcesHardSkills: HardSkill[];
 }

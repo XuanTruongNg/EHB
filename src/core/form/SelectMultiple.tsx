@@ -9,6 +9,8 @@ type ISelectMultiple = SelectProps & {
   options: SelectOptions[];
   placeholder: string;
   title: string;
+  labelWidth?: string;
+  labelMargin?: string;
   rules?: Exclude<
     RegisterOptions,
     'valueAsNumber' | 'valueAsDate' | 'setValueAs'
@@ -22,6 +24,8 @@ const SelectMultipleC: React.FunctionComponent<ISelectMultiple> = ({
   placeholder,
   options,
   rules,
+  labelWidth,
+  labelMargin,
   ...rest
 }) => {
   const {
@@ -30,7 +34,12 @@ const SelectMultipleC: React.FunctionComponent<ISelectMultiple> = ({
   } = useFormContext();
 
   return (
-    <FieldWrapper title={title} name={name}>
+    <FieldWrapper
+      title={title}
+      width={labelWidth}
+      margin={labelMargin}
+      name={name}
+    >
       <Controller
         name={name}
         control={control}

@@ -3,10 +3,10 @@ import ClearIcon from '@mui/icons-material/Clear';
 import { Box, Button } from '@mui/material';
 import Stack from '@mui/material/Stack';
 import {
-  resourcePlaceholder,
   addResourceText,
   buttonText,
   editResourceText,
+  resourcePlaceholder,
 } from 'core/constant';
 import FormWrapper from 'core/form/FormWrapper';
 import SelectC from 'core/form/Select';
@@ -39,11 +39,11 @@ type Props =
       isOpen: boolean;
       modelControl: React.Dispatch<React.SetStateAction<'ADD' | 'EDIT' | null>>;
       type: 'ADD';
-      id?: undefined;
+      id: undefined;
     };
 
 export const resourceSchema = yup.object({
-  name: yup.string().min(5).label('Resouce name'),
+  name: yup.string().required().label('Resource name'),
   departmentId: yup
     .number()
     .transform((_, val) => (typeof val === 'number' ? val : null))
@@ -66,7 +66,12 @@ export const resourceSchema = yup.object({
     .nullable(),
 });
 
-const ResourceModal: FC<Props> = ({ isOpen, modelControl, type, id }) => {
+const ResourceModal: FC<Props> = ({
+  isOpen,
+  modelControl: controlModal,
+  type,
+  id,
+}) => {
   const methods = useForm<AddResource | EditResource>({
     resolver: yupResolver(resourceSchema),
   });
@@ -78,14 +83,10 @@ const ResourceModal: FC<Props> = ({ isOpen, modelControl, type, id }) => {
   const { data: roles } = useGetRole();
   const { data: hardSkills } = useGetHardSkill();
 
-  const resetForm = useCallback(() => {
-    methods.reset();
-  }, [methods]);
-
   const closeHandler = useCallback(() => {
-    modelControl(null);
-    resetForm();
-  }, [resetForm, modelControl]);
+    controlModal(null);
+    methods.reset();
+  }, [controlModal, methods]);
 
   const departmentData = useMemo(
     () => dataToOptions(departments, 'title', 'id'),

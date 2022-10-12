@@ -5,6 +5,7 @@ import { useFormContext } from 'react-hook-form';
 interface Props {
   title: string;
   width?: string;
+  margin?: string;
   name: string;
 }
 
@@ -12,6 +13,7 @@ const FieldWrapper: CustomFC<Props> = ({
   title,
   children,
   name,
+  margin,
   width = '200px',
 }) => {
   const {
@@ -31,11 +33,11 @@ const FieldWrapper: CustomFC<Props> = ({
         alignItems: 'center',
       }}
     >
-      <Typography sx={{ width }}>{title}</Typography>
+      <Typography sx={{ width, margin }}>{title}</Typography>
       <Box>
         {children}
         {errorText && (
-          <Typography sx={{ color: 'red', fontSize: 12, marginTop: '10px' }}>
+          <Typography sx={{ color: 'red', fontSize: 12, marginTop: '5px' }}>
             {errorText}
           </Typography>
         )}

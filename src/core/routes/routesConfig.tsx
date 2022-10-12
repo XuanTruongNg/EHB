@@ -10,6 +10,7 @@ import Layout from 'core/layout/Layout';
 import AuthLogin from 'pages/AuthLogin';
 import Demo from 'pages/Demo';
 import Resource from 'pages/Resource';
+import Project from 'pages/Project';
 import NotFoundPage from 'pages/NotFoundPage';
 import OAuthRedirect from 'pages/OAuthRedirect';
 import { Navigate } from 'react-router-dom';
@@ -62,7 +63,7 @@ export const ROUTES: SingleRoute[] = [
     path: PROJECT,
     component: <Layout />,
     guard: <AuthGuard acceptRoles={[ROLE_PROJECT_MANAGER, ROLE_ADMIN]} />,
-    children: [{ path: '', component: <Demo /> }],
+    children: [{ path: '', component: <Project /> }],
   },
   {
     path: RESOURCE,

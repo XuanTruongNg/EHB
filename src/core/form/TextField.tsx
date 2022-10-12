@@ -13,6 +13,8 @@ type ITextField = TextFieldProps & {
     RegisterOptions,
     'valueAsNumber' | 'valueAsDate' | 'setValueAs'
   >;
+  labelWidth?: string;
+  labelMargin?: string;
 };
 
 const TextFieldC: React.FunctionComponent<ITextField> = ({
@@ -23,6 +25,8 @@ const TextFieldC: React.FunctionComponent<ITextField> = ({
   type = 'text',
   disabled = false,
   rules,
+  labelWidth,
+  labelMargin,
   ...rest
 }) => {
   const {
@@ -31,7 +35,12 @@ const TextFieldC: React.FunctionComponent<ITextField> = ({
   } = useFormContext();
 
   return (
-    <FieldWrapper title={title} name={name}>
+    <FieldWrapper
+      title={title}
+      width={labelWidth}
+      margin={labelMargin}
+      name={name}
+    >
       <Controller
         name={name}
         control={control}
