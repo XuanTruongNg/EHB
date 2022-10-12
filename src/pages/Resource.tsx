@@ -1,25 +1,29 @@
 import { Box, Button } from '@mui/material';
-import DatagridC, { PaginationData } from 'components/Datagrid';
+import DatagridC, { TableOnChangeData } from 'components/Datagrid';
 import NavBar from 'components/NavBar';
 import SearchBar from 'components/SearchBar';
 import AddResourceModal from 'containers/AddResourceModal';
 import { buttonText, navBarText } from 'core/constant';
 import { resourceText } from 'core/constant/resource';
 import { HEADER_MARGIN } from 'core/constant/spacing';
-import { FilterParams } from 'core/interface/api';
+import { FilterParams, PaginationData } from 'core/interface/api';
 import { Resource as ResourceModel } from 'core/interface/models';
 import { Columns, Rows } from 'core/interface/table';
 import { useGetResource } from 'hooks';
-import { useCallback, useMemo, useState } from 'react';
+import { useCallback, useMemo, useState, useEffect } from 'react';
 
 const { headerColumnText } = resourceText;
+
+type SPagination = PaginationData<ResourceModel> | undefined;
+type SFilter = FilterParams<ResourceModel> | undefined;
 
 const Resource = () => {
   const [isOpen, setIsOpen] = useState(false);
 
-  const [filterData, setFilterData] = useState<
-    FilterParams<ResourceModel> | undefined
-  >(undefined);
+  // TODO: find a better solution in future
+  const [searchData, setSearchData] = useState<string | undefined>(undefined);
+  const [paginationData, setPaginationData] = useState<SPagination>(undefined);
+  const [filterData, setFilterData] = useState<SFilter>(undefined);
 
   const { data: resources, isFetching } = useGetResource(filterData);
 
@@ -82,7 +86,7 @@ const Resource = () => {
   );
 
   const handleTableChange = useCallback(
-    (data: PaginationData<ResourceModel>) => {
+    (data: TableOnChangeData<ResourceModel>) => {
       const { page, pageSize } = data;
       const sort = data.sort[0];
       let order: 'ASC' | 'DESC' | undefined;
@@ -101,10 +105,18 @@ const Resource = () => {
           orderBy = undefined;
           break;
       }
-      setFilterData({ page, pageSize, order, orderBy });
+      setPaginationData({ page, pageSize, order, orderBy });
     },
     []
   );
+
+  const handleSearch = useCallback((searchData: string) => {
+    setSearchData(searchData || undefined);
+  }, []);
+
+  useEffect(() => {
+    setFilterData({ ...paginationData, searchData });
+  }, [paginationData, searchData]);
 
   return (
     <>
@@ -135,25 +147,16 @@ const Resource = () => {
             {buttonText.ADD_RESOURCE}
           </Button>
 
-          <SearchBar
-            onChange={(searchData) =>
-              setFilterData((prev) => ({
-                ...prev,
-                searchData,
-                page: 0,
-                order: undefined,
-                orderBy: undefined,
-              }))
-            }
-          />
+          <SearchBar onChange={handleSearch} />
         </Box>
-        <Box sx={{ minHeight: 630, width: '100%' }}>
+        <Box sx={{ minHeight: 650, width: '100%' }}>
           <DatagridC
             columns={resourceColumns}
             rows={resourceRows}
             loading={isFetching}
-            rowCount={resources?.count || 0}
+            rowCount={resources?.count ?? -1}
             onChange={handleTableChange}
+            page={filterData?.page}
           />
         </Box>
       </Box>

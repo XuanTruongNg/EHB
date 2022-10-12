@@ -11,9 +11,11 @@ export interface GetListResponse<T> {
   data: T[];
 }
 
-export interface FilterParams<T> extends ObjectLiteral {
+export interface PaginationData<T> {
   page?: number;
   pageSize?: number;
   orderBy?: keyof T;
   order?: 'ASC' | 'DESC';
 }
+
+export interface FilterParams<T> extends ObjectLiteral, PaginationData<T> {}

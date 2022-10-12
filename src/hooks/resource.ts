@@ -7,14 +7,12 @@ import { createResource, getResources } from '../api';
 export const useCreateResource = () => {
   const { mutate: addResource } = useMutation(createResource, {
     onSuccess: () => {
+      queryClient.invalidateQueries('resources');
       const message = 'success';
       alert(message);
     },
     onError: () => {
       alert('there was an error');
-    },
-    onSettled: () => {
-      queryClient.invalidateQueries('create');
     },
   });
 

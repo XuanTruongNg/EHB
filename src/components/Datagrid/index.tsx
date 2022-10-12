@@ -8,7 +8,7 @@ import { useEffect, useState } from 'react';
 interface GridSortItemC<T> extends Omit<GridSortItem, 'field'> {
   field: keyof T;
 }
-export interface PaginationData<T> {
+export interface TableOnChangeData<T> {
   page: number;
   pageSize: number;
   sort: GridSortItemC<T>[];
@@ -16,7 +16,7 @@ export interface PaginationData<T> {
 
 interface Props<T extends ObjectLiteral> extends Omit<DataGridProps, 'rows'> {
   rows: Rows<T>;
-  onChange?: (paginationData: PaginationData<T>) => void;
+  onChange?: (paginationData: TableOnChangeData<T>) => void;
 }
 
 const DatagridC = <T extends ObjectLiteral>({
@@ -26,13 +26,22 @@ const DatagridC = <T extends ObjectLiteral>({
   rowsPerPageOptions = [10, 20, 50, 100],
   paginationMode = 'server',
   onChange,
+  rowCount,
+  page = 0,
   ...rest
 }: Props<T>) => {
-  const [paginationData, setPaginationData] = useState<PaginationData<T>>({
+  const [paginationData, setPaginationData] = useState<TableOnChangeData<T>>({
     pageSize: rowsPerPageOptions[0] || 10,
-    page: 0,
+    page,
     sort: [],
   });
+
+  const [rowCountState, setRowCountState] = useState(rowCount);
+  useEffect(() => {
+    setRowCountState((prevRowCountState) =>
+      !(rowCount === undefined || rowCount < 0) ? rowCount : prevRowCountState
+    );
+  }, [rowCount, setRowCountState]);
 
   useEffect(() => {
     onChange && onChange(paginationData);
@@ -45,6 +54,7 @@ const DatagridC = <T extends ObjectLiteral>({
       hideFooterSelectedRowCount={hideFooterSelectedRowCount}
       pagination={pagination}
       paginationMode={paginationMode}
+      rowCount={rowCountState}
       components={{
         NoRowsOverlay: () => (
           <Stack
@@ -65,8 +75,9 @@ const DatagridC = <T extends ObjectLiteral>({
       onPageSizeChange={(pageSize) => {
         setPaginationData((prev) => ({ ...prev, pageSize }));
       }}
-      onPageChange={(page) => {
-        setPaginationData((prev) => ({ ...prev, page }));
+      page={page}
+      onPageChange={(_page) => {
+        setPaginationData((prev) => ({ ...prev, page: _page }));
       }}
       sortingMode="server"
       onSortModelChange={(e: GridSortItemC<T>[]) => {

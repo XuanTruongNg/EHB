@@ -5,7 +5,7 @@ import { CustomFC } from 'core/interface/component';
 import { useState } from 'react';
 
 interface Props {
-  onChange: (e: any) => void;
+  onChange: (e: string) => void;
 }
 
 const SearchBar: CustomFC<Props> = ({ onChange }) => {
