@@ -3,7 +3,7 @@ import { DataGrid, DataGridProps, GridSortItem } from '@mui/x-data-grid';
 import { resourceText } from 'core/constant/resource';
 import { ObjectLiteral } from 'core/interface/api';
 import { Rows } from 'core/interface/table';
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 
 interface GridSortItemC<T> extends Omit<GridSortItem, 'field'> {
   field: keyof T;
@@ -44,8 +44,34 @@ const DatagridC = <T extends ObjectLiteral>({
   }, [rowCount, setRowCountState]);
 
   useEffect(() => {
-    onChange && onChange(paginationData);
-  }, [paginationData, onChange]);
+    setPaginationData((prev) => ({ ...prev, page }));
+  }, [page]);
+
+  const handlePageChange = useCallback(
+    (newPage: number) => {
+      setPaginationData((prev) => ({ ...prev, page: newPage }));
+      onChange && onChange({ ...paginationData, page: newPage });
+    },
+    [onChange, paginationData]
+  );
+
+  const handlePageSizeChange = useCallback(
+    (newPageSize: number) => {
+      setPaginationData((prev) => ({ ...prev, pageSize: newPageSize }));
+      if (typeof rowCountState === 'number' && newPageSize > rowCountState)
+        return;
+      onChange && onChange({ ...paginationData, pageSize: newPageSize });
+    },
+    [onChange, paginationData, rowCountState]
+  );
+
+  const handleSortChange = useCallback(
+    (newSort: GridSortItemC<T>[]) => {
+      setPaginationData((prev) => ({ ...prev, sort: newSort }));
+      onChange && onChange({ ...paginationData, sort: newSort });
+    },
+    [onChange, paginationData]
+  );
 
   return (
     <DataGrid
@@ -72,17 +98,11 @@ const DatagridC = <T extends ObjectLiteral>({
         rowsPerPageOptions.length ? rowsPerPageOptions : undefined
       }
       pageSize={paginationData.pageSize}
-      onPageSizeChange={(pageSize) => {
-        setPaginationData((prev) => ({ ...prev, pageSize }));
-      }}
-      page={page}
-      onPageChange={(_page) => {
-        setPaginationData((prev) => ({ ...prev, page: _page }));
-      }}
+      onPageSizeChange={handlePageSizeChange}
+      page={paginationData.page}
+      onPageChange={handlePageChange}
       sortingMode="server"
-      onSortModelChange={(e: GridSortItemC<T>[]) => {
-        setPaginationData((prev) => ({ ...prev, sort: e }));
-      }}
+      onSortModelChange={handleSortChange}
       sx={{
         '& .FirstColumn-DataGrid': {
           borderRight: '1px solid rgba(224, 224, 224, 1)',

@@ -10,7 +10,7 @@ import { FilterParams, PaginationData } from 'core/interface/api';
 import { Resource as ResourceModel } from 'core/interface/models';
 import { Columns, Rows } from 'core/interface/table';
 import { useGetResource } from 'hooks';
-import { useCallback, useMemo, useState, useEffect } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 
 const { headerColumnText } = resourceText;
 
@@ -112,6 +112,7 @@ const Resource = () => {
 
   const handleSearch = useCallback((searchData: string) => {
     setSearchData(searchData || undefined);
+    setPaginationData((prev) => ({ ...prev, page: 0 }));
   }, []);
 
   useEffect(() => {
