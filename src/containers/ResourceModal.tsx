@@ -3,33 +3,46 @@ import ClearIcon from '@mui/icons-material/Clear';
 import { Box, Button } from '@mui/material';
 import Stack from '@mui/material/Stack';
 import {
-  addResourcePlaceholder,
+  resourcePlaceholder,
   addResourceText,
   buttonText,
+  editResourceText,
 } from 'core/constant';
 import FormWrapper from 'core/form/FormWrapper';
 import SelectC from 'core/form/Select';
 import SelectMultipleC from 'core/form/SelectMultiple';
 import TextFieldC from 'core/form/TextField';
-import { AddResource } from 'core/interface/resource';
+import { AddResource, EditResource } from 'core/interface/resource';
 import {
   useCreateResource,
   useGetDepartment,
   useGetHardSkill,
+  useGetResourceById,
   useGetRole,
+  useUpdateResource,
 } from 'hooks';
-import { FC, useMemo } from 'react';
+import { FC, useCallback, useEffect, useMemo } from 'react';
 import { useForm } from 'react-hook-form';
 import uuid from 'react-uuid';
+import { dataToOptions } from 'util/data';
 import * as yup from 'yup';
 import ModalWrapper from '../components/ModalWrapper';
 
-interface Props {
-  isOpen: boolean;
-  setIsOpen: (isOpen: boolean) => void;
-}
+type Props =
+  | {
+      isOpen: boolean;
+      modelControl: React.Dispatch<React.SetStateAction<'ADD' | 'EDIT' | null>>;
+      type: 'EDIT';
+      id: number;
+    }
+  | {
+      isOpen: boolean;
+      modelControl: React.Dispatch<React.SetStateAction<'ADD' | 'EDIT' | null>>;
+      type: 'ADD';
+      id?: undefined;
+    };
 
-const schema = yup.object({
+export const resourceSchema = yup.object({
   name: yup.string().min(5).label('Resouce name'),
   departmentId: yup
     .number()
@@ -52,52 +65,79 @@ const schema = yup.object({
     .min(0)
     .nullable(),
 });
-const AddResourceModal: FC<Props> = ({ isOpen, setIsOpen }) => {
-  const methods = useForm<AddResource>({
-    resolver: yupResolver(schema),
+
+const ResourceModal: FC<Props> = ({ isOpen, modelControl, type, id }) => {
+  const methods = useForm<AddResource | EditResource>({
+    resolver: yupResolver(resourceSchema),
   });
+
+  const { data: editedResource } = useGetResourceById(id);
+  const updateResource = useUpdateResource();
+
   const { data: departments } = useGetDepartment();
   const { data: roles } = useGetRole();
   const { data: hardSkills } = useGetHardSkill();
 
+  const resetForm = useCallback(() => {
+    methods.reset();
+  }, [methods]);
+
+  const closeHandler = useCallback(() => {
+    modelControl(null);
+    resetForm();
+  }, [resetForm, modelControl]);
+
   const departmentData = useMemo(
-    () =>
-      departments?.map((item) => {
-        return { value: item.id, label: item.title };
-      }),
+    () => dataToOptions(departments, 'title', 'id'),
     [departments]
   );
 
-  const roleData = useMemo(
-    () =>
-      roles?.map((item) => {
-        return { value: item.id, label: item.title };
-      }),
-    [roles]
-  );
+  const roleData = useMemo(() => dataToOptions(roles, 'title', 'id'), [roles]);
 
   const skillData = useMemo(
-    () =>
-      hardSkills?.map((item) => {
-        return { value: item.id, label: item.title };
-      }),
+    () => dataToOptions(hardSkills, 'title', 'id'),
     [hardSkills]
   );
 
   const addResource = useCreateResource();
 
-  const onSubmit = (data: AddResource) => {
-    //TODO handle get uuid later
-    const randomUuid: string = uuid();
-    addResource({ ...data, uuid: randomUuid });
-    setIsOpen(false);
+  const onSubmit = async (data: AddResource | EditResource) => {
+    switch (type) {
+      case 'ADD':
+        //TODO handle get uuid later
+        const randomUuid: string = uuid();
+        await addResource({ ...data, uuid: randomUuid });
+        break;
+      case 'EDIT':
+        if ('code' in data) {
+          delete data.code;
+          await updateResource({ ...data, id: id });
+        }
+        break;
+    }
+    closeHandler();
   };
+
+  useEffect(() => {
+    if (type === 'EDIT' && editedResource && isOpen) {
+      methods.setValue('name', editedResource.name);
+      methods.setValue('code', editedResource.code);
+      methods.setValue('departmentId', editedResource.departments.id);
+      methods.setValue('roleId', editedResource.resourcesRoles.id);
+      methods.setValue(
+        'hardSkillIds',
+        editedResource.resourcesHardSkills.map((item) => item.hardSkills.id)
+      );
+      methods.setValue('yearsOfExperience', editedResource.yearsOfExperience);
+    }
+    return () => {};
+  }, [editedResource, isOpen, methods, type]);
 
   return (
     <ModalWrapper
       isOpen={isOpen}
-      setIsOpen={() => setIsOpen(false)}
-      title={addResourceText.TITLE}
+      setIsOpen={closeHandler}
+      title={type === 'ADD' ? addResourceText.TITLE : editResourceText.TITLE}
     >
       <Box
         sx={{
@@ -106,7 +146,7 @@ const AddResourceModal: FC<Props> = ({ isOpen, setIsOpen }) => {
           right: '16px',
           cursor: 'pointer',
         }}
-        onClick={() => setIsOpen(false)}
+        onClick={closeHandler}
       >
         <ClearIcon />
       </Box>
@@ -115,32 +155,47 @@ const AddResourceModal: FC<Props> = ({ isOpen, setIsOpen }) => {
           <TextFieldC
             name="name"
             title={addResourceText.NAME}
-            placeholder={addResourcePlaceholder.NAME}
+            placeholder={resourcePlaceholder.NAME}
             type="text"
           />
+          {type === 'EDIT' && (
+            <TextFieldC
+              name="code"
+              title={editResourceText.CODE}
+              type="text"
+              disabled={true}
+              sx={{
+                '& fieldset': { border: 'none' },
+                '& .Mui-disabled': {
+                  WebkitTextFillColor: '#000',
+                },
+              }}
+            />
+          )}
           <SelectC
             name="departmentId"
             title={addResourceText.DEPARTMENT}
-            placeholder={addResourcePlaceholder.DEPARTMENT}
-            options={departmentData || []}
+            placeholder={resourcePlaceholder.DEPARTMENT}
+            options={departmentData}
           />
           <SelectC
             name="roleId"
             title={addResourceText.ROLE}
-            placeholder={addResourcePlaceholder.ROLE}
-            options={roleData || []}
+            placeholder={resourcePlaceholder.ROLE}
+            options={roleData}
           />
           <SelectMultipleC
             name="hardSkillIds"
             title={addResourceText.HARD_SKILLS}
-            placeholder={addResourcePlaceholder.HARD_SKILLS}
-            options={skillData || []}
+            placeholder={resourcePlaceholder.HARD_SKILLS}
+            options={skillData}
           />
           <TextFieldC
             name="yearsOfExperience"
             title={addResourceText.YOE}
-            placeholder={addResourcePlaceholder.YOE}
+            placeholder={resourcePlaceholder.YOE}
             type="number"
+            defaultValue={0}
             sx={{ width: 200 }}
           />
         </Stack>
@@ -161,7 +216,7 @@ const AddResourceModal: FC<Props> = ({ isOpen, setIsOpen }) => {
                 opacity: 0.8,
               },
             }}
-            onClick={() => setIsOpen(false)}
+            onClick={closeHandler}
           >
             {buttonText.CANCEL}
           </Button>
@@ -176,7 +231,7 @@ const AddResourceModal: FC<Props> = ({ isOpen, setIsOpen }) => {
             }}
             type="submit"
           >
-            {buttonText.ADD_NEW}
+            {type === 'ADD' ? buttonText.ADD_NEW : buttonText.SAVE}
           </Button>
         </Box>
       </FormWrapper>
@@ -184,4 +239,4 @@ const AddResourceModal: FC<Props> = ({ isOpen, setIsOpen }) => {
   );
 };
 
-export default AddResourceModal;
+export default ResourceModal;

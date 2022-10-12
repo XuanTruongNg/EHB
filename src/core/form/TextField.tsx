@@ -7,6 +7,7 @@ type ITextField = TextFieldProps & {
   title: string;
   width?: number;
   type?: string;
+  disabled?: boolean;
   defaultValue?: string | number;
   rules?: Exclude<
     RegisterOptions,
@@ -20,6 +21,7 @@ const TextFieldC: React.FunctionComponent<ITextField> = ({
   defaultValue = '',
   width = 400,
   type = 'text',
+  disabled = false,
   rules,
   ...rest
 }) => {
@@ -46,6 +48,7 @@ const TextFieldC: React.FunctionComponent<ITextField> = ({
             <TextField
               {...rest}
               {...field}
+              disabled={disabled}
               type={type}
               sx={{ width: 400, ...rest.sx }}
               error={!!errors[name]}
@@ -56,6 +59,7 @@ const TextFieldC: React.FunctionComponent<ITextField> = ({
               }
               InputProps={{
                 inputProps: { min: 0 },
+                ...rest.InputProps,
               }}
             />
           </Box>

@@ -1,16 +1,12 @@
 import { Box, Select, SelectProps } from '@mui/material';
 import MenuItem from '@mui/material/MenuItem';
+import { SelectOptions } from 'core/interface/select';
 import { Controller, RegisterOptions, useFormContext } from 'react-hook-form';
 import FieldWrapper from './FieldWrapper';
 
-interface Option {
-  value: number;
-  label: string;
-}
-
 type ISelect = SelectProps & {
   name: string;
-  options: Option[];
+  options: SelectOptions[];
   placeholder: string;
   title: string;
   rules?: Exclude<
@@ -53,7 +49,6 @@ const SelectC: React.FunctionComponent<ISelect> = ({
                 {...field}
                 {...rest}
                 onChange={(e) => {
-                  console.log(e);
                   field.onChange(e);
                 }}
                 error={!!errors[name]}
@@ -77,7 +72,7 @@ const SelectC: React.FunctionComponent<ISelect> = ({
               >
                 {options.map((option) => {
                   return (
-                    <MenuItem key={option.value} value={option.value}>
+                    <MenuItem key={option.label} value={option.value}>
                       {option.label}
                     </MenuItem>
                   );

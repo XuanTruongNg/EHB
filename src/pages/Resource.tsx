@@ -1,8 +1,9 @@
 import { Box, Button } from '@mui/material';
+import { GridCellParams } from '@mui/x-data-grid';
 import DatagridC, { TableOnChangeData } from 'components/Datagrid';
 import NavBar from 'components/NavBar';
 import SearchBar from 'components/SearchBar';
-import AddResourceModal from 'containers/AddResourceModal';
+import ResourceModal from 'containers/ResourceModal';
 import { buttonText, navBarText } from 'core/constant';
 import { resourceText } from 'core/constant/resource';
 import { HEADER_MARGIN } from 'core/constant/spacing';
@@ -18,7 +19,9 @@ type SPagination = PaginationData<ResourceModel> | undefined;
 type SFilter = FilterParams<ResourceModel> | undefined;
 
 const Resource = () => {
-  const [isOpen, setIsOpen] = useState(false);
+  const [modelControl, setModelControl] = useState<'ADD' | 'EDIT' | null>(null);
+
+  const [selectedValue, setSelectedValue] = useState<number>(-1);
 
   // TODO: find a better solution in future
   const [searchData, setSearchData] = useState<string | undefined>(undefined);
@@ -71,7 +74,7 @@ const Resource = () => {
     () =>
       resources?.data.map((item) => {
         return {
-          id: item.uuid,
+          id: item.id,
           code: item.code,
           name: item.name,
           resourcesRoles: item.resourcesRoles.title,
@@ -119,6 +122,12 @@ const Resource = () => {
     setFilterData({ ...paginationData, searchData });
   }, [paginationData, searchData]);
 
+  const onCellClick = (params: GridCellParams) => {
+    const { row } = params;
+    setSelectedValue(row.id);
+    setModelControl('EDIT');
+  };
+
   return (
     <>
       <NavBar title={navBarText.RESOURCES} height={60} />
@@ -143,7 +152,7 @@ const Resource = () => {
                 opacity: 0.8,
               },
             }}
-            onClick={() => setIsOpen((isOpen) => !isOpen)}
+            onClick={() => setModelControl('ADD')}
           >
             {buttonText.ADD_RESOURCE}
           </Button>
@@ -155,13 +164,24 @@ const Resource = () => {
             columns={resourceColumns}
             rows={resourceRows}
             loading={isFetching}
+            onCellClick={onCellClick}
             rowCount={resources?.count ?? -1}
             onChange={handleTableChange}
             page={filterData?.page}
           />
         </Box>
       </Box>
-      <AddResourceModal isOpen={isOpen} setIsOpen={setIsOpen} />
+      <ResourceModal
+        isOpen={modelControl === 'ADD'}
+        modelControl={setModelControl}
+        type={'ADD'}
+      />
+      <ResourceModal
+        isOpen={modelControl === 'EDIT'}
+        modelControl={setModelControl}
+        id={selectedValue}
+        type={'EDIT'}
+      />
     </>
   );
 };

@@ -4,4 +4,5 @@ export const buttonText = {
   ADD_RESOURCE: 'Add new resource',
   ADD_NEW: 'Add new',
   CANCEL: 'Cancel',
+  SAVE: 'Save',
 };

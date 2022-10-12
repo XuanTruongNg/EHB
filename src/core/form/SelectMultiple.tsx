@@ -1,16 +1,12 @@
 import { Box, Chip, Select, SelectProps } from '@mui/material';
 import MenuItem from '@mui/material/MenuItem';
+import { SelectOptions } from 'core/interface/select';
 import { Controller, RegisterOptions, useFormContext } from 'react-hook-form';
 import FieldWrapper from './FieldWrapper';
 
-interface Option {
-  value: number;
-  label: string;
-}
-
 type ISelectMultiple = SelectProps & {
   name: string;
-  options: Option[];
+  options: SelectOptions[];
   placeholder: string;
   title: string;
   rules?: Exclude<
@@ -54,7 +50,7 @@ const SelectMultipleC: React.FunctionComponent<ISelectMultiple> = ({
                 {...rest}
                 error={!!errors[name]}
                 renderValue={(selected) => {
-                  const selectedItemValues: Option['value'][] = selected;
+                  const selectedItemValues: SelectOptions['value'][] = selected;
                   return (
                     <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5 }}>
                       {selectedItemValues?.map((value) => {
