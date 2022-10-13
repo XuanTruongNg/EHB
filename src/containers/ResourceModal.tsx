@@ -8,6 +8,7 @@ import {
   editResourceText,
   resourcePlaceholder,
 } from 'core/constant';
+import AutocompleteC from 'core/form/Autocomplete';
 import FormWrapper from 'core/form/FormWrapper';
 import SelectC from 'core/form/Select';
 import SelectMultipleC from 'core/form/SelectMultiple';

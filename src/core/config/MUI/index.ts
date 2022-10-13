@@ -15,6 +15,16 @@ export const theme = createTheme({
     },
   },
   components: {
+    MuiTextField: {
+      defaultProps: {
+        size: 'small',
+      }
+    },
+    MuiSelect: {
+      defaultProps: {
+        size: 'small',
+      }
+    },
     MuiButton: {
       defaultProps: {
         variant: 'contained',

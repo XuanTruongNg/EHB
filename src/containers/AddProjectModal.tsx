@@ -1,5 +1,7 @@
 import { yupResolver } from '@hookform/resolvers/yup';
 import ClearIcon from '@mui/icons-material/Clear';
+import InputAdornment from '@mui/material/InputAdornment';
+import SearchIcon from '@mui/icons-material/Search';
 import { Box, Button } from '@mui/material';
 import Stack from '@mui/material/Stack';
 import {
@@ -114,6 +116,13 @@ const AddProjectModal: FC<Props> = ({ isOpen, setIsOpen }) => {
             title={addProjectText.PROJECT_MANAGER}
             placeholder={addProjectPlaceholder.PROJECT_MANAGER}
             type="number"
+            InputProps={{
+              endAdornment: (
+                <InputAdornment position="end">
+                  <SearchIcon />
+                </InputAdornment>
+              ),
+            }}
           />
 
           <Box sx={{ display: 'flex', alignItems: 'center' }}>
