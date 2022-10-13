@@ -12,6 +12,7 @@ import { Columns, Rows } from 'core/interface/table';
 import { useGetProject } from 'hooks';
 import moment from 'moment';
 import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 const { headerColumnText } = projectText;
 
@@ -24,6 +25,7 @@ const Project = () => {
   const [searchData, setSearchData] = useState<string | undefined>(undefined);
   const [paginationData, setPaginationData] = useState<SPagination>(undefined);
   const [filterData, setFilterData] = useState<SFilter>(undefined);
+  const navigate = useNavigate();
 
   const { data: projects, isFetching } = useGetProject(filterData);
 
@@ -50,6 +52,7 @@ const Project = () => {
         field: 'resourcesProjects',
         headerName: headerColumnText.ASSIGNED_RESOURCES,
         flex: 1,
+        sortable: false,
       },
       {
         field: 'startDate',
@@ -169,6 +172,7 @@ const Project = () => {
             rowCount={projects?.count ?? -1}
             onChange={handleTableChange}
             page={filterData?.page}
+            onRowClick={(params) => navigate(`/project/${params.row.id}`)}
           />
         </Box>
       </Box>

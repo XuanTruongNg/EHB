@@ -20,7 +20,7 @@ const Demo: React.FunctionComponent<DemoProps> = () => {
     <div>
       <div className="">You loggin:</div>
       <FormWrapper onSubmit={onSubmit} methods={methods}>
-        <TextFieldC name="id" title="id" type="text" dir="" />
+        <TextFieldC name="id" title="id" type="text" dir="row" />
         <input type="submit" />
       </FormWrapper>
       <pre>{JSON.stringify(data, null, 2)}</pre>

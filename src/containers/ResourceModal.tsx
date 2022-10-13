@@ -24,7 +24,7 @@ import {
 import { FC, useCallback, useEffect, useMemo } from 'react';
 import { useForm } from 'react-hook-form';
 import uuid from 'react-uuid';
-import { dataToOptions } from 'util/data';
+import { dataToOptions } from 'util/';
 import * as yup from 'yup';
 import ModalWrapper from '../components/ModalWrapper';
 

@@ -25,6 +25,7 @@ import {
   TIME_SHEET,
   AUTH_LOGIN,
 } from 'core/constant';
+import EditProject from 'containers/EditProject';
 
 export interface SingleRoute {
   path?: string;
@@ -63,7 +64,13 @@ export const ROUTES: SingleRoute[] = [
     path: PROJECT,
     component: <Layout />,
     guard: <AuthGuard acceptRoles={[ROLE_PROJECT_MANAGER, ROLE_ADMIN]} />,
-    children: [{ path: '', component: <Project /> }],
+    children: [
+      { path: '', component: <Project /> },
+      {
+        path: ':id',
+        component: <EditProject />,
+      },
+    ],
   },
   {
     path: RESOURCE,

@@ -1,31 +1,32 @@
 import { Box, Select, SelectProps } from '@mui/material';
 import MenuItem from '@mui/material/MenuItem';
+import { UI_DEFAULT_VALUE } from 'core/constant';
+import { BaseInputProps } from 'core/interface/form/base';
 import { SelectOptions } from 'core/interface/select';
 import { Controller, RegisterOptions, useFormContext } from 'react-hook-form';
 import FieldWrapper from './FieldWrapper';
 
-type ISelect = SelectProps & {
-  name: string;
-  options: SelectOptions[];
-  placeholder: string;
-  title: string;
-  labelWidth?: string;
-  labelMargin?: string;
-  rules?: Exclude<
-    RegisterOptions,
-    'valueAsNumber' | 'valueAsDate' | 'setValueAs'
-  >;
-};
+type ISelect = SelectProps &
+  BaseInputProps & {
+    name: string;
+    options: SelectOptions[];
+    placeholder?: string;
+    title?: string;
+    rules?: Exclude<
+      RegisterOptions,
+      'valueAsNumber' | 'valueAsDate' | 'setValueAs'
+    >;
+  };
 
 const SelectC: React.FunctionComponent<ISelect> = ({
   name,
   title,
   defaultValue = '',
-  placeholder,
   options,
   rules,
-  labelWidth,
-  labelMargin,
+  errorStyle,
+  labelStyle,
+  dir,
   ...rest
 }) => {
   const {
@@ -35,10 +36,11 @@ const SelectC: React.FunctionComponent<ISelect> = ({
 
   return (
     <FieldWrapper
-      title={title}
+      dir={dir}
       name={name}
-      margin={labelMargin}
-      width={labelWidth}
+      title={title}
+      errorStyle={errorStyle}
+      labelStyle={labelStyle}
     >
       <Controller
         name={name}
@@ -62,21 +64,22 @@ const SelectC: React.FunctionComponent<ISelect> = ({
                 }}
                 error={!!errors[name]}
                 defaultValue={defaultValue}
-                placeholder={placeholder}
                 sx={{
-                  '& .MuiSelect-select .notranslate::after': placeholder
+                  '& .MuiSelect-select .notranslate::after': rest.placeholder
                     ? {
-                        content: `"${placeholder}"`,
+                        content: `"${rest.placeholder}"`,
 
                         opacity: 0.42,
                       }
                     : {},
-                  width: 400,
+                  width: UI_DEFAULT_VALUE.INPUT_WIDTH,
+                  ...rest.sx,
                 }}
                 MenuProps={{
                   sx: {
                     height: 250,
                   },
+                  ...rest.MenuProps,
                 }}
               >
                 {options.map((option) => {

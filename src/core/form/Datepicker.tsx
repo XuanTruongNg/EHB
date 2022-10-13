@@ -1,36 +1,36 @@
-import { TextField } from '@mui/material';
+import { TextField, TextFieldProps } from '@mui/material';
 import { Controller, RegisterOptions, useFormContext } from 'react-hook-form';
 import FieldWrapper from './FieldWrapper';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DatePicker, DatePickerProps } from '@mui/x-date-pickers/DatePicker';
+import { BaseInputProps } from 'core/interface/form/base';
 
 type IDatePicker = Omit<
   DatePickerProps<unknown, unknown>,
   'value' | 'onChange' | 'renderInput'
-> & {
-  name: string;
-  placeholder: string;
-  inputWidth?: string;
-  title: string;
-  rules?: Exclude<
-    RegisterOptions,
-    'valueAsNumber' | 'valueAsDate' | 'setValueAs'
-  >;
-  defaultValue?: string | number;
-  labelWidth?: string;
-  labelMargin?: string;
-};
+> &
+  BaseInputProps & {
+    name: string;
+    inputWidth?: string;
+    title?: string;
+    rules?: Exclude<
+      RegisterOptions,
+      'valueAsNumber' | 'valueAsDate' | 'setValueAs'
+    >;
+    defaultValue?: string | number;
+    inputStyle?: TextFieldProps['sx'];
+  };
 
 const DatePickerC: React.FunctionComponent<IDatePicker> = ({
   name,
   title,
   defaultValue = '',
   rules,
-  placeholder,
-  labelWidth,
-  labelMargin,
-  inputWidth = '150px',
+  inputStyle,
+  labelStyle,
+  errorStyle,
+  dir,
   ...rest
 }) => {
   const {
@@ -41,27 +41,27 @@ const DatePickerC: React.FunctionComponent<IDatePicker> = ({
   return (
     <LocalizationProvider dateAdapter={AdapterDayjs}>
       <FieldWrapper
-        title={title}
-        width={labelWidth}
-        margin={labelMargin}
         name={name}
+        title={title}
+        errorStyle={errorStyle}
+        labelStyle={labelStyle}
+        dir={dir}
       >
         <Controller
-          {...rest}
           name={name}
           control={control}
           defaultValue={defaultValue}
           rules={rules}
           render={({ field: { onChange, value } }) => (
             <DatePicker
-              toolbarPlaceholder={placeholder}
+              {...rest}
               value={value}
               onChange={(value) => onChange(value)}
               renderInput={(params) => (
                 <TextField
                   {...params}
                   error={!!errors[name]}
-                  sx={{ width: inputWidth }}
+                  sx={{ width: '150px', ...inputStyle }}
                 />
               )}
             />

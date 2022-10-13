@@ -17,7 +17,7 @@ import { useGetProjectType } from 'hooks/projectType';
 import moment from 'moment';
 import { FC, useEffect, useMemo } from 'react';
 import { useForm } from 'react-hook-form';
-import { dataToOptions } from 'util/data';
+import { dataToOptions } from 'util/';
 import * as yup from 'yup';
 import ModalWrapper from '../components/ModalWrapper';
 
@@ -120,14 +120,13 @@ const AddProjectModal: FC<Props> = ({ isOpen, setIsOpen }) => {
             <DatePickerC
               name="startDate"
               title={addProjectText.START_DATE}
-              placeholder={addProjectPlaceholder.START_DATE}
+              toolbarPlaceholder={addProjectPlaceholder.START_DATE}
             />
             <DatePickerC
               name="endDate"
               title={addProjectText.END_DATE}
-              placeholder={addProjectPlaceholder.END_DATE}
-              labelWidth="60px"
-              labelMargin="0 0 0 40px"
+              toolbarPlaceholder={addProjectPlaceholder.END_DATE}
+              labelStyle={{ width: '60px', margin: '0 0 0 40px' }}
             />
           </Box>
 

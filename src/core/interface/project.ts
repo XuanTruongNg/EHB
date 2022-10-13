@@ -7,6 +7,10 @@ import { Project } from './models/project';
 export interface TempProject extends Omit<Project, 'resourcesProjects'> {
   resourcesProjects: ({
     resources: Resource;
+    bandwidth: number;
+    endDate: string;
+    startDate: string;
+    title: string;
   } & Base)[];
 }
 
@@ -16,4 +20,10 @@ export interface AddProject
   extends Pick<Project, 'name' | 'code' | 'startDate' | 'endDate'> {
   projectManagerId: number;
   projectTypesId: number;
+}
+
+export interface IEditProject
+  extends Pick<Project, 'code' | 'name' | 'startDate' | 'endDate'> {
+  projectManagerId: number;
+  projectTypeId: number;
 }

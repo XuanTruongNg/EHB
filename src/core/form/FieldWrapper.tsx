@@ -1,29 +1,32 @@
-import { Box, Typography } from '@mui/material';
+import { Box, Typography, TypographyProps } from '@mui/material';
 import { CustomFC } from 'core/interface/component';
 import { useMemo } from 'react';
 import { useFormContext } from 'react-hook-form';
 interface Props {
-  title: string;
-  width?: string;
-  margin?: string;
-  name: string;
+  title?: string;
+  name?: string;
+  labelStyle?: TypographyProps['sx'];
+  errorStyle?: TypographyProps['sx'];
+  dir?: 'row' | 'column';
 }
 
 const FieldWrapper: CustomFC<Props> = ({
   title,
   children,
   name,
-  margin,
-  width = '200px',
+  labelStyle,
+  errorStyle,
+  dir = 'row',
 }) => {
   const {
     formState: { errors },
   } = useFormContext();
 
   const errorText = useMemo(() => {
+    if (!name) return null;
     const error = errors[name]?.message;
     if (typeof error === 'string') return error;
-    return '';
+    return null;
   }, [name, errors]);
   return (
     <Box
@@ -31,13 +34,16 @@ const FieldWrapper: CustomFC<Props> = ({
         display: 'flex',
         justifyContent: 'flex-start',
         alignItems: 'center',
+        flexDirection: dir,
       }}
     >
-      <Typography sx={{ width, margin }}>{title}</Typography>
+      <Typography sx={{ width: '200px', ...labelStyle }}>{title}</Typography>
       <Box>
         {children}
         {errorText && (
-          <Typography sx={{ color: 'red', fontSize: 12, marginTop: '5px' }}>
+          <Typography
+            sx={{ color: 'red', fontSize: 12, marginTop: '5px', ...errorStyle }}
+          >
             {errorText}
           </Typography>
         )}

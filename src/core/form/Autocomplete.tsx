@@ -1,11 +1,8 @@
-import {
-  Typography,
-  Box,
-  Autocomplete,
-  TextField,
-  AutocompleteProps,
-} from '@mui/material';
+import { Autocomplete, TextField, AutocompleteProps } from '@mui/material';
+import { UI_DEFAULT_VALUE } from 'core/constant';
+import { BaseInputProps } from 'core/interface/form/base';
 import { Controller, useFormContext } from 'react-hook-form';
+import FieldWrapper from './FieldWrapper';
 
 interface option {
   value: number;
@@ -15,61 +12,53 @@ interface option {
 type IAutocomplete = Omit<
   AutocompleteProps<any, any, any, any>,
   'renderInput'
-> & {
-  name: string;
-  options: option[];
-  placeholder: string;
-  title: string;
-  width?: number;
-  isMultiple?: boolean;
-};
+> &
+  BaseInputProps & {
+    name: string;
+    placeholder: string;
+    title: string;
+  };
 
 const AutocompleteC: React.FunctionComponent<IAutocomplete> = ({
   name,
   title,
-  width = 400,
   defaultValue,
   placeholder,
-  options,
-  isMultiple,
+  labelStyle,
+  errorStyle,
+  dir,
   ...rest
 }) => {
   const { control, setValue } = useFormContext();
 
   return (
-    <Box
-      sx={{
-        display: 'flex',
-        justifyContent: 'flex-start',
-        alignItems: 'center',
-      }}
+    <FieldWrapper
+      dir={dir}
+      name={name}
+      title={title}
+      labelStyle={labelStyle}
+      errorStyle={errorStyle}
     >
-      <Typography sx={{ width: '200px' }}>{title}</Typography>
       <Controller
         name={name}
         control={control}
         defaultValue={defaultValue}
-        rules={{ required: true }}
         render={({ field }) => {
           return (
             <Autocomplete
               {...field}
               {...rest}
-              sx={{ width }}
-              disableClearable
-              multiple={isMultiple}
+              sx={{ width: UI_DEFAULT_VALUE.INPUT_WIDTH, ...rest.sx }}
               defaultValue={defaultValue}
               getOptionLabel={(option) => option.label}
-              // isOptionEqualToValue={(option, value) => option.id === value.id}
               onChange={(_, data) => {
-                if (isMultiple) {
+                if (rest.multiple) {
                   const multiple = data.map((item: option) => item.value);
                   setValue(name, multiple);
                 } else {
                   setValue(name, data.value);
                 }
               }}
-              options={options}
               renderOption={(props, option) => (
                 <li {...props} key={option.value}>
                   {option.label}
@@ -93,7 +82,7 @@ const AutocompleteC: React.FunctionComponent<IAutocomplete> = ({
           );
         }}
       />
-    </Box>
+    </FieldWrapper>
   );
 };
 
