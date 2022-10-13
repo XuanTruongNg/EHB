@@ -8,10 +8,9 @@ import {
   editResourceText,
   resourcePlaceholder,
 } from 'core/constant';
-import AutocompleteC from 'core/form/Autocomplete';
 import FormWrapper from 'core/form/FormWrapper';
 import SelectC from 'core/form/Select';
-import SelectMultipleC from 'core/form/SelectMultiple';
+import AutocompleteC from 'core/form/Autocomplete';
 import TextFieldC from 'core/form/TextField';
 import { AddResource, EditResource } from 'core/interface/resource';
 import {
@@ -186,11 +185,12 @@ const ResourceModal: FC<Props> = ({
             placeholder={resourcePlaceholder.ROLE}
             options={roleData}
           />
-          <SelectMultipleC
+          <AutocompleteC
             name="hardSkillIds"
             title={addResourceText.HARD_SKILLS}
             placeholder={resourcePlaceholder.HARD_SKILLS}
             options={skillData}
+            multiple
           />
           <TextFieldC
             name="yearsOfExperience"

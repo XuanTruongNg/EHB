@@ -2,14 +2,14 @@ import { Box, Chip, Select, SelectProps } from '@mui/material';
 import MenuItem from '@mui/material/MenuItem';
 import { UI_DEFAULT_VALUE } from 'core/constant';
 import { BaseInputProps } from 'core/interface/form/base';
-import { SelectOptions } from 'core/interface/select';
+import { SelectOption } from 'core/interface/select';
 import { Controller, RegisterOptions, useFormContext } from 'react-hook-form';
 import FieldWrapper from './FieldWrapper';
 
 type ISelectMultiple = SelectProps &
   BaseInputProps & {
     name: string;
-    options: SelectOptions[];
+    options: SelectOption[];
     placeholder?: string;
     title?: string;
     rules?: Exclude<
@@ -55,7 +55,7 @@ const SelectMultipleC: React.FunctionComponent<ISelectMultiple> = ({
               multiple={true}
               error={!!errors[name]}
               renderValue={(selected) => {
-                const selectedItemValues: SelectOptions['value'][] = selected;
+                const selectedItemValues: SelectOption['value'][] = selected;
                 return (
                   <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5 }}>
                     {selectedItemValues?.map((value) => {

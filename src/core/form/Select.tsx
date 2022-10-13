@@ -2,14 +2,14 @@ import { Box, Select, SelectProps } from '@mui/material';
 import MenuItem from '@mui/material/MenuItem';
 import { UI_DEFAULT_VALUE } from 'core/constant';
 import { BaseInputProps } from 'core/interface/form/base';
-import { SelectOptions } from 'core/interface/select';
+import { SelectOption } from 'core/interface/select';
 import { Controller, RegisterOptions, useFormContext } from 'react-hook-form';
 import FieldWrapper from './FieldWrapper';
 
 type ISelect = SelectProps &
   BaseInputProps & {
     name: string;
-    options: SelectOptions[];
+    options: SelectOption[];
     placeholder?: string;
     title?: string;
     rules?: Exclude<

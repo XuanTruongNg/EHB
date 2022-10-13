@@ -3,11 +3,7 @@ import { UI_DEFAULT_VALUE } from 'core/constant';
 import { BaseInputProps } from 'core/interface/form/base';
 import { Controller, useFormContext } from 'react-hook-form';
 import FieldWrapper from './FieldWrapper';
-
-interface option {
-  value: number;
-  label: string;
-}
+import { SelectOption } from 'core/interface/select';
 
 type IAutocomplete = Omit<
   AutocompleteProps<any, any, any, any>,
@@ -15,6 +11,7 @@ type IAutocomplete = Omit<
 > &
   BaseInputProps & {
     name: string;
+    options: SelectOption[];
     placeholder: string;
     title: string;
   };
@@ -43,17 +40,28 @@ const AutocompleteC: React.FunctionComponent<IAutocomplete> = ({
         name={name}
         control={control}
         defaultValue={defaultValue}
-        render={({ field }) => {
+        render={({ field: { value, ...fieldRest } }) => {
+          let _value;
+          if (!rest.multiple) {
+            _value = rest.options.find(
+              (option: SelectOption) => option.value === value
+            );
+          } else {
+            _value = rest.options.filter(
+              (option) => !!value?.includes(option.value)
+            );
+          }
           return (
             <Autocomplete
-              {...field}
+              {...fieldRest}
               {...rest}
+              value={_value}
               sx={{ width: UI_DEFAULT_VALUE.INPUT_WIDTH, ...rest.sx }}
               defaultValue={defaultValue}
               getOptionLabel={(option) => option.label}
               onChange={(_, data) => {
                 if (rest.multiple) {
-                  const multiple = data.map((item: option) => item.value);
+                  const multiple = data.map((item: SelectOption) => item.value);
                   setValue(name, multiple);
                 } else {
                   setValue(name, data.value);
