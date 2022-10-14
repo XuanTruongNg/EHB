@@ -5,6 +5,7 @@ import { Controller, useFormContext } from 'react-hook-form';
 import FieldWrapper from './FieldWrapper';
 import { SelectOption } from 'core/interface/select';
 
+//TODO Autocomplete can only use with multiple options now
 type IAutocomplete = Omit<
   AutocompleteProps<any, any, any, any>,
   'renderInput'
@@ -19,14 +20,19 @@ type IAutocomplete = Omit<
 const AutocompleteC: React.FunctionComponent<IAutocomplete> = ({
   name,
   title,
-  defaultValue,
+  multiple,
+  defaultValue = multiple ? [] : '',
   placeholder,
   labelStyle,
   errorStyle,
   dir,
   ...rest
 }) => {
-  const { control, setValue } = useFormContext();
+  const {
+    control,
+    setValue,
+    formState: { errors },
+  } = useFormContext();
 
   return (
     <FieldWrapper
@@ -42,7 +48,7 @@ const AutocompleteC: React.FunctionComponent<IAutocomplete> = ({
         defaultValue={defaultValue}
         render={({ field: { value, ...fieldRest } }) => {
           let _value;
-          if (!rest.multiple) {
+          if (!multiple) {
             _value = rest.options.find(
               (option: SelectOption) => option.value === value
             );
@@ -56,11 +62,12 @@ const AutocompleteC: React.FunctionComponent<IAutocomplete> = ({
               {...fieldRest}
               {...rest}
               value={_value}
+              multiple={multiple}
               sx={{ width: UI_DEFAULT_VALUE.INPUT_WIDTH, ...rest.sx }}
               defaultValue={defaultValue}
               getOptionLabel={(option) => option.label}
               onChange={(_, data) => {
-                if (rest.multiple) {
+                if (multiple) {
                   const multiple = data.map((item: SelectOption) => item.value);
                   setValue(name, multiple);
                 } else {
@@ -76,6 +83,7 @@ const AutocompleteC: React.FunctionComponent<IAutocomplete> = ({
                 return (
                   <TextField
                     {...params}
+                    error={!!errors[name]}
                     variant="outlined"
                     placeholder={placeholder}
                     fullWidth
