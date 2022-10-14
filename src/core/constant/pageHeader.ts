@@ -1,4 +1,4 @@
-export const navBarText = {
+export const pageHeaderText = {
   RESOURCES: 'Resources',
   PROJECTS: 'Projects',
 };

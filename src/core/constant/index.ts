@@ -2,7 +2,7 @@ export * from './button';
 export * from './config';
 export * from './key';
 export * from './modal';
-export * from './navBar';
+export * from './pageHeader';
 export * from './notFoundPage';
 export * from './project';
 export * from './resource';

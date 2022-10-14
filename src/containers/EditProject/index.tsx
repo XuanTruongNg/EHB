@@ -6,7 +6,7 @@ import { useForm } from 'react-hook-form';
 import TextFieldC from 'core/form/TextField';
 import SelectC from 'core/form/Select';
 import DatePickerC from 'core/form/Datepicker';
-import { useCallback, useEffect, useMemo } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import { dataToOptions } from 'util/';
 import { IEditProject, TempProject } from 'core/interface/project';
 import { useGetProjectById, useGetProjectType, useUpdateProject } from 'hooks';
@@ -54,6 +54,7 @@ const schema = yup.object({
 });
 
 const EditProject: React.FunctionComponent<EditProjectProps> = () => {
+  const [isDisabled, setIsDisabled] = useState<boolean>(true);
   const navigate = useNavigate();
   const methods = useForm<IEditProject>({ resolver: yupResolver(schema) });
   const { data: projectTypes } = useGetProjectType();
@@ -123,12 +124,14 @@ const EditProject: React.FunctionComponent<EditProjectProps> = () => {
               name="code"
               sx={{ width: 100 }}
               InputProps={{ style: { fontWeight: 'bold', height: 30 } }}
+              disabled={isDisabled}
             />
             <TextFieldC
               labelStyle={{ width: 0 }}
               name="name"
-              sx={{ width: 100 }}
+              sx={{ width: 'auto' }}
               InputProps={{ style: { fontWeight: 'bold', height: 30 } }}
+              disabled={isDisabled}
             />
           </Box>
         </Box>
@@ -154,6 +157,7 @@ const EditProject: React.FunctionComponent<EditProjectProps> = () => {
                 title="Project Manager"
                 labelStyle={{ width: '130px', fontWeight: 600 }}
                 sx={{ marginLeft: 2, width: 200 }}
+                disabled={isDisabled}
               />
               <SelectC
                 name="projectTypeId"
@@ -161,6 +165,7 @@ const EditProject: React.FunctionComponent<EditProjectProps> = () => {
                 sx={{ width: 200, marginLeft: 2 }}
                 labelStyle={{ width: '130px', fontWeight: 600 }}
                 options={projectTypeData}
+                disabled={isDisabled}
               />
             </Box>
             <Box
@@ -176,19 +181,21 @@ const EditProject: React.FunctionComponent<EditProjectProps> = () => {
                   labelStyle={{ width: '90px', fontWeight: 600 }}
                   title="Duration"
                   name="startDate"
+                  disabled={isDisabled}
                   inputStyle={{ marginLeft: 2, marginRight: 2 }}
                 />
                 <DatePickerC
                   labelStyle={{ width: 'auto' }}
                   inputStyle={{ marginLeft: 2 }}
                   title="to"
+                  disabled={isDisabled}
                   name="endDate"
                 />
               </Box>
               <TextFieldC
                 title={'Total members'}
                 type="text"
-                disabled={true}
+                disabled={isDisabled}
                 value={data?.resourcesProjects.length || 0}
                 labelStyle={{ width: '130px', fontWeight: 600 }}
                 sx={{
@@ -204,10 +211,77 @@ const EditProject: React.FunctionComponent<EditProjectProps> = () => {
             sx={{
               flex: '1 1 0%',
               display: 'flex',
-              justifyContent: 'flex-end',
+              flexDirection: 'column',
+              justifyContent: 'space-between',
+              alignItems: 'flex-end',
               paddingRight: '4%',
             }}
           >
+            {isDisabled ? (
+              <Button
+                size="medium"
+                sx={{
+                  backgroundColor: 'secondary.main',
+                  ':hover': {
+                    backgroundColor: 'secondary.main',
+                    opacity: 0.8,
+                  },
+                  width: '200px',
+                  fontSize: '16px',
+                }}
+                onClick={() => setIsDisabled(!isDisabled)}
+              >
+                {buttonText.EDIT_PROJECT}
+              </Button>
+            ) : null}
+            {!isDisabled ? (
+              <Button
+                size="medium"
+                sx={{
+                  backgroundColor: 'secondary.main',
+                  ':hover': {
+                    backgroundColor: 'secondary.main',
+                    opacity: 0.8,
+                  },
+                  width: '200px',
+                  fontSize: '16px',
+                }}
+                // onClick={}
+              >
+                {buttonText.ADD_NEW_MEMBER}
+              </Button>
+            ) : null}
+          </Box>
+        </Box>
+        <Box sx={{ padding: 5 }}>{/* TODO Data Grid goes here */}</Box>
+        {!isDisabled ? (
+          <Box
+            sx={{
+              display: 'flex',
+              gap: '20px',
+              justifyContent: 'end',
+              paddingRight: 2,
+            }}
+          >
+            <Button
+              size="medium"
+              sx={{
+                backgroundColor: 'secondary.light',
+                ':hover': {
+                  backgroundColor: 'secondary.light',
+                  opacity: 0.8,
+                },
+                width: '150px',
+                fontSize: '16px',
+              }}
+              type="button"
+              onClick={() => {
+                setIsDisabled(true);
+                handleReset(data);
+              }}
+            >
+              {buttonText.CANCEL}
+            </Button>
             <Button
               size="medium"
               sx={{
@@ -216,56 +290,15 @@ const EditProject: React.FunctionComponent<EditProjectProps> = () => {
                   backgroundColor: 'secondary.main',
                   opacity: 0.8,
                 },
-                width: '200px',
+                width: '150px',
                 fontSize: '16px',
               }}
-              // onClick={}
+              type="submit"
             >
-              {buttonText.ADD_NEW_MEMBER}
+              {buttonText.SAVE}
             </Button>
           </Box>
-        </Box>
-        <Box sx={{ padding: 5 }}>{/* TODO Data Grid goes here */}</Box>
-        <Box
-          sx={{
-            display: 'flex',
-            gap: '20px',
-            justifyContent: 'end',
-            paddingRight: 2,
-          }}
-        >
-          <Button
-            size="medium"
-            sx={{
-              backgroundColor: 'secondary.light',
-              ':hover': {
-                backgroundColor: 'secondary.light',
-                opacity: 0.8,
-              },
-              width: '150px',
-              fontSize: '16px',
-            }}
-            type="button"
-            onClick={() => handleReset(data)}
-          >
-            {buttonText.CANCEL}
-          </Button>
-          <Button
-            size="medium"
-            sx={{
-              backgroundColor: 'secondary.main',
-              ':hover': {
-                backgroundColor: 'secondary.main',
-                opacity: 0.8,
-              },
-              width: '150px',
-              fontSize: '16px',
-            }}
-            type="submit"
-          >
-            {buttonText.SAVE}
-          </Button>
-        </Box>
+        ) : null}
       </FormWrapper>
     </>
   );

@@ -17,7 +17,7 @@ import { AddProject } from 'core/interface/project';
 import { useCreateProject } from 'hooks/project';
 import { useGetProjectType } from 'hooks/projectType';
 import moment from 'moment';
-import { FC, useEffect, useMemo } from 'react';
+import { FC, useEffect, useMemo, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { dataToOptions } from 'util/';
 import * as yup from 'yup';
@@ -54,16 +54,12 @@ const schema = yup.object({
 });
 
 const AddProjectModal: FC<Props> = ({ isOpen, setIsOpen }) => {
+  const [start, setStart] = useState<Date>();
+  const [end, setEnd] = useState<Date>();
   const methods = useForm<AddProject>({
     resolver: yupResolver(schema),
   });
   const { data: projectTypes } = useGetProjectType();
-
-  useEffect(() => {
-    if (!isOpen) {
-      methods.reset();
-    }
-  }, [isOpen, methods]);
 
   const projectTypeData = useMemo(
     () => dataToOptions(projectTypes, 'name', 'id'),
@@ -79,6 +75,12 @@ const AddProjectModal: FC<Props> = ({ isOpen, setIsOpen }) => {
     addProject({ ...data, startDate, endDate });
     setIsOpen(false);
   };
+
+  useEffect(() => {
+    if (!isOpen) {
+      methods.reset();
+    }
+  }, [isOpen, methods]);
 
   return (
     <ModalWrapper
@@ -128,12 +130,16 @@ const AddProjectModal: FC<Props> = ({ isOpen, setIsOpen }) => {
           <Box sx={{ display: 'flex', alignItems: 'center' }}>
             <DatePickerC
               name="startDate"
+              maxDate={start}
               title={addProjectText.START_DATE}
               toolbarPlaceholder={addProjectPlaceholder.START_DATE}
+              onAccept={(date: any) => setEnd(date)}
             />
             <DatePickerC
               name="endDate"
+              minDate={end}
               title={addProjectText.END_DATE}
+              onAccept={(date: any) => setStart(date)}
               toolbarPlaceholder={addProjectPlaceholder.END_DATE}
               labelStyle={{ width: '60px', margin: '0 0 0 40px' }}
             />

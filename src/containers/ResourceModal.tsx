@@ -127,7 +127,7 @@ const ResourceModal: FC<Props> = ({
       methods.setValue('roleId', editedResource.resourcesRoles.id);
       methods.setValue(
         'hardSkillIds',
-        editedResource.resourcesHardSkills.map((item) => item.hardSkills.id)
+        editedResource.resourcesHardSkills?.map((item) => item.hardSkills.id)
       );
       methods.setValue('yearsOfExperience', editedResource.yearsOfExperience);
     }
@@ -165,12 +165,6 @@ const ResourceModal: FC<Props> = ({
               title={editResourceText.CODE}
               type="text"
               disabled={true}
-              sx={{
-                '& fieldset': { border: 'none' },
-                '& .Mui-disabled': {
-                  WebkitTextFillColor: '#000',
-                },
-              }}
             />
           )}
           <SelectC

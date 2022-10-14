@@ -1,10 +1,10 @@
 import { Box, Button } from '@mui/material';
 import { GridCellParams } from '@mui/x-data-grid';
 import DatagridC, { TableOnChangeData } from 'components/Datagrid';
-import NavBar from 'components/NavBar';
+import PageHeader from 'components/PageHeader';
 import SearchBar from 'components/SearchBar';
 import ResourceModal from 'containers/ResourceModal';
-import { buttonText, navBarText } from 'core/constant';
+import { buttonText, pageHeaderText } from 'core/constant';
 import { resourceText } from 'core/constant/resource';
 import { HEADER_MARGIN } from 'core/constant/spacing';
 import { FilterParams, PaginationData } from 'core/interface/api';
@@ -25,8 +25,16 @@ const Resource = () => {
 
   // TODO: find a better solution in future
   const [searchData, setSearchData] = useState<string | undefined>(undefined);
-  const [paginationData, setPaginationData] = useState<SPagination>(undefined);
-  const [filterData, setFilterData] = useState<SFilter>(undefined);
+
+  const defaultParams: SFilter = {
+    order: 'ASC',
+    orderBy: 'code',
+  };
+
+  const [paginationData, setPaginationData] =
+    useState<SPagination>(defaultParams);
+
+  const [filterData, setFilterData] = useState<SFilter>(defaultParams);
 
   const { data: resources, isFetching } = useGetResource(filterData);
 
@@ -79,7 +87,7 @@ const Resource = () => {
           name: item.name,
           resourcesRoles: item.resourcesRoles.title,
           departments: item.departments.title,
-          resourcesHardSkills: item.resourcesHardSkills.map(
+          resourcesHardSkills: item.resourcesHardSkills?.map(
             (item) => item.hardSkills.title
           ),
           yearsOfExperience: item.yearsOfExperience,
@@ -104,8 +112,8 @@ const Resource = () => {
           orderBy = sort.field;
           break;
         default:
-          order = undefined;
-          orderBy = undefined;
+          order = defaultParams.order;
+          orderBy = defaultParams.orderBy;
           break;
       }
       setPaginationData({ page, pageSize, order, orderBy });
@@ -130,7 +138,7 @@ const Resource = () => {
 
   return (
     <>
-      <NavBar title={navBarText.RESOURCES} height={60} />
+      <PageHeader title={pageHeaderText.RESOURCES} height={60} />
       <Box
         sx={{
           display: 'flex',

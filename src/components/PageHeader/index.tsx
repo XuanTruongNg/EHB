@@ -18,7 +18,7 @@ const PageHeader: FC<Props> = ({ title, height }) => {
         borderBottom: '1px solid #C1C1C1',
       }}
     >
-      <Typography sx={{ fontWeight: 600 }}>{title}</Typography>
+      <Typography sx={{ fontWeight: 600, fontSize: 20 }}>{title}</Typography>
     </Box>
   );
 };

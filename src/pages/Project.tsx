@@ -1,9 +1,9 @@
 import { Box, Button } from '@mui/material';
 import DatagridC, { TableOnChangeData } from 'components/Datagrid';
-import NavBar from 'components/NavBar';
+import PageHeader from 'components/PageHeader';
 import SearchBar from 'components/SearchBar';
 import AddProjectModal from 'containers/AddProjectModal';
-import { buttonText, navBarText } from 'core/constant';
+import { buttonText, pageHeaderText } from 'core/constant';
 import { projectText } from 'core/constant/project';
 import { HEADER_MARGIN } from 'core/constant/spacing';
 import { FilterParams, PaginationData } from 'core/interface/api';
@@ -23,8 +23,15 @@ const Project = () => {
   const [isOpen, setIsOpen] = useState(false);
 
   const [searchData, setSearchData] = useState<string | undefined>(undefined);
-  const [paginationData, setPaginationData] = useState<SPagination>(undefined);
-  const [filterData, setFilterData] = useState<SFilter>(undefined);
+
+  const defaultParams: SFilter = {
+    order: 'DESC',
+    orderBy: 'createdAt',
+  };
+
+  const [paginationData, setPaginationData] =
+    useState<SPagination>(defaultParams);
+  const [filterData, setFilterData] = useState<SFilter>(defaultParams);
   const navigate = useNavigate();
 
   const { data: projects, isFetching } = useGetProject(filterData);
@@ -116,8 +123,8 @@ const Project = () => {
           orderBy = sort.field;
           break;
         default:
-          order = undefined;
-          orderBy = undefined;
+          order = defaultParams.order;
+          orderBy = defaultParams.orderBy;
           break;
       }
       setPaginationData({ page, pageSize, order, orderBy });
@@ -135,7 +142,7 @@ const Project = () => {
 
   return (
     <>
-      <NavBar title={navBarText.PROJECTS} height={60} />
+      <PageHeader title={pageHeaderText.PROJECTS} height={60} />
       <Box
         sx={{
           display: 'flex',
