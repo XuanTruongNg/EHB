@@ -24,7 +24,6 @@ const TextFieldC: React.FunctionComponent<ITextField> = ({
   rules,
   labelStyle,
   errorStyle,
-  disabled,
   dir,
   ...rest
 }) => {
@@ -54,14 +53,15 @@ const TextFieldC: React.FunctionComponent<ITextField> = ({
               sx={{
                 width: UI_DEFAULT_VALUE.INPUT_WIDTH,
                 '& fieldset': {
-                  border: disabled ? 'none' : '1px solid rgba(0, 0, 0, 0.23)',
+                  border: rest.disabled
+                    ? 'none'
+                    : '1px solid rgba(0, 0, 0, 0.23)',
                 },
                 '& .Mui-disabled': {
                   WebkitTextFillColor: 'black',
                 },
                 ...rest.sx,
               }}
-              disabled={disabled}
               error={!!errors[name]}
               onChange={(event) =>
                 field.onChange(

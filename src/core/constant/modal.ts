@@ -30,8 +30,9 @@ export const addProjectText = {
   NAME: 'Project name',
   CODE: 'Project code',
   PROJECT_MANAGER: 'Project manager',
-  START_DATE: 'Duration',
-  END_DATE: 'To',
+  DURATION: 'Duration',
+  START_DATE: 'from',
+  END_DATE: 'to',
   TYPE: 'Project type',
 };
 
@@ -42,4 +43,12 @@ export const addProjectPlaceholder = {
   START_DATE: 'dd/mm/yyyy',
   END_DATE: 'dd/mm/yyyy',
   TYPE: 'Choose an option',
+};
+
+export const editProjectText = {
+  PROJECT_MANAGER: 'Project Manager',
+  PROJECT_TYPE: 'Project type',
+  DURATION: 'Duration',
+  START_DATE: 'from',
+  END_DATE: 'to',
 };

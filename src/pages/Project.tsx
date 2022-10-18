@@ -24,14 +24,8 @@ const Project = () => {
 
   const [searchData, setSearchData] = useState<string | undefined>(undefined);
 
-  const defaultParams: SFilter = {
-    order: 'DESC',
-    orderBy: 'createdAt',
-  };
-
-  const [paginationData, setPaginationData] =
-    useState<SPagination>(defaultParams);
-  const [filterData, setFilterData] = useState<SFilter>(defaultParams);
+  const [paginationData, setPaginationData] = useState<SPagination>(undefined);
+  const [filterData, setFilterData] = useState<SFilter>(undefined);
   const navigate = useNavigate();
 
   const { data: projects, isFetching } = useGetProject(filterData);
@@ -123,8 +117,8 @@ const Project = () => {
           orderBy = sort.field;
           break;
         default:
-          order = defaultParams.order;
-          orderBy = defaultParams.orderBy;
+          order = undefined;
+          orderBy = undefined;
           break;
       }
       setPaginationData({ page, pageSize, order, orderBy });
@@ -171,7 +165,7 @@ const Project = () => {
 
           <SearchBar onChange={handleSearch} />
         </Box>
-        <Box sx={{ minHeight: 650, width: '100%' }}>
+        <Box sx={{ minHeight: 620, width: '100%' }}>
           <DatagridC
             columns={projectColumns}
             rows={projectRows}

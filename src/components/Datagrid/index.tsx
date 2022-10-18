@@ -4,6 +4,7 @@ import { resourceText } from 'core/constant/resource';
 import { ObjectLiteral } from 'core/interface/api';
 import { Rows } from 'core/interface/table';
 import { useCallback, useEffect, useState } from 'react';
+import { customScrollbar } from '../../style/customScrollBar';
 
 interface GridSortItemC<T> extends Omit<GridSortItem, 'field'> {
   field: keyof T;
@@ -97,6 +98,11 @@ const DatagridC = <T extends ObjectLiteral>({
       rowsPerPageOptions={
         rowsPerPageOptions.length ? rowsPerPageOptions : undefined
       }
+      localeText={{
+        MuiTablePagination: {
+          labelRowsPerPage: resourceText.ROWS_PER_PAGE,
+        },
+      }}
       pageSize={paginationData.pageSize}
       onPageSizeChange={handlePageSizeChange}
       page={paginationData.page}
@@ -120,6 +126,8 @@ const DatagridC = <T extends ObjectLiteral>({
         '& .MuiToolbar-root': {
           backgroundColor: 'rgba(224, 224, 224, 1)',
         },
+        '& .MuiTablePagination-select': { padding: '0 8px' },
+        '& .MuiDataGrid-virtualScroller': customScrollbar('6px'),
         ...rest.sx,
       }}
     />

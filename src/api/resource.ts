@@ -5,7 +5,6 @@ import { EditResource } from '../core/interface/resource';
 import {
   AddResource,
   ResourcesResponse,
-  TempResource,
 } from 'core/interface/resource';
 
 const url = '/rms/api/resources';
@@ -26,6 +25,6 @@ export const updateResource = (data: EditResource): ApiResponse<''> => {
   return http.put(`${url}/${id}`, rest);
 };
 
-export const getResourceById = (id?: number): ApiResponse<TempResource> => {
+export const getResourceById = (id?: number): ApiResponse<Resource> => {
   return http.get(`${url}/${id}`);
 };

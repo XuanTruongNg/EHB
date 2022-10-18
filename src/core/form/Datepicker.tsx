@@ -7,8 +7,8 @@ import { DatePicker, DatePickerProps } from '@mui/x-date-pickers/DatePicker';
 import { BaseInputProps } from 'core/interface/form/base';
 
 type IDatePicker = Omit<
-  DatePickerProps<unknown, unknown>,
-  'value' | 'onChange' | 'renderInput'
+  DatePickerProps<unknown, Date>,
+  'value' | 'renderInput'
 > &
   BaseInputProps & {
     name: string;
@@ -52,11 +52,14 @@ const DatePickerC: React.FunctionComponent<IDatePicker> = ({
           control={control}
           defaultValue={defaultValue}
           rules={rules}
-          render={({ field: { onChange, value } }) => (
+          render={({ field }) => (
             <DatePicker
               {...rest}
-              value={value}
-              onChange={(value) => onChange(value)}
+              {...field}
+              onChange={(value) => {
+                rest.onChange(value);
+                field.onChange(value);
+              }}
               renderInput={(params) => (
                 <TextField
                   {...params}

@@ -1,5 +1,4 @@
 import { yupResolver } from '@hookform/resolvers/yup';
-import ClearIcon from '@mui/icons-material/Clear';
 import { Box, Button } from '@mui/material';
 import Stack from '@mui/material/Stack';
 import {
@@ -59,11 +58,10 @@ export const resourceSchema = yup.object({
   hardSkillIds: yup.array().min(1).label('Hard skills'),
   yearsOfExperience: yup
     .number()
-    .transform((_, val) => (typeof val === 'number' ? val : null))
     .required()
+    .typeError('Years of experience must be a valid number')
     .label('Years of experience')
-    .min(0)
-    .nullable(),
+    .min(0),
 });
 
 const ResourceModal: FC<Props> = ({
@@ -127,7 +125,7 @@ const ResourceModal: FC<Props> = ({
       methods.setValue('roleId', editedResource.resourcesRoles.id);
       methods.setValue(
         'hardSkillIds',
-        editedResource.resourcesHardSkills?.map((item) => item.hardSkills.id)
+        editedResource.hardSkills.map((skill) => skill.id)
       );
       methods.setValue('yearsOfExperience', editedResource.yearsOfExperience);
     }
@@ -140,17 +138,6 @@ const ResourceModal: FC<Props> = ({
       setIsOpen={closeHandler}
       title={type === 'ADD' ? addResourceText.TITLE : editResourceText.TITLE}
     >
-      <Box
-        sx={{
-          position: 'absolute',
-          top: '16px',
-          right: '16px',
-          cursor: 'pointer',
-        }}
-        onClick={closeHandler}
-      >
-        <ClearIcon />
-      </Box>
       <FormWrapper onSubmit={onSubmit} methods={methods}>
         <Stack spacing={3} sx={{ py: '32px', px: '64px' }}>
           <TextFieldC
@@ -190,7 +177,7 @@ const ResourceModal: FC<Props> = ({
             name="yearsOfExperience"
             title={addResourceText.YOE}
             placeholder={resourcePlaceholder.YOE}
-            type="number"
+            type="text"
             defaultValue={0}
             sx={{ width: 200 }}
           />

@@ -10,7 +10,7 @@ import { useCallback, useEffect, useMemo, useState } from 'react';
 import { dataToOptions } from 'util/';
 import { IEditProject, TempProject } from 'core/interface/project';
 import { useGetProjectById, useGetProjectType, useUpdateProject } from 'hooks';
-import { buttonText } from 'core/constant';
+import { editProjectText, buttonText } from 'core/constant';
 import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
 
@@ -59,7 +59,8 @@ const EditProject: React.FunctionComponent<EditProjectProps> = () => {
   const methods = useForm<IEditProject>({ resolver: yupResolver(schema) });
   const { data: projectTypes } = useGetProjectType();
   const updateProject = useUpdateProject();
-
+  const [start, setStart] = useState<Date>();
+  const [end, setEnd] = useState<Date>();
   const { id } = useParams<{ id: string }>();
 
   const { data } = useGetProjectById({
@@ -122,14 +123,14 @@ const EditProject: React.FunctionComponent<EditProjectProps> = () => {
             <TextFieldC
               labelStyle={{ width: 0 }}
               name="code"
-              sx={{ width: 100 }}
+              sx={{ width: '100%', minWidth: 150 }}
               InputProps={{ style: { fontWeight: 'bold', height: 30 } }}
               disabled={isDisabled}
             />
             <TextFieldC
               labelStyle={{ width: 0 }}
               name="name"
-              sx={{ width: 'auto' }}
+              sx={{ width: '100%', minWidth: 150 }}
               InputProps={{ style: { fontWeight: 'bold', height: 30 } }}
               disabled={isDisabled}
             />
@@ -154,14 +155,14 @@ const EditProject: React.FunctionComponent<EditProjectProps> = () => {
             >
               <TextFieldC
                 name="projectManagerId"
-                title="Project Manager"
+                title={editProjectText.PROJECT_MANAGER}
                 labelStyle={{ width: '130px', fontWeight: 600 }}
                 sx={{ marginLeft: 2, width: 200 }}
                 disabled={isDisabled}
               />
               <SelectC
                 name="projectTypeId"
-                title="Project Type"
+                title={editProjectText.PROJECT_TYPE}
                 sx={{ width: 200, marginLeft: 2 }}
                 labelStyle={{ width: '130px', fontWeight: 600 }}
                 options={projectTypeData}
@@ -179,17 +180,21 @@ const EditProject: React.FunctionComponent<EditProjectProps> = () => {
               <Box sx={{ display: 'flex' }}>
                 <DatePickerC
                   labelStyle={{ width: '90px', fontWeight: 600 }}
-                  title="Duration"
+                  inputStyle={{ marginLeft: 2, marginRight: 2 }}
+                  title={editProjectText.DURATION}
                   name="startDate"
                   disabled={isDisabled}
-                  inputStyle={{ marginLeft: 2, marginRight: 2 }}
+                  maxDate={start}
+                  onChange={(date: any) => setEnd(date || undefined)}
                 />
                 <DatePickerC
                   labelStyle={{ width: 'auto' }}
                   inputStyle={{ marginLeft: 2 }}
-                  title="to"
-                  disabled={isDisabled}
+                  title={editProjectText.END_DATE}
                   name="endDate"
+                  disabled={isDisabled}
+                  minDate={end}
+                  onChange={(date: any) => setStart(date || undefined)}
                 />
               </Box>
               <TextFieldC

@@ -1,8 +1,7 @@
 import { yupResolver } from '@hookform/resolvers/yup';
-import ClearIcon from '@mui/icons-material/Clear';
 import InputAdornment from '@mui/material/InputAdornment';
 import SearchIcon from '@mui/icons-material/Search';
-import { Box, Button } from '@mui/material';
+import { Box, Button, Typography } from '@mui/material';
 import Stack from '@mui/material/Stack';
 import {
   addProjectPlaceholder,
@@ -88,17 +87,6 @@ const AddProjectModal: FC<Props> = ({ isOpen, setIsOpen }) => {
       setIsOpen={() => setIsOpen(false)}
       title={addProjectText.TITLE}
     >
-      <Box
-        sx={{
-          position: 'absolute',
-          top: '16px',
-          right: '16px',
-          cursor: 'pointer',
-        }}
-        onClick={() => setIsOpen(false)}
-      >
-        <ClearIcon />
-      </Box>
       <FormWrapper onSubmit={onSubmit} methods={methods}>
         <Stack spacing={3} sx={{ py: '32px', px: '64px' }}>
           <TextFieldC
@@ -106,6 +94,7 @@ const AddProjectModal: FC<Props> = ({ isOpen, setIsOpen }) => {
             title={addProjectText.NAME}
             placeholder={addProjectPlaceholder.NAME}
             type="text"
+            InputProps={{ sx: { width: '100%', minWidth: '50%' } }}
           />
           <TextFieldC
             name="code"
@@ -128,20 +117,23 @@ const AddProjectModal: FC<Props> = ({ isOpen, setIsOpen }) => {
           />
 
           <Box sx={{ display: 'flex', alignItems: 'center' }}>
+            <Typography sx={{ width: '200px' }}>
+              {addProjectText.DURATION}
+            </Typography>
             <DatePickerC
               name="startDate"
               maxDate={start}
-              title={addProjectText.START_DATE}
+              labelStyle={{ width: '0px' }}
               toolbarPlaceholder={addProjectPlaceholder.START_DATE}
-              onAccept={(date: any) => setEnd(date)}
+              onChange={(date) => setEnd(date || undefined)}
             />
             <DatePickerC
               name="endDate"
               minDate={end}
-              title={addProjectText.END_DATE}
-              onAccept={(date: any) => setStart(date)}
-              toolbarPlaceholder={addProjectPlaceholder.END_DATE}
               labelStyle={{ width: '60px', margin: '0 0 0 40px' }}
+              title={addProjectText.END_DATE}
+              toolbarPlaceholder={addProjectPlaceholder.END_DATE}
+              onChange={(date) => setStart(date || undefined)}
             />
           </Box>
 

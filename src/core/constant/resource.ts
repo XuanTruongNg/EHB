@@ -8,4 +8,5 @@ export const resourceText = {
     YEARS_EXP: 'Years of experience',
   },
   NO_RESULT: 'No results',
+  ROWS_PER_PAGE: 'Items per page',
 };

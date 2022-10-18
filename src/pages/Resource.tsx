@@ -26,15 +26,9 @@ const Resource = () => {
   // TODO: find a better solution in future
   const [searchData, setSearchData] = useState<string | undefined>(undefined);
 
-  const defaultParams: SFilter = {
-    order: 'ASC',
-    orderBy: 'code',
-  };
+  const [paginationData, setPaginationData] = useState<SPagination>(undefined);
 
-  const [paginationData, setPaginationData] =
-    useState<SPagination>(defaultParams);
-
-  const [filterData, setFilterData] = useState<SFilter>(defaultParams);
+  const [filterData, setFilterData] = useState<SFilter>(undefined);
 
   const { data: resources, isFetching } = useGetResource(filterData);
 
@@ -63,7 +57,7 @@ const Resource = () => {
         flex: 1,
       },
       {
-        field: 'resourcesHardSkills',
+        field: 'hardSkills',
         headerName: headerColumnText.HARD_SKILLS,
         flex: 1,
         sortable: false,
@@ -87,9 +81,7 @@ const Resource = () => {
           name: item.name,
           resourcesRoles: item.resourcesRoles.title,
           departments: item.departments.title,
-          resourcesHardSkills: item.resourcesHardSkills?.map(
-            (item) => item.hardSkills.title
-          ),
+          hardSkills: item.hardSkills.map((skill) => skill.title),
           yearsOfExperience: item.yearsOfExperience,
         };
       }) || [],
@@ -112,8 +104,8 @@ const Resource = () => {
           orderBy = sort.field;
           break;
         default:
-          order = defaultParams.order;
-          orderBy = defaultParams.orderBy;
+          order = undefined;
+          orderBy = undefined;
           break;
       }
       setPaginationData({ page, pageSize, order, orderBy });
@@ -167,7 +159,7 @@ const Resource = () => {
 
           <SearchBar onChange={handleSearch} />
         </Box>
-        <Box sx={{ minHeight: 650, width: '100%' }}>
+        <Box sx={{ minHeight: 620, width: '100%' }}>
           <DatagridC
             columns={resourceColumns}
             rows={resourceRows}
