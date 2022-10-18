@@ -185,7 +185,7 @@ const EditProject: React.FunctionComponent<EditProjectProps> = () => {
                   name="startDate"
                   disabled={isDisabled}
                   maxDate={start}
-                  onChange={(date: any) => setEnd(date || undefined)}
+                  onChange={(date) => setEnd(date || undefined)}
                 />
                 <DatePickerC
                   labelStyle={{ width: 'auto' }}
@@ -194,7 +194,7 @@ const EditProject: React.FunctionComponent<EditProjectProps> = () => {
                   name="endDate"
                   disabled={isDisabled}
                   minDate={end}
-                  onChange={(date: any) => setStart(date || undefined)}
+                  onChange={(date) => setStart(date || undefined)}
                 />
               </Box>
               <TextFieldC
