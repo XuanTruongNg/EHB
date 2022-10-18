@@ -2,11 +2,10 @@
 FROM node:18.10-alpine as build
 WORKDIR /app
 
-COPY package.json ./
-RUN yarn install
-
+COPY ./package*.json ./
+RUN npm ci
 COPY . .
-RUN yarn build
+RUN npm run build
 
 # production environment
 FROM nginx:stable-alpine
