@@ -5,7 +5,7 @@ import SearchBar from 'components/SearchBar';
 import AddProjectModal from 'containers/AddProjectModal';
 import { buttonText, pageHeaderText } from 'core/constant';
 import { projectText } from 'core/constant/project';
-import { HEADER_MARGIN } from 'core/constant/spacing';
+import { HEADER_MARGIN, PAGE_HEADER_MARGIN } from 'core/constant/spacing';
 import { FilterParams, PaginationData } from 'core/interface/api';
 import { Project as ProjectModel } from 'core/interface/models';
 import { Columns, Rows } from 'core/interface/table';
@@ -145,7 +145,7 @@ const Project = () => {
           p: '32px',
           flex: 1,
           overflow: 'auto',
-          height: `calc(100vh - ${HEADER_MARGIN}*2)`,
+          height: `calc(100vh - ${HEADER_MARGIN + PAGE_HEADER_MARGIN}%)`,
         }}
       >
         <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>

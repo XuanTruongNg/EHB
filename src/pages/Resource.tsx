@@ -6,7 +6,7 @@ import SearchBar from 'components/SearchBar';
 import ResourceModal from 'containers/ResourceModal';
 import { buttonText, pageHeaderText } from 'core/constant';
 import { resourceText } from 'core/constant/resource';
-import { HEADER_MARGIN } from 'core/constant/spacing';
+import { HEADER_MARGIN, PAGE_HEADER_MARGIN } from 'core/constant/spacing';
 import { FilterParams, PaginationData } from 'core/interface/api';
 import { Resource as ResourceModel } from 'core/interface/models';
 import { Columns, Rows } from 'core/interface/table';
@@ -139,7 +139,7 @@ const Resource = () => {
           p: '32px',
           flex: 1,
           overflow: 'auto',
-          height: `calc(100vh - ${HEADER_MARGIN}*2)`,
+          height: `calc(100vh - ${HEADER_MARGIN + PAGE_HEADER_MARGIN}%)`,
         }}
       >
         <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
@@ -159,7 +159,7 @@ const Resource = () => {
 
           <SearchBar onChange={handleSearch} />
         </Box>
-        <Box sx={{ minHeight: 620, width: '100%' }}>
+        <Box sx={{ width: '100%', height: 630 }}>
           <DatagridC
             columns={resourceColumns}
             rows={resourceRows}

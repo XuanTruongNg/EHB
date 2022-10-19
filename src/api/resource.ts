@@ -1,11 +1,8 @@
 import { http } from 'core/api';
 import { ApiResponse, FilterParams } from 'core/interface/api';
-import { Resource } from 'core/interface/models';
 import { EditResource } from '../core/interface/resource';
-import {
-  AddResource,
-  ResourcesResponse,
-} from 'core/interface/resource';
+import { AddResource, ResourcesResponse } from 'core/interface/resource';
+import { Resource } from 'core/interface/models';
 
 const url = '/rms/api/resources';
 // const url = 'resources';

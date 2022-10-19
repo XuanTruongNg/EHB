@@ -4,7 +4,7 @@ import { resourceText } from 'core/constant/resource';
 import { ObjectLiteral } from 'core/interface/api';
 import { Rows } from 'core/interface/table';
 import { useCallback, useEffect, useState } from 'react';
-import { customScrollbar } from '../../style/customScrollBar';
+import { customScrollbar } from 'style';
 
 interface GridSortItemC<T> extends Omit<GridSortItem, 'field'> {
   field: keyof T;
@@ -27,7 +27,7 @@ const DatagridC = <T extends ObjectLiteral>({
   rowsPerPageOptions = [10, 20, 50, 100],
   paginationMode = 'server',
   onChange,
-  rowCount,
+  rowCount = 0,
   page = 0,
   ...rest
 }: Props<T>) => {

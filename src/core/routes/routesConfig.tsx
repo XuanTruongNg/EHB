@@ -26,6 +26,7 @@ import {
   AUTH_LOGIN,
 } from 'core/constant';
 import EditProject from 'containers/EditProject';
+import Dashboard from 'pages/Dashboard';
 
 export interface SingleRoute {
   path?: string;
@@ -58,7 +59,7 @@ export const ROUTES: SingleRoute[] = [
     path: DASHBOARD,
     component: <Layout />,
     guard: <AuthGuard acceptRoles={[ROLE_PROJECT_MANAGER, ROLE_ADMIN]} />,
-    children: [{ path: '', component: <Demo /> }],
+    children: [{ path: '', component: <Dashboard /> }],
   },
   {
     path: PROJECT,

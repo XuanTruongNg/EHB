@@ -10,3 +10,4 @@ export * from './role';
 export * from './routes';
 export * from './spacing';
 export * from './UI';
+export * from './dashboard';

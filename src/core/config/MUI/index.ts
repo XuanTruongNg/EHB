@@ -18,12 +18,12 @@ export const theme = createTheme({
     MuiTextField: {
       defaultProps: {
         size: 'small',
-      }
+      },
     },
     MuiSelect: {
       defaultProps: {
         size: 'small',
-      }
+      },
     },
     MuiButton: {
       defaultProps: {
@@ -32,10 +32,16 @@ export const theme = createTheme({
       styleOverrides: {
         sizeMedium: {
           width: 170,
-          height: 40,
+          height: 36,
           borderRadius: '5px',
           fontWeight: 600,
         },
+      },
+    },
+    MuiLinearProgress: {
+      styleOverrides: {
+        bar: { backgroundColor: '#35CA4D' },
+        colorPrimary: { backgroundColor: '#BAE1F1' },
       },
     },
   },

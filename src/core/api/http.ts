@@ -10,7 +10,7 @@ import { config } from '../constant/config';
 let store: Store;
 
 const http = axios.create({
-  baseURL: "/",
+  baseURL: '/',
   withCredentials: true,
   headers: {
     [KEYS.HEADER_CASDOOR]: config.CASDOOR_CLIENT_ID,

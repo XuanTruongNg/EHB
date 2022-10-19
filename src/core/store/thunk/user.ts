@@ -8,7 +8,16 @@ export const getCurrentUserThunk = (): AppThunk<Promise<void>> => {
       setTimeout(() => {
         if (getState().user.token) {
           //call api to get user info
-          dispatch(userActions.setUser({ uuid: '1', name: 'test', id: 1, createdAt: new Date().toString(), updatedAt: new Date().toString(), isDeleted: false }));
+          dispatch(
+            userActions.setUser({
+              uuid: '1',
+              name: 'test',
+              id: 1,
+              createdAt: new Date().toString(),
+              updatedAt: new Date().toString(),
+              isDeleted: false,
+            })
+          );
           resolve();
         } else {
           reject(new Error('Token not found'));
