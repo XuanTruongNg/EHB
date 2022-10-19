@@ -1,4 +1,5 @@
 import Loading from 'components/Loading';
+import { AUTH_LOGIN, NOT_FOUND_PAGE } from 'core/constant';
 import { Role } from 'core/interface/role';
 import { useAppSelector } from 'core/store';
 import {
@@ -21,7 +22,7 @@ const AuthGuard: React.FunctionComponent<AuthWrapperProps> = ({
   if (!isTriedLogin) return <Loading />;
 
   if (!isAuthenticated) {
-    return <Navigate to="/auth/login" replace />;
+    return <Navigate to={AUTH_LOGIN} replace />;
   }
 
   if (
@@ -29,7 +30,7 @@ const AuthGuard: React.FunctionComponent<AuthWrapperProps> = ({
       return userRoles?.includes(item);
     }) === -1
   ) {
-    return <Navigate to="/404-not-found" replace />;
+    return <Navigate to={NOT_FOUND_PAGE} replace />;
   }
   return <Outlet />;
 };

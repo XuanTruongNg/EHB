@@ -1,9 +1,6 @@
 import Loading from 'components/Loading';
-import {
-  ROLE_ADMIN,
-  ROLE_EMPLOYEE,
-  ROLE_PROJECT_MANAGER,
-} from 'core/constant/role';
+import { DASHBOARD, TIME_SHEET } from 'core/constant';
+import { ROLE_ADMIN, ROLE_PROJECT_MANAGER } from 'core/constant/role';
 import { Navigate, Outlet } from 'react-router-dom';
 
 import { useAppSelector } from '../store';
@@ -21,15 +18,16 @@ const UnAuthGuard: React.FunctionComponent<UnAuthGuardProps> = () => {
   const userRoles = useAppSelector(selectUserRoleNames);
 
   if (!isTriedLogin) return <Loading />;
+
   if (isAuthenticated) {
     if (
       userRoles?.includes(ROLE_ADMIN) ||
       userRoles?.includes(ROLE_PROJECT_MANAGER)
-    )
-      return <Navigate to="/dashboard" replace />;
+    ) {
+      return <Navigate to={DASHBOARD} replace />;
+    }
 
-    if (userRoles?.includes(ROLE_EMPLOYEE))
-      return <Navigate to="/time-sheet" replace />;
+    return <Navigate to={TIME_SHEET} replace />;
   }
 
   return <Outlet />;
