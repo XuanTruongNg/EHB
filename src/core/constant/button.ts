@@ -8,4 +8,5 @@ export const buttonText = {
   EDIT_PROJECT: 'Edit project',
   CANCEL: 'Cancel',
   SAVE: 'Save',
+  ASSIGN: 'Assign'
 };

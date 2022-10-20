@@ -25,7 +25,8 @@ import {
   TIME_SHEET,
   AUTH_LOGIN,
 } from 'core/constant';
-import EditProject from 'containers/EditProject';
+import EditProject from 'pages/EditProject';
+import AssignResource from 'pages/AssignResource';
 import Dashboard from 'pages/Dashboard';
 
 export interface SingleRoute {
@@ -69,7 +70,10 @@ export const ROUTES: SingleRoute[] = [
       { path: '', component: <Project /> },
       {
         path: ':id',
-        component: <EditProject />,
+        children: [
+          { path: '', component: <EditProject /> },
+          { path: 'assign', component: <AssignResource /> },
+        ],
       },
     ],
   },

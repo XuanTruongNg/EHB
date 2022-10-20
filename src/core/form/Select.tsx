@@ -4,7 +4,7 @@ import { UI_DEFAULT_VALUE } from 'core/constant';
 import { BaseInputProps } from 'core/interface/form/base';
 import { SelectOption } from 'core/interface/select';
 import { Controller, RegisterOptions, useFormContext } from 'react-hook-form';
-import FieldWrapper from './FieldWrapper';
+import { FieldWrapper } from './FieldWrapper';
 
 type ISelect = SelectProps &
   BaseInputProps & {
@@ -18,7 +18,7 @@ type ISelect = SelectProps &
     >;
   };
 
-const SelectC: React.FunctionComponent<ISelect> = ({
+export const SelectC: React.FunctionComponent<ISelect> = ({
   name,
   title,
   defaultValue = '',
@@ -27,6 +27,7 @@ const SelectC: React.FunctionComponent<ISelect> = ({
   errorStyle,
   labelStyle,
   dir,
+  onChange,
   ...rest
 }) => {
   const {
@@ -58,9 +59,9 @@ const SelectC: React.FunctionComponent<ISelect> = ({
             >
               <Select
                 {...field}
-                {...rest}
-                onChange={(e) => {
+                onChange={(e, child) => {
                   field.onChange(e);
+                  if (onChange) onChange(e, child);
                 }}
                 error={!!errors[name]}
                 defaultValue={defaultValue}
@@ -81,6 +82,7 @@ const SelectC: React.FunctionComponent<ISelect> = ({
                   },
                   ...rest.MenuProps,
                 }}
+                {...rest}
               >
                 {options.map((option) => {
                   return (
@@ -97,4 +99,3 @@ const SelectC: React.FunctionComponent<ISelect> = ({
     </FieldWrapper>
   );
 };
-export default SelectC;

@@ -1,6 +1,6 @@
 import { TextField, TextFieldProps } from '@mui/material';
 import { Controller, RegisterOptions, useFormContext } from 'react-hook-form';
-import FieldWrapper from './FieldWrapper';
+import { FieldWrapper } from './FieldWrapper';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DatePicker, DatePickerProps } from '@mui/x-date-pickers/DatePicker';
@@ -22,7 +22,7 @@ type IDatePicker = Omit<
     inputStyle?: TextFieldProps['sx'];
   };
 
-const DatePickerC: React.FunctionComponent<IDatePicker> = ({
+export const DatePickerC: React.FunctionComponent<IDatePicker> = ({
   name,
   title,
   defaultValue = '',
@@ -31,6 +31,7 @@ const DatePickerC: React.FunctionComponent<IDatePicker> = ({
   labelStyle,
   errorStyle,
   dir,
+  onChange,
   ...rest
 }) => {
   const {
@@ -54,11 +55,10 @@ const DatePickerC: React.FunctionComponent<IDatePicker> = ({
           rules={rules}
           render={({ field }) => (
             <DatePicker
-              {...rest}
               {...field}
               onChange={(value) => {
-                rest.onChange(value);
                 field.onChange(value);
+                if (onChange) onChange(value);
               }}
               renderInput={(params) => (
                 <TextField
@@ -67,6 +67,7 @@ const DatePickerC: React.FunctionComponent<IDatePicker> = ({
                   sx={{ width: '150px', ...inputStyle }}
                 />
               )}
+              {...rest}
             />
           )}
         />
@@ -74,5 +75,3 @@ const DatePickerC: React.FunctionComponent<IDatePicker> = ({
     </LocalizationProvider>
   );
 };
-
-export default DatePickerC;

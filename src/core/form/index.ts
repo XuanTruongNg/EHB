@@ -5,3 +5,4 @@ export * from './FormWrapper';
 export * from './Select';
 export * from './SelectMultiple';
 export * from './TextField';
+export * from './Slider';

@@ -2,7 +2,7 @@ import { Autocomplete, TextField, AutocompleteProps } from '@mui/material';
 import { UI_DEFAULT_VALUE } from 'core/constant';
 import { BaseInputProps } from 'core/interface/form/base';
 import { Controller, useFormContext } from 'react-hook-form';
-import FieldWrapper from './FieldWrapper';
+import { FieldWrapper } from './FieldWrapper';
 import { SelectOption } from 'core/interface/select';
 
 //TODO Autocomplete can only use with multiple options now
@@ -17,7 +17,7 @@ type IAutocomplete = Omit<
     title: string;
   };
 
-const AutocompleteC: React.FunctionComponent<IAutocomplete> = ({
+export const AutocompleteC: React.FunctionComponent<IAutocomplete> = ({
   name,
   title,
   multiple,
@@ -26,6 +26,7 @@ const AutocompleteC: React.FunctionComponent<IAutocomplete> = ({
   labelStyle,
   errorStyle,
   dir,
+  onChange,
   ...rest
 }) => {
   const {
@@ -60,19 +61,20 @@ const AutocompleteC: React.FunctionComponent<IAutocomplete> = ({
           return (
             <Autocomplete
               {...fieldRest}
-              {...rest}
               value={_value}
               multiple={multiple}
               sx={{ width: UI_DEFAULT_VALUE.INPUT_WIDTH, ...rest.sx }}
               defaultValue={defaultValue}
               getOptionLabel={(option) => option.label}
-              onChange={(_, data) => {
+              onChange={(event, data, reason, detail) => {
                 if (multiple) {
                   const multiple = data.map((item: SelectOption) => item.value);
                   setValue(name, multiple);
                 } else {
                   setValue(name, data.value);
                 }
+
+                if (onChange) onChange(event, data, reason, detail);
               }}
               renderOption={(props, option) => (
                 <li {...props} key={option.value}>
@@ -94,6 +96,7 @@ const AutocompleteC: React.FunctionComponent<IAutocomplete> = ({
                   />
                 );
               }}
+              {...rest}
             />
           );
         }}
@@ -101,5 +104,3 @@ const AutocompleteC: React.FunctionComponent<IAutocomplete> = ({
     </FieldWrapper>
   );
 };
-
-export default AutocompleteC;

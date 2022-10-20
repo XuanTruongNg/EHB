@@ -33,7 +33,7 @@ const NavBar: FC<Props> = ({ navigationItems }) => {
             )
           )
           .map((item) => {
-            const isSelected = router.pathname === item.path;
+            const isSelected = router.pathname.includes(item.path);
             return (
               <Typography
                 key={item.text}

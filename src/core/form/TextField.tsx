@@ -2,7 +2,7 @@ import { TextField, TextFieldProps } from '@mui/material';
 import { UI_DEFAULT_VALUE } from 'core/constant';
 import { BaseInputProps } from 'core/interface/form/base';
 import { Controller, RegisterOptions, useFormContext } from 'react-hook-form';
-import FieldWrapper from './FieldWrapper';
+import { FieldWrapper } from './FieldWrapper';
 
 type ITextField = TextFieldProps &
   BaseInputProps & {
@@ -17,7 +17,7 @@ type ITextField = TextFieldProps &
     >;
   };
 
-const TextFieldC: React.FunctionComponent<ITextField> = ({
+export const TextFieldC: React.FunctionComponent<ITextField> = ({
   name,
   title,
   defaultValue = '',
@@ -25,6 +25,7 @@ const TextFieldC: React.FunctionComponent<ITextField> = ({
   labelStyle,
   errorStyle,
   dir,
+  onChange,
   ...rest
 }) => {
   const {
@@ -48,7 +49,6 @@ const TextFieldC: React.FunctionComponent<ITextField> = ({
           rules={rules}
           render={({ field }) => (
             <TextField
-              {...rest}
               {...field}
               sx={{
                 width: UI_DEFAULT_VALUE.INPUT_WIDTH,
@@ -63,17 +63,20 @@ const TextFieldC: React.FunctionComponent<ITextField> = ({
                 ...rest.sx,
               }}
               error={!!errors[name]}
-              onChange={(event) =>
+              onChange={(event) => {
                 field.onChange(
                   rest.type === 'number'
                     ? +event.target.value
                     : event.target.value
-                )
-              }
+                );
+
+                if (onChange) onChange(event);
+              }}
               InputProps={{
                 inputProps: { min: 0 },
                 ...rest.InputProps,
               }}
+              {...rest}
             />
           )}
         />
@@ -90,5 +93,3 @@ const TextFieldC: React.FunctionComponent<ITextField> = ({
     </FieldWrapper>
   );
 };
-
-export default TextFieldC;

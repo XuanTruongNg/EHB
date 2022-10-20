@@ -1,4 +1,5 @@
 import { GetListResponse } from './api';
+import { Project } from './models';
 import { Resource } from './models/resource';
 
 export interface ResourcesResponse extends GetListResponse<Resource> {}
@@ -15,4 +16,8 @@ export interface EditResource
   roleId: number;
   code?: string;
   hardSkillIds: number[];
+}
+
+export interface AddResourcesToProject extends Pick<Project, 'id'> {
+  resourceIdList: number[]
 }

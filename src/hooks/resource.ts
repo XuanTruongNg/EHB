@@ -15,8 +15,7 @@ export const useCreateResource = () => {
   const { mutateAsync: addResource } = useMutation(createResource, {
     onSuccess: () => {
       queryClient.invalidateQueries('resources');
-      const message = 'success';
-      alert(message);
+      alert('success');
     },
     onError: () => {
       alert('there was an error');
@@ -45,8 +44,7 @@ export const useUpdateResource = () => {
       onSuccess: () => {
         queryClient.invalidateQueries('resources');
         queryClient.invalidateQueries('resource');
-        const message = 'success';
-        alert(message);
+        alert('success');
       },
       onError: () => {
         alert('there was an error');
@@ -65,3 +63,5 @@ export const useGetResourceById = (id?: number) => {
     enabled: !!id,
   });
 };
+
+

@@ -144,7 +144,6 @@ const Resource = () => {
       >
         <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
           <Button
-            size="medium"
             sx={{
               backgroundColor: 'secondary.main',
               ':hover': {

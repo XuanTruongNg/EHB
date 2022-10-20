@@ -5,7 +5,6 @@ import { AddResource, ResourcesResponse } from 'core/interface/resource';
 import { Resource } from 'core/interface/models';
 
 const url = '/rms/api/resources';
-// const url = 'resources';
 
 export const createResource = (data: AddResource): ApiResponse<Resource> => {
   return http.post(url, data);

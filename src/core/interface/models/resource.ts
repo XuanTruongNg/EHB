@@ -1,3 +1,4 @@
+import { CurrentProjectsOfResource } from './project';
 import { Base } from './base';
 import { Department } from './department';
 import { HardSkill } from './hardSkill';
@@ -12,4 +13,12 @@ export interface Resource extends Pick<Base, 'id'> {
   departments: Department;
   resourcesRoles: ResourceRole;
   hardSkills: HardSkill[];
+  currentProjects: CurrentProjectsOfResource[];
+  projectsEndDate: string[];
+}
+
+export interface ResourceInProject extends Pick<Resource, 'name' | 'code' | 'resourcesRoles'| 'hardSkills'| 'yearsOfExperience'> {
+  joinedDate: string;
+  endDate: string;
+  allocatedBandwidth: number;
 }

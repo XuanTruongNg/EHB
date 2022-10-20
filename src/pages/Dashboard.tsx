@@ -180,7 +180,6 @@ const Dashboard = () => {
           {pageHeaderText.OVERVIEW}
         </Typography>
         <Button
-          size="medium"
           sx={{
             backgroundColor: 'secondary.main',
             ':hover': {

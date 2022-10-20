@@ -7,10 +7,7 @@ import {
   editResourceText,
   resourcePlaceholder,
 } from 'core/constant';
-import FormWrapper from 'core/form/FormWrapper';
-import SelectC from 'core/form/Select';
-import AutocompleteC from 'core/form/Autocomplete';
-import TextFieldC from 'core/form/TextField';
+import { FormWrapper, SelectC, AutocompleteC, TextFieldC } from 'core/form';
 import { AddResource, EditResource } from 'core/interface/resource';
 import {
   useCreateResource,
@@ -177,7 +174,7 @@ const ResourceModal: FC<Props> = ({
             name="yearsOfExperience"
             title={addResourceText.YOE}
             placeholder={resourcePlaceholder.YOE}
-            type="text"
+            type="number"
             defaultValue={0}
             sx={{ width: 200 }}
           />
@@ -191,7 +188,6 @@ const ResourceModal: FC<Props> = ({
           }}
         >
           <Button
-            size="medium"
             sx={{
               backgroundColor: 'secondary.light',
               ':hover': {
@@ -204,7 +200,6 @@ const ResourceModal: FC<Props> = ({
             {buttonText.CANCEL}
           </Button>
           <Button
-            size="medium"
             sx={{
               backgroundColor: 'primary.main',
               ':hover': {

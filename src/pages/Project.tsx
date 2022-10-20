@@ -3,7 +3,7 @@ import DatagridC, { TableOnChangeData } from 'components/Datagrid';
 import PageHeader from 'components/PageHeader';
 import SearchBar from 'components/SearchBar';
 import AddProjectModal from 'containers/AddProjectModal';
-import { buttonText, pageHeaderText } from 'core/constant';
+import { buttonText, pageHeaderText, PROJECT } from 'core/constant';
 import { projectText } from 'core/constant/project';
 import { HEADER_MARGIN, PAGE_HEADER_MARGIN } from 'core/constant/spacing';
 import { FilterParams, PaginationData } from 'core/interface/api';
@@ -150,7 +150,6 @@ const Project = () => {
       >
         <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
           <Button
-            size="medium"
             sx={{
               backgroundColor: 'secondary.main',
               ':hover': {
@@ -173,7 +172,7 @@ const Project = () => {
             rowCount={projects?.count ?? -1}
             onChange={handleTableChange}
             page={filterData?.page}
-            onRowClick={(params) => navigate(`/project/${params.row.id}`)}
+            onRowClick={(params) => navigate(`${PROJECT}/${params.row.id}`)}
           />
         </Box>
       </Box>

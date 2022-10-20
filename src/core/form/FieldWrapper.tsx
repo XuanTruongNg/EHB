@@ -10,7 +10,7 @@ interface Props {
   dir?: 'row' | 'column';
 }
 
-const FieldWrapper: CustomFC<Props> = ({
+export const FieldWrapper: CustomFC<Props> = ({
   title,
   children,
   name,
@@ -51,5 +51,3 @@ const FieldWrapper: CustomFC<Props> = ({
     </Box>
   );
 };
-
-export default FieldWrapper;

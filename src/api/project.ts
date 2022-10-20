@@ -1,12 +1,13 @@
 import { http } from 'core/api';
 import { ApiResponse, FilterParams } from 'core/interface/api';
-import { Project } from 'core/interface/models';
+import { Project, Resource } from 'core/interface/models';
 import {
   AddProject,
   IEditProject,
   ProjectsResponse,
 } from 'core/interface/project';
 import { TempProject } from 'core/interface/project';
+import { AddResourcesToProject } from 'core/interface/resource';
 
 const url = '/rms/api/projects';
 
@@ -29,4 +30,11 @@ export const updateProject = (
   data: IEditProject
 ): ApiResponse<Project> => {
   return http.put(`${url}/${id}`, data);
+};
+
+export const addResourcesToProject = (
+  data: AddResourcesToProject
+): ApiResponse<Resource[]> => {
+  const { id, ...rest } = data;
+  return http.post(`${url}/${id}/resources`, rest);
 };

@@ -13,3 +13,5 @@ export interface Project extends Base {
   projectTypes: ProjectType;
   resourcesProjects: Resource[];
 }
+
+export interface CurrentProjectsOfResource extends Omit<Project, 'resourcesProjects' | 'projectTypes' | 'creator' | 'projectManager'> {}

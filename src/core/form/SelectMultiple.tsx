@@ -4,7 +4,7 @@ import { UI_DEFAULT_VALUE } from 'core/constant';
 import { BaseInputProps } from 'core/interface/form/base';
 import { SelectOption } from 'core/interface/select';
 import { Controller, RegisterOptions, useFormContext } from 'react-hook-form';
-import FieldWrapper from './FieldWrapper';
+import { FieldWrapper } from './FieldWrapper';
 
 type ISelectMultiple = SelectProps &
   BaseInputProps & {
@@ -18,7 +18,7 @@ type ISelectMultiple = SelectProps &
     >;
   };
 
-const SelectMultipleC: React.FunctionComponent<ISelectMultiple> = ({
+export const SelectMultipleC: React.FunctionComponent<ISelectMultiple> = ({
   name,
   title,
   defaultValue = [],
@@ -51,7 +51,6 @@ const SelectMultipleC: React.FunctionComponent<ISelectMultiple> = ({
           return (
             <Select
               {...field}
-              {...rest}
               multiple={true}
               error={!!errors[name]}
               renderValue={(selected) => {
@@ -84,6 +83,7 @@ const SelectMultipleC: React.FunctionComponent<ISelectMultiple> = ({
                 },
                 ...rest.MenuProps,
               }}
+              {...rest}
             >
               {options.map((option) => {
                 return (
@@ -99,4 +99,3 @@ const SelectMultipleC: React.FunctionComponent<ISelectMultiple> = ({
     </FieldWrapper>
   );
 };
-export default SelectMultipleC;

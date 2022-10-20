@@ -1,5 +1,4 @@
-import FormWrapper from 'core/form/FormWrapper';
-import TextFieldC from 'core/form/TextField';
+import { FormWrapper, TextFieldC } from 'core/form';
 import { useGetUserById } from 'hooks';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';

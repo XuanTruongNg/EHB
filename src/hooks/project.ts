@@ -4,6 +4,7 @@ import { IEditProject } from 'core/interface/project';
 import { queryClient } from 'index';
 import { useMutation, useQuery } from 'react-query';
 import {
+  addResourcesToProject,
   createProject,
   getProjectById,
   getProjects,
@@ -13,8 +14,7 @@ import {
 export const useCreateProject = () => {
   const { mutate: addProject } = useMutation(createProject, {
     onSuccess: () => {
-      const message = 'success';
-      alert(message);
+      alert('success');
     },
     onError: () => {
       alert('there was an error');
@@ -65,8 +65,7 @@ export const useUpdateProject = () => {
       onSuccess: () => {
         queryClient.invalidateQueries('projects');
         queryClient.invalidateQueries('project');
-        const message = 'success';
-        alert(message);
+        alert('success');
       },
       onError: () => {
         alert('there was an error');
@@ -76,3 +75,17 @@ export const useUpdateProject = () => {
 
   return mutate;
 };
+
+export const useAddResourcesToProject = () => {
+  const { mutateAsync: addMembersToProject } = useMutation(addResourcesToProject, {
+    onSuccess: () => {
+      queryClient.invalidateQueries('projects');
+      alert('success');
+    },
+    onError: () => {
+      alert('there was an error');
+    },
+  });
+
+  return addMembersToProject;
+}

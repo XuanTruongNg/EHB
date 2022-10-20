@@ -8,10 +8,7 @@ import {
   addProjectText,
   buttonText,
 } from 'core/constant';
-import DatePickerC from 'core/form/Datepicker';
-import FormWrapper from 'core/form/FormWrapper';
-import SelectC from 'core/form/Select';
-import TextFieldC from 'core/form/TextField';
+import { DatePickerC, FormWrapper, SelectC, TextFieldC } from 'core/form';
 import { AddProject } from 'core/interface/project';
 import { useCreateProject } from 'hooks/project';
 import { useGetProjectType } from 'hooks/projectType';
@@ -153,7 +150,6 @@ const AddProjectModal: FC<Props> = ({ isOpen, setIsOpen }) => {
           }}
         >
           <Button
-            size="medium"
             sx={{
               backgroundColor: 'secondary.light',
               ':hover': {
@@ -166,7 +162,6 @@ const AddProjectModal: FC<Props> = ({ isOpen, setIsOpen }) => {
             {buttonText.CANCEL}
           </Button>
           <Button
-            size="medium"
             sx={{
               backgroundColor: 'primary.main',
               ':hover': {
