@@ -46,7 +46,7 @@ const schema = yup.object({
     .date()
     .min(yup.ref('startDate'), "End date can't be before start date")
     .typeError('Invalid date!'),
-  projectTypeId: yup
+  projectTypesId: yup
     .number()
     .transform((_, val) => (typeof val === 'number' ? val : null))
     .required()
@@ -88,7 +88,7 @@ const EditProject: React.FunctionComponent<EditProjectProps> = () => {
         code: data.code,
         name: data.name,
         projectManagerId: data.projectManager.id,
-        projectTypeId: data.projectTypes.id,
+        projectTypesId: data.projectTypes.id,
         startDate: data.startDate,
         endDate: data.endDate,
         // totalMembers: data.resourcesProjects.length,
@@ -209,7 +209,10 @@ const EditProject: React.FunctionComponent<EditProjectProps> = () => {
 
   const onSubmit = (data: IEditProject) => {
     if (!id) return;
-    updateProject({ ...data, id: Number(id) });
+    const startDate = moment(data.startDate.toString()).format('DD-MM-YYYY');
+    const endDate = moment(data.endDate.toString()).format('DD-MM-YYYY');
+    updateProject({ ...data, id: Number(id), startDate, endDate });
+    setIsDisabled(!isDisabled);
   };
 
   return (
@@ -278,12 +281,13 @@ const EditProject: React.FunctionComponent<EditProjectProps> = () => {
               <TextFieldC
                 name="projectManagerId"
                 title={editProjectText.PROJECT_MANAGER}
+                type="number"
                 labelStyle={{ width: '130px', fontWeight: 600 }}
                 sx={{ marginLeft: 2, width: 200 }}
                 disabled={isDisabled}
               />
               <SelectC
-                name="projectTypeId"
+                name="projectTypesId"
                 title={editProjectText.PROJECT_TYPE}
                 sx={{ width: 200, marginLeft: 2 }}
                 labelStyle={{ width: '130px', fontWeight: 600 }}

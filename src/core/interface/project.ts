@@ -25,5 +25,5 @@ export interface AddProject
 export interface IEditProject
   extends Pick<Project, 'code' | 'name' | 'startDate' | 'endDate'> {
   projectManagerId: number;
-  projectTypeId: number;
+  projectTypesId: number;
 }
