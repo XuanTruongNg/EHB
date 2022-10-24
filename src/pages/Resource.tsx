@@ -3,7 +3,7 @@ import { GridCellParams } from '@mui/x-data-grid';
 import DatagridC, { TableOnChangeData } from 'components/Datagrid';
 import PageHeader from 'components/PageHeader';
 import SearchBar from 'components/SearchBar';
-import ResourceModal from 'containers/ResourceModal';
+import ResourceModal from 'containers/Resource';
 import { buttonText, pageHeaderText } from 'core/constant';
 import { resourceText } from 'core/constant/resource';
 import { HEADER_MARGIN, PAGE_HEADER_MARGIN } from 'core/constant/spacing';

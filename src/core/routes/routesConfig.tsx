@@ -25,7 +25,7 @@ import {
   TIME_SHEET,
   AUTH_LOGIN,
 } from 'core/constant';
-import EditProject from 'pages/EditProject';
+import EditProject from 'containers/Project/EditProject';
 import AssignResource from 'pages/AssignResource';
 import Dashboard from 'pages/Dashboard';
 

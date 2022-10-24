@@ -30,12 +30,17 @@ import KeyboardDoubleArrowDownIcon from '@mui/icons-material/KeyboardDoubleArrow
 import KeyboardDoubleArrowUpIcon from '@mui/icons-material/KeyboardDoubleArrowUp';
 import DatagridC, { TableOnChangeData } from 'components/Datagrid';
 import moment from 'moment';
+import {
+  FilterResources,
+  SearchResourcesParams,
+} from 'core/interface/resource';
 
 const { headerColumnText } = resourceText;
 
 type SPagination = PaginationData<ResourceModel> | undefined;
 type SFilter = FilterParams<ResourceModel> | undefined;
 
+//TODO if resource doesn't have current project
 const dumbCurrentProjects = [
   {
     id: 1,
@@ -55,7 +60,9 @@ const dumbCurrentProjects = [
 
 const AssignResource = () => {
   const navigate = useNavigate();
-  const [searchData, setSearchData] = useState<string | undefined>(undefined);
+  const [searchData, setSearchData] = useState<
+    SearchResourcesParams | undefined
+  >(undefined);
   const [paginationData, setPaginationData] = useState<SPagination>(undefined);
   const [filterData, setFilterData] = useState<SFilter>(undefined);
   const [isCollapse, setCollapse] = useState(false);
@@ -73,7 +80,7 @@ const AssignResource = () => {
 
   const { data: resources, isFetching } = useGetResource(filterData);
 
-  const methods = useForm();
+  const methods = useForm<FilterResources>();
 
   const addMembersToProject = useAddResourcesToProject();
 
@@ -195,7 +202,7 @@ const AssignResource = () => {
   );
 
   useEffect(() => {
-    setFilterData({ ...paginationData, searchData });
+    setFilterData({ ...paginationData, ...searchData });
   }, [paginationData, searchData]);
 
   const handleAssignResources = () => {
@@ -206,10 +213,15 @@ const AssignResource = () => {
     navigate(-1);
   };
 
-  //TODO wait for api to handle search here
-  const handleSearch = (data: any) => {
-    // console.log({ id, ...data });
-    console.log(data);
+  const handleSearch = (data: FilterResources) => {
+    const searchParams = {
+      roleId: data.roleId,
+      skillIdList: data.hardSkillIds,
+      minExp: data.yearsOfExperience[0],
+      maxExp: data.yearsOfExperience[1],
+    };
+
+    setSearchData(searchParams);
   };
 
   return (
@@ -274,7 +286,7 @@ const AssignResource = () => {
                   }}
                 >
                   <SliderC
-                    name="yearOfExperience"
+                    name="yearsOfExperience"
                     title={assignResourceText.YOE}
                   />
                   <Button type="submit">Search</Button>

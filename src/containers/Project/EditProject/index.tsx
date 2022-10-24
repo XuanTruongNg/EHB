@@ -15,7 +15,6 @@ import {
   PAGE_HEADER_MARGIN,
   ASSIGN,
 } from 'core/constant';
-import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
 import DatagridC, { TableOnChangeData } from 'components/Datagrid';
 import { ResourceInProject as ResourceModel } from 'core/interface/models';
@@ -23,47 +22,26 @@ import { FilterParams, PaginationData } from 'core/interface/api';
 import { Columns, Rows } from 'core/interface/table';
 import { resourceText } from 'core/constant/resource';
 import moment from 'moment';
-import EditMemberModal from 'containers/EditMemberModal';
+import EditMemberModal from 'containers/Project/EditMember';
+import { editProjectSchema } from './formConfig';
 
 const { headerColumnText } = resourceText;
 
 interface EditProjectProps {}
 
-const schema = yup.object({
-  name: yup.string().required().label('Project name'),
-  code: yup.string().required().label('Project code'),
-  projectManagerId: yup
-    .number()
-    .transform((_, val) => (typeof val === 'number' ? val : null))
-    .required()
-    .label('Project Manager')
-    .nullable(),
-  startDate: yup
-    .date()
-    .max(yup.ref('endDate'), "Start date can't be after end date")
-    .typeError('Invalid date!'),
-  endDate: yup
-    .date()
-    .min(yup.ref('startDate'), "End date can't be before start date")
-    .typeError('Invalid date!'),
-  projectTypesId: yup
-    .number()
-    .transform((_, val) => (typeof val === 'number' ? val : null))
-    .required()
-    .label('Project Type')
-    .nullable(),
-});
-
 type SPagination = PaginationData<ResourceModel> | undefined;
 type SFilter = FilterParams<ResourceModel> | undefined;
 
+//TODO refactoring pages structure at the end of this sprint (sprint 2) and refactor useQuery hooks
 const EditProject: React.FunctionComponent<EditProjectProps> = () => {
   const [isDisabled, setIsDisabled] = useState<boolean>(true);
   const [paginationData, setPaginationData] = useState<SPagination>(undefined);
   const [filterData, setFilterData] = useState<SFilter>(undefined);
   const [isOpen, setIsOpen] = useState(false);
   const navigate = useNavigate();
-  const methods = useForm<IEditProject>({ resolver: yupResolver(schema) });
+  const methods = useForm<IEditProject>({
+    resolver: yupResolver(editProjectSchema),
+  });
   const { data: projectTypes } = useGetProjectType();
   const updateProject = useUpdateProject();
   const [start, setStart] = useState<Date>();
@@ -163,7 +141,7 @@ const EditProject: React.FunctionComponent<EditProjectProps> = () => {
           uuid: item.resources.uuid,
           departments: item.resources.departments,
           resourcesRoles: item.resources.resourcesRoles.title,
-          hardSkills: item.resources.hardSkills,
+          hardSkills: item.resources.hardSkills.map((skill) => skill.title),
           joinedDate: moment(item.startDate).format('DD-MM-YYYY'),
           endDate: moment(item.endDate).format('DD-MM-YYYY'),
           allocatedBandwidth: item.bandwidth,
@@ -209,8 +187,8 @@ const EditProject: React.FunctionComponent<EditProjectProps> = () => {
 
   const onSubmit = (data: IEditProject) => {
     if (!id) return;
-    const startDate = moment(data.startDate.toString()).format('DD-MM-YYYY');
-    const endDate = moment(data.endDate.toString()).format('DD-MM-YYYY');
+    const startDate = moment(data.startDate.toString()).format('MM-DD-YYYY');
+    const endDate = moment(data.endDate.toString()).format('MM-DD-YYYY');
     updateProject({ ...data, id: Number(id), startDate, endDate });
     setIsDisabled(!isDisabled);
   };

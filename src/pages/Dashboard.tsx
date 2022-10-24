@@ -21,7 +21,7 @@ import { useCallback, useMemo, useState } from 'react';
 import KeyboardDoubleArrowDownIcon from '@mui/icons-material/KeyboardDoubleArrowDown';
 import KeyboardDoubleArrowUpIcon from '@mui/icons-material/KeyboardDoubleArrowUp';
 import { buttonText } from '../core/constant/button';
-import AddProjectModal from 'containers/AddProjectModal';
+import AddProjectModal from 'containers/Project/AddProject';
 import { useNavigate } from 'react-router-dom';
 
 const Dashboard = () => {

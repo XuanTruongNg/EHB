@@ -2,7 +2,7 @@ import { Box, Button } from '@mui/material';
 import DatagridC, { TableOnChangeData } from 'components/Datagrid';
 import PageHeader from 'components/PageHeader';
 import SearchBar from 'components/SearchBar';
-import AddProjectModal from 'containers/AddProjectModal';
+import AddProjectModal from 'containers/Project/AddProject';
 import { buttonText, pageHeaderText, PROJECT } from 'core/constant';
 import { projectText } from 'core/constant/project';
 import { HEADER_MARGIN, PAGE_HEADER_MARGIN } from 'core/constant/spacing';

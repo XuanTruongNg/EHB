@@ -19,5 +19,17 @@ export interface EditResource
 }
 
 export interface AddResourcesToProject extends Pick<Project, 'id'> {
-  resourceIdList: number[]
+  resourceIdList: number[];
+}
+
+export interface FilterResources
+  extends Pick<AddResource, 'roleId' | 'hardSkillIds'> {
+  yearsOfExperience: number[];
+}
+
+export interface SearchResourcesParams {
+  roleId: number;
+  skillIdList: number[];
+  minExp: number;
+  maxExp: number;
 }

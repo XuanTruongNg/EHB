@@ -1,6 +1,6 @@
 import { http } from 'core/api';
 import { ApiResponse, FilterParams } from 'core/interface/api';
-import { Project, Resource } from 'core/interface/models';
+import { Project } from 'core/interface/models';
 import {
   AddProject,
   IEditProject,
@@ -34,7 +34,7 @@ export const updateProject = (
 
 export const addResourcesToProject = (
   data: AddResourcesToProject
-): ApiResponse<Resource[]> => {
+): ApiResponse<Project> => {
   const { id, ...rest } = data;
   return http.post(`${url}/${id}/resources`, rest);
 };

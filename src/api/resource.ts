@@ -3,6 +3,7 @@ import { ApiResponse, FilterParams } from 'core/interface/api';
 import { EditResource } from '../core/interface/resource';
 import { AddResource, ResourcesResponse } from 'core/interface/resource';
 import { Resource } from 'core/interface/models';
+import * as qs from 'qs';
 
 const url = '/rms/api/resources';
 
@@ -13,7 +14,12 @@ export const createResource = (data: AddResource): ApiResponse<Resource> => {
 export const getResources = (
   params?: FilterParams<Resource>
 ): ApiResponse<ResourcesResponse> => {
-  return http.get(url, { params });
+  return http.get(url, {
+    params,
+    paramsSerializer: (params) => {
+      return qs.stringify(params, { arrayFormat: 'comma' });
+    },
+  });
 };
 
 export const updateResource = (data: EditResource): ApiResponse<''> => {

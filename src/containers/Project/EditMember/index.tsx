@@ -10,7 +10,7 @@ import { AddProject } from 'core/interface/project';
 import moment from 'moment';
 import { FC, useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
-import ModalWrapper from '../components/ModalWrapper';
+import ModalWrapper from '../../../components/ModalWrapper';
 
 interface Props {
   isOpen: boolean;

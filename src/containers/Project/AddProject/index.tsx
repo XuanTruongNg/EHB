@@ -16,44 +16,19 @@ import moment from 'moment';
 import { FC, useEffect, useMemo, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { dataToOptions } from 'util/';
-import * as yup from 'yup';
-import ModalWrapper from '../components/ModalWrapper';
+import ModalWrapper from '../../../components/ModalWrapper';
+import { addProjectSchema } from './formConfig';
 
 interface Props {
   isOpen: boolean;
   setIsOpen: (isOpen: boolean) => void;
 }
 
-const schema = yup.object({
-  name: yup.string().required().label('Project name'),
-  code: yup.string().required().label('Project code'),
-  projectManagerId: yup
-    .number()
-    .transform((_, val) => (typeof val === 'number' ? val : null))
-    .required()
-    .label('Project Manager')
-    .nullable(),
-  startDate: yup
-    .date()
-    .max(yup.ref('endDate'), "Start date can't be after end date")
-    .typeError('Invalid date!'),
-  endDate: yup
-    .date()
-    .min(yup.ref('startDate'), "End date can't be before start date")
-    .typeError('Invalid date!'),
-  projectTypesId: yup
-    .number()
-    .transform((_, val) => (typeof val === 'number' ? val : null))
-    .required()
-    .label('Project Type')
-    .nullable(),
-});
-
 const AddProjectModal: FC<Props> = ({ isOpen, setIsOpen }) => {
   const [start, setStart] = useState<Date>();
   const [end, setEnd] = useState<Date>();
   const methods = useForm<AddProject>({
-    resolver: yupResolver(schema),
+    resolver: yupResolver(addProjectSchema),
   });
   const { data: projectTypes } = useGetProjectType();
 
