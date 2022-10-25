@@ -11,3 +11,4 @@ export * from './routes';
 export * from './spacing';
 export * from './UI';
 export * from './dashboard';
+export * from './regex';

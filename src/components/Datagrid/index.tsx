@@ -59,11 +59,9 @@ const DatagridC = <T extends ObjectLiteral>({
   const handlePageSizeChange = useCallback(
     (newPageSize: number) => {
       setPaginationData((prev) => ({ ...prev, pageSize: newPageSize }));
-      if (typeof rowCountState === 'number' && newPageSize > rowCountState)
-        return;
       onChange && onChange({ ...paginationData, pageSize: newPageSize });
     },
-    [onChange, paginationData, rowCountState]
+    [onChange, paginationData]
   );
 
   const handleSortChange = useCallback(

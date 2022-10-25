@@ -19,33 +19,23 @@ import {
 } from 'hooks';
 import { FC, useCallback, useEffect, useMemo } from 'react';
 import { useForm } from 'react-hook-form';
-import uuid from 'react-uuid';
 import { dataToOptions } from 'util/';
-import ModalWrapper from '../../components/ModalWrapper';
-import { resourceSchema } from './formConfig';
+import { addResourceModal, editResourceModal } from './formConfig';
+import ModalWrapper from 'components/ModalWrapper';
+import { isAddResource } from '../../../util/data';
 
-type Props =
-  | {
-      isOpen: boolean;
-      modelControl: React.Dispatch<React.SetStateAction<'ADD' | 'EDIT' | null>>;
-      type: 'EDIT';
-      id: number;
-    }
-  | {
-      isOpen: boolean;
-      modelControl: React.Dispatch<React.SetStateAction<'ADD' | 'EDIT' | null>>;
-      type: 'ADD';
-      id: undefined;
-    };
+type Props = {
+  isOpen: boolean;
+  modelControl: React.Dispatch<React.SetStateAction<'ADD' | 'EDIT' | null>>;
+  type: 'EDIT' | 'ADD' | null;
+  id: number | undefined;
+};
 
-const ResourceModal: FC<Props> = ({
-  isOpen,
-  modelControl: controlModal,
-  type,
-  id,
-}) => {
+const ResourceModal: FC<Props> = ({ isOpen, modelControl, type, id }) => {
   const methods = useForm<AddResource | EditResource>({
-    resolver: yupResolver(resourceSchema),
+    resolver: yupResolver(
+      type === 'ADD' ? addResourceModal : editResourceModal
+    ),
   });
 
   const { data: editedResource } = useGetResourceById(id);
@@ -56,9 +46,9 @@ const ResourceModal: FC<Props> = ({
   const { data: hardSkills } = useGetHardSkill();
 
   const closeHandler = useCallback(() => {
-    controlModal(null);
+    modelControl(null);
     methods.reset();
-  }, [controlModal, methods]);
+  }, [modelControl, methods]);
 
   const departmentData = useMemo(
     () => dataToOptions(departments, 'title', 'id'),
@@ -77,15 +67,15 @@ const ResourceModal: FC<Props> = ({
   const onSubmit = async (data: AddResource | EditResource) => {
     switch (type) {
       case 'ADD':
-        //TODO handle get uuid later
-        const randomUuid: string = uuid();
-        await addResource({ ...data, uuid: randomUuid });
+        if (isAddResource(data)) {
+          await addResource(data);
+        }
         break;
       case 'EDIT':
-        if ('code' in data) {
-          delete data.code;
-          await updateResource({ ...data, id: id });
+        if (!isAddResource(data) && id) {
+          await updateResource({ data, id });
         }
+
         break;
     }
     closeHandler();
@@ -93,13 +83,22 @@ const ResourceModal: FC<Props> = ({
 
   useEffect(() => {
     if (type === 'EDIT' && editedResource && isOpen) {
-      methods.setValue('name', editedResource.name);
-      methods.setValue('code', editedResource.code);
-      methods.setValue('departmentId', editedResource.departments.id);
-      methods.setValue('roleId', editedResource.resourcesRoles.id);
+      // methods.setValue('code', editedResource.code);
+      // methods.setValue('uuid', editedResource.uuid);
+      methods.setValue('phoneNumber', editedResource.phoneNumber);
+      methods.setValue('displayName', editedResource.displayName);
+      methods.setValue('email', editedResource.email);
+      methods.setValue('name', editedResource?.name);
+      methods.setValue('departmentId', editedResource?.departments?.id);
+      methods.setValue(
+        'roleIds',
+        editedResource.roles ? editedResource.roles.map((role) => role.id) : []
+      );
       methods.setValue(
         'hardSkillIds',
-        editedResource.hardSkills.map((skill) => skill.id)
+        editedResource.hardSkills
+          ? editedResource.hardSkills.map((skill) => skill.id)
+          : []
       );
       methods.setValue('yearsOfExperience', editedResource.yearsOfExperience);
     }
@@ -122,23 +121,57 @@ const ResourceModal: FC<Props> = ({
           />
           {type === 'EDIT' && (
             <TextFieldC
-              name="code"
+              name=""
               title={editResourceText.CODE}
               type="text"
               disabled={true}
+              value={editedResource?.code || ''}
             />
           )}
+          <TextFieldC
+            name="displayName"
+            title={addResourceText.DISPLAY_NAME}
+            placeholder={resourcePlaceholder.NAME}
+            type="text"
+          />
+          {type === 'ADD' && (
+            <TextFieldC
+              name="uuid"
+              title={addResourceText.UUID}
+              placeholder={resourcePlaceholder.ID}
+              type="text"
+            />
+          )}
+          <TextFieldC
+            name="phoneNumber"
+            title={addResourceText.PHONE}
+            placeholder={resourcePlaceholder.PHONE}
+            type="text"
+          />
+          <TextFieldC
+            name="email"
+            title={addResourceText.EMAIL}
+            placeholder={resourcePlaceholder.EMAIL}
+            type="text"
+          />
+          <TextFieldC
+            name="avatar"
+            title={addResourceText.AVATAR}
+            type="file"
+          />
+
           <SelectC
             name="departmentId"
             title={addResourceText.DEPARTMENT}
             placeholder={resourcePlaceholder.DEPARTMENT}
             options={departmentData}
           />
-          <SelectC
-            name="roleId"
+          <AutocompleteC
+            name="roleIds"
             title={addResourceText.ROLE}
             placeholder={resourcePlaceholder.ROLE}
             options={roleData}
+            multiple
           />
           <AutocompleteC
             name="hardSkillIds"
@@ -161,7 +194,7 @@ const ResourceModal: FC<Props> = ({
             display: 'flex',
             justifyContent: 'flex-end',
             gap: '32px',
-            p: '32px',
+            p: '0 32px 32px',
           }}
         >
           <Button
@@ -178,9 +211,11 @@ const ResourceModal: FC<Props> = ({
           </Button>
           <Button
             sx={{
-              backgroundColor: 'primary.main',
+              backgroundColor:
+                type === 'ADD' ? 'primary.main' : 'secondary.main',
               ':hover': {
-                backgroundColor: 'primary.main',
+                backgroundColor:
+                  type === 'ADD' ? 'primary.main' : 'secondary.main',
                 opacity: 0.8,
               },
             }}

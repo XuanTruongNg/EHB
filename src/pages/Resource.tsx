@@ -3,7 +3,7 @@ import { GridCellParams } from '@mui/x-data-grid';
 import DatagridC, { TableOnChangeData } from 'components/Datagrid';
 import PageHeader from 'components/PageHeader';
 import SearchBar from 'components/SearchBar';
-import ResourceModal from 'containers/Resource';
+import ResourceModal from 'containers/Resource/AddEditResource';
 import { buttonText, pageHeaderText } from 'core/constant';
 import { resourceText } from 'core/constant/resource';
 import { HEADER_MARGIN, PAGE_HEADER_MARGIN } from 'core/constant/spacing';
@@ -47,7 +47,7 @@ const Resource = () => {
         flex: 1,
       },
       {
-        field: 'resourcesRoles',
+        field: 'roles',
         headerName: headerColumnText.ROLE,
         flex: 1,
       },
@@ -76,13 +76,10 @@ const Resource = () => {
     () =>
       resources?.data.map((item) => {
         return {
-          id: item.id,
-          code: item.code,
-          name: item.name,
-          resourcesRoles: item.resourcesRoles.title,
-          departments: item.departments.title,
-          hardSkills: item.hardSkills.map((skill) => skill.title),
-          yearsOfExperience: item.yearsOfExperience,
+          ...item,
+          departments: item.departments?.title,
+          hardSkills: item.hardSkills?.map((skill) => skill.title),
+          roles: item.roles?.map((role) => role.title),
         };
       }) || [],
     [resources]
@@ -119,8 +116,20 @@ const Resource = () => {
   }, []);
 
   useEffect(() => {
-    setFilterData({ ...paginationData, searchData });
-  }, [paginationData, searchData]);
+    if (!paginationData && !searchData) return;
+    setFilterData((prev) => {
+      if (
+        prev?.pageSize &&
+        paginationData?.pageSize &&
+        resources?.count &&
+        prev.searchData === searchData &&
+        prev?.pageSize > resources?.count &&
+        paginationData?.pageSize > resources?.count
+      )
+        return prev;
+      return { ...paginationData, searchData };
+    });
+  }, [paginationData, searchData, resources?.count]);
 
   const onCellClick = (params: GridCellParams) => {
     const { row } = params;
@@ -171,16 +180,10 @@ const Resource = () => {
         </Box>
       </Box>
       <ResourceModal
-        isOpen={modelControl === 'ADD'}
+        isOpen={modelControl === 'ADD' || modelControl === 'EDIT'}
         modelControl={setModelControl}
-        type={'ADD'}
-        id={undefined}
-      />
-      <ResourceModal
-        isOpen={modelControl === 'EDIT'}
-        modelControl={setModelControl}
+        type={modelControl}
         id={selectedValue}
-        type={'EDIT'}
       />
     </>
   );

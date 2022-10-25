@@ -99,7 +99,7 @@ const AssignResource = () => {
         flex: 1,
       },
       {
-        field: 'resourcesRoles',
+        field: 'roles',
         headerName: headerColumnText.ROLE,
         flex: 1,
       },
@@ -148,7 +148,7 @@ const AssignResource = () => {
       },
       {
         field: 'remainBandwidth',
-        headerName: headerColumnText.BANDWIDTH,
+        headerName: headerColumnText.REMAINING_BANDWIDTH,
         flex: 1,
         sortable: false,
       },
@@ -163,7 +163,7 @@ const AssignResource = () => {
           id: item.id,
           code: item.code,
           name: item.name,
-          resourcesRoles: item.resourcesRoles.title,
+          roles: item.roles.map((role) => role.title),
           hardSkills: item.hardSkills.map((skill) => skill.title),
           yearsOfExperience: item.yearsOfExperience,
           currentProjects: dumbCurrentProjects.map((project) => project.name),
@@ -215,7 +215,7 @@ const AssignResource = () => {
 
   const handleSearch = (data: FilterResources) => {
     const searchParams = {
-      roleId: data.roleId,
+      roleId: data.roleIds,
       skillIdList: data.hardSkillIds,
       minExp: data.yearsOfExperience[0],
       maxExp: data.yearsOfExperience[1],

@@ -22,9 +22,11 @@ export const getResources = (
   });
 };
 
-export const updateResource = (data: EditResource): ApiResponse<''> => {
-  const { id, ...rest } = data;
-  return http.put(`${url}/${id}`, rest);
+export const updateResource = (
+  id: number,
+  data: EditResource
+): ApiResponse<''> => {
+  return http.put(`${url}/${id}`, data);
 };
 
 export const getResourceById = (id?: number): ApiResponse<Resource> => {

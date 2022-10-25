@@ -19,3 +19,8 @@ export interface PaginationData<T> {
 }
 
 export interface FilterParams<T> extends ObjectLiteral, PaginationData<T> {}
+
+export interface EditParam<T> {
+  id: number;
+  data: T;
+}

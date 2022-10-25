@@ -1,5 +1,4 @@
 import * as yup from 'yup';
-
 export const editProjectSchema = yup.object({
   name: yup.string().required().label('Project name'),
   code: yup.string().required().label('Project code'),
@@ -17,7 +16,7 @@ export const editProjectSchema = yup.object({
     .date()
     .min(yup.ref('startDate'), "End date can't be before start date")
     .typeError('Invalid date!'),
-  projectTypesId: yup
+  projectTypeId: yup
     .number()
     .transform((_, val) => (typeof val === 'number' ? val : null))
     .required()

@@ -1,6 +1,6 @@
 import { Base } from './base';
 
-export interface OnGoingProject extends Pick<Base, 'id'> {
+export interface OnGoingProject extends Base {
   code: string;
   projectName: string;
   assignedResources: number;

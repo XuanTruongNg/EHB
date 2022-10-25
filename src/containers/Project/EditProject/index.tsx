@@ -91,7 +91,7 @@ const EditProject: React.FunctionComponent<EditProjectProps> = () => {
         flex: 1,
       },
       {
-        field: 'resourcesRoles',
+        field: 'roles',
         headerName: headerColumnText.ROLE,
         flex: 1,
       },
@@ -121,7 +121,7 @@ const EditProject: React.FunctionComponent<EditProjectProps> = () => {
       },
       {
         field: 'allocatedBandwidth',
-        headerName: headerColumnText.BANDWIDTH,
+        headerName: headerColumnText.ALLOCATED_BANDWIDTH,
         flex: 1,
         sortable: false,
       },
@@ -140,7 +140,7 @@ const EditProject: React.FunctionComponent<EditProjectProps> = () => {
           yearsOfExperience: item.resources.yearsOfExperience,
           uuid: item.resources.uuid,
           departments: item.resources.departments,
-          resourcesRoles: item.resources.resourcesRoles.title,
+          roles: item.resources.roles.map((role) => role.title),
           hardSkills: item.resources.hardSkills.map((skill) => skill.title),
           joinedDate: moment(item.startDate).format('DD-MM-YYYY'),
           endDate: moment(item.endDate).format('DD-MM-YYYY'),

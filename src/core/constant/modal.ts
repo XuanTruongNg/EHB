@@ -5,6 +5,11 @@ export const addResourceText = {
   ROLE: 'Role',
   HARD_SKILLS: 'Hard skills',
   YOE: 'Years of experience',
+  DISPLAY_NAME: 'Display name',
+  PHONE: 'Phone number',
+  EMAIL: 'Email',
+  UUID: 'UUID',
+  AVATAR: 'Avatar',
 };
 
 export const editResourceText = {
@@ -19,6 +24,9 @@ export const editResourceText = {
 
 export const resourcePlaceholder = {
   NAME: 'Enter a name',
+  ID: 'Enter an id',
+  PHONE: 'Enter a phone number',
+  EMAIL: 'Enter an email',
   DEPARTMENT: 'Choose an option',
   ROLE: 'Choose an option',
   HARD_SKILLS: 'Choose options',

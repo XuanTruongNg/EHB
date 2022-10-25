@@ -83,7 +83,10 @@ export const TextFieldC: React.FunctionComponent<ITextField> = ({
       ) : (
         <TextField
           {...rest}
-          sx={{ width: UI_DEFAULT_VALUE.INPUT_WIDTH, ...rest.sx }}
+          sx={{
+            width: UI_DEFAULT_VALUE.INPUT_WIDTH,
+            ...rest.sx,
+          }}
           InputProps={{
             inputProps: { min: 0 },
             ...rest.InputProps,

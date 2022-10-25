@@ -1,5 +1,5 @@
 import { AxiosResponse } from 'axios';
-import { FilterParams } from 'core/interface/api';
+import { EditParam, FilterParams } from 'core/interface/api';
 import { Resource } from 'core/interface/models';
 import { EditResource } from 'core/interface/resource';
 import { queryClient } from 'index';
@@ -37,20 +37,22 @@ export const useGetResource = (filterParams?: FilterParams<Resource>) => {
   );
 };
 
+// TODO: Error handling for validation
 export const useUpdateResource = () => {
-  const { mutateAsync } = useMutation<AxiosResponse<''>, any, EditResource>(
-    (data) => updateResource(data),
-    {
-      onSuccess: () => {
-        queryClient.invalidateQueries('resources');
-        queryClient.invalidateQueries('resource');
-        alert('success');
-      },
-      onError: () => {
-        alert('there was an error');
-      },
-    }
-  );
+  const { mutateAsync } = useMutation<
+    AxiosResponse<''>,
+    any,
+    EditParam<EditResource>
+  >(({ id, data }) => updateResource(id, data), {
+    onSuccess: () => {
+      queryClient.invalidateQueries('resources');
+      queryClient.invalidateQueries('resource');
+      alert('success');
+    },
+    onError: (err) => {
+      alert('there was an error');
+    },
+  });
 
   return mutateAsync;
 };
@@ -60,8 +62,6 @@ export const useGetResourceById = (id?: number) => {
     select: (res) => {
       return res.data;
     },
-    enabled: !!id,
+    enabled: !!id && id > -1,
   });
 };
-
-

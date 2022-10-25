@@ -1,4 +1,5 @@
 import { ObjectLiteral } from 'core/interface/api';
+import { AddResource } from 'core/interface/resource';
 import { SelectOption } from 'core/interface/select';
 
 export const dataToOptions = <T extends ObjectLiteral>(
@@ -8,4 +9,8 @@ export const dataToOptions = <T extends ObjectLiteral>(
 ): SelectOption[] => {
   if (!list) return [];
   return list.map((item) => ({ label: item[label], value: item[value] }));
+};
+
+export const isAddResource = (data: ObjectLiteral): data is AddResource => {
+  return data && data['uuid'];
 };
