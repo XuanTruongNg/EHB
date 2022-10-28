@@ -1,23 +1,16 @@
-import { Box, Typography, TypographyProps } from '@mui/material';
-import { CustomFC } from 'core/interface/component';
-import { useMemo } from 'react';
-import { useFormContext } from 'react-hook-form';
+import { Box, Typography, TypographyProps } from "@mui/material";
+import { FC, ReactNode, useMemo } from "react";
+import { useFormContext } from "react-hook-form";
 interface Props {
   title?: string;
   name?: string;
-  labelStyle?: TypographyProps['sx'];
-  errorStyle?: TypographyProps['sx'];
-  dir?: 'row' | 'column';
+  labelStyle?: TypographyProps["sx"];
+  errorStyle?: TypographyProps["sx"];
+  dir?: "row" | "column";
+  children?: ReactNode;
 }
 
-export const FieldWrapper: CustomFC<Props> = ({
-  title,
-  children,
-  name,
-  labelStyle,
-  errorStyle,
-  dir = 'row',
-}) => {
+export const FieldWrapper: FC<Props> = ({ title, children, name, labelStyle, errorStyle, dir = "row" }) => {
   const {
     formState: { errors },
   } = useFormContext();
@@ -25,27 +18,23 @@ export const FieldWrapper: CustomFC<Props> = ({
   const errorText = useMemo(() => {
     if (!name) return null;
     const error = errors[name]?.message;
-    if (typeof error === 'string') return error;
+    if (typeof error === "string") return error;
     return null;
   }, [name, errors]);
   return (
     <Box
       sx={{
-        display: 'flex',
-        justifyContent: 'flex-start',
-        alignItems: 'center',
+        display: "flex",
+        justifyContent: "flex-start",
+        alignItems: "center",
         flexDirection: dir,
       }}
     >
-      <Typography sx={{ width: '200px', ...labelStyle }}>{title}</Typography>
+      <Typography sx={{ width: "200px", ...labelStyle }}>{title}</Typography>
       <Box>
         {children}
         {errorText && (
-          <Typography
-            sx={{ color: 'red', fontSize: 12, marginTop: '5px', ...errorStyle }}
-          >
-            {errorText}
-          </Typography>
+          <Typography sx={{ color: "red", fontSize: 12, marginTop: "5px", ...errorStyle }}>{errorText}</Typography>
         )}
       </Box>
     </Box>

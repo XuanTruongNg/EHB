@@ -1,34 +1,19 @@
-import { http } from 'core/api';
-import { ApiResponse, FilterParams } from 'core/interface/api';
-import { EditResource } from '../core/interface/resource';
-import { AddResource, ResourcesResponse } from 'core/interface/resource';
-import { Resource } from 'core/interface/models';
-import * as qs from 'qs';
+import * as qs from "qs";
+import { http } from "core/api";
+import { ApiResponse, FilterParams } from "core/interface/api";
+import { Resource } from "core/interface/models";
+import { AddResourceForm, ResourcesResponse, EditResourceForm } from "core/interface/resource";
 
-const url = '/rms/api/resources';
+const url = "/rms/api/resources";
 
-export const createResource = (data: AddResource): ApiResponse<Resource> => {
-  return http.post(url, data);
-};
+export const createResource = (data: AddResourceForm): ApiResponse<Resource> => http.post(url, data);
 
-export const getResources = (
-  params?: FilterParams<Resource>
-): ApiResponse<ResourcesResponse> => {
-  return http.get(url, {
+export const getResources = (params?: FilterParams<Resource>): ApiResponse<ResourcesResponse> =>
+  http.get(url, {
     params,
-    paramsSerializer: (params) => {
-      return qs.stringify(params, { arrayFormat: 'comma' });
-    },
+    paramsSerializer: (params) => qs.stringify(params, { arrayFormat: "comma" }),
   });
-};
 
-export const updateResource = (
-  id: number,
-  data: EditResource
-): ApiResponse<''> => {
-  return http.put(`${url}/${id}`, data);
-};
+export const updateResource = (id: number, data: EditResourceForm): ApiResponse<""> => http.put(`${url}/${id}`, data);
 
-export const getResourceById = (id?: number): ApiResponse<Resource> => {
-  return http.get(`${url}/${id}`);
-};
+export const getResourceById = (id?: number): ApiResponse<Resource> => http.get(`${url}/${id}`);

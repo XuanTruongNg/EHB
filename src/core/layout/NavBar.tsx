@@ -1,9 +1,9 @@
-import { Box, Typography } from '@mui/material';
-import { NavigationItem } from 'core/interface/navigation';
-import { useAppSelector } from 'core/store';
-import { selectUserRoleNames } from 'core/store/selector';
-import { FC } from 'react';
-import { useNavigate, useLocation } from 'react-router-dom';
+import { Box, Typography } from "@mui/material";
+import { FC } from "react";
+import { useNavigate, useLocation } from "react-router-dom";
+import { NavigationItem } from "core/interface/navigation";
+import { useAppSelector } from "core/store";
+import { selectUserRoleNames } from "core/store/selector";
 
 interface Props {
   navigationItems: NavigationItem[];
@@ -16,31 +16,27 @@ const NavBar: FC<Props> = ({ navigationItems }) => {
   return (
     <Box
       sx={{
-        display: 'flex',
-        justifyContent: 'space-between',
-        alignItems: 'center',
-        px: '32px',
-        width: '100%',
+        display: "flex",
+        justifyContent: "space-between",
+        alignItems: "center",
+        px: "32px",
+        width: "100%",
         height: 60,
-        backgroundColor: 'primary.main',
+        backgroundColor: "primary.main",
       }}
     >
-      <Box sx={{ display: 'flex', columnGap: '64px' }}>
+      <Box sx={{ display: "flex", columnGap: "64px" }}>
         {navigationItems
-          .filter((item) =>
-            item.acceptRoles.some((acceptRole) =>
-              userRoles?.includes(acceptRole)
-            )
-          )
+          .filter((item) => item.acceptRoles.some((acceptRole) => userRoles?.includes(acceptRole)))
           .map((item) => {
             const isSelected = router.pathname.includes(item.path);
             return (
               <Typography
                 key={item.text}
                 sx={{
-                  color: isSelected ? 'pink' : 'common.white',
+                  color: isSelected ? "pink" : "common.white",
                   fontWeight: 600,
-                  cursor: 'pointer',
+                  cursor: "pointer",
                 }}
                 onClick={() => {
                   navigate(item.path);
@@ -53,13 +49,13 @@ const NavBar: FC<Props> = ({ navigationItems }) => {
       </Box>
       <Box
         sx={{
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
           width: 35,
           height: 35,
-          borderRadius: '50%',
-          backgroundColor: 'pink',
+          borderRadius: "50%",
+          backgroundColor: "pink",
           fontWeight: 600,
           fontSize: 28,
         }}

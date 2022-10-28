@@ -1,6 +1,6 @@
-import { ObjectLiteral } from 'core/interface/api';
-import { AddResource } from 'core/interface/resource';
-import { SelectOption } from 'core/interface/select';
+import { ObjectLiteral } from "core/interface/api";
+import { AddResourceForm } from "core/interface/resource";
+import { SelectOption } from "core/interface/select";
 
 export const dataToOptions = <T extends ObjectLiteral>(
   list: T[] | undefined,
@@ -11,6 +11,4 @@ export const dataToOptions = <T extends ObjectLiteral>(
   return list.map((item) => ({ label: item[label], value: item[value] }));
 };
 
-export const isAddResource = (data: ObjectLiteral): data is AddResource => {
-  return data && data['uuid'];
-};
+export const isAddResource = (data: ObjectLiteral): data is AddResourceForm => data && data["uuid"];

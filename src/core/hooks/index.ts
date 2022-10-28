@@ -1,2 +1,2 @@
-export * from './useInterval';
-export * from './useMediaQuery';
+export * from "./useInterval";
+export * from "./useMediaQuery";

@@ -1,0 +1,6 @@
+#!/bin/bash
+echo "Running pre-commit hook"
+EXTENSION="(.ts$|.tsx$)"
+npx prettier --write $(git diff --name-only --cached HEAD | grep -E $EXTENSION | xargs)
+npx eslint --fix src
+npx eslint $(git diff --name-only --cached HEAD | grep -E $EXTENSION | xargs)

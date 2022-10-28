@@ -1,8 +1,8 @@
-import { CurrentProjectsOfResource } from './project';
-import { Base } from './base';
-import { Department } from './department';
-import { HardSkill } from './hardSkill';
-import { ResourceRole } from './resourceRole';
+import { Base } from "./base";
+import { Department } from "./department";
+import { HardSkill } from "./hardSkill";
+import { CurrentProjectsOfResource } from "./project";
+import { ResourceRole } from "./resourceRole";
 
 export interface Resource extends Base {
   uuid: string;
@@ -22,10 +22,7 @@ export interface Resource extends Base {
 }
 
 export interface ResourceInProject
-  extends Pick<
-    Resource,
-    'name' | 'code' | 'roles' | 'hardSkills' | 'yearsOfExperience'
-  > {
+  extends Pick<Resource, "name" | "code" | "roles" | "hardSkills" | "yearsOfExperience"> {
   joinedDate: string;
   endDate: string;
   allocatedBandwidth: number;

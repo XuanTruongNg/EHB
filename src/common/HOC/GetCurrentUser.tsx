@@ -1,15 +1,15 @@
-import { getCurrentUserThunk } from 'core/store/thunk';
-import * as React from 'react';
-import { CustomFC } from '../../core/interface/component';
-import { useAppDispatch } from '../../core/store';
-import { userActions } from '../../core/store/slice';
-interface GetCurrentUserWrapperProps {}
+import { FC, ReactNode, useEffect } from "react";
+import { getCurrentUserThunk } from "core/store/thunk";
+import { useAppDispatch } from "../../core/store";
+import { userActions } from "../../core/store/slice";
 
-export const GetCurrentUserWrapper: CustomFC<GetCurrentUserWrapperProps> = ({
-  children,
-}) => {
+interface Props {
+  children: ReactNode;
+}
+
+export const GetCurrentUserWrapper: FC<Props> = ({ children }) => {
   const dispatch = useAppDispatch();
-  React.useEffect(() => {
+  useEffect(() => {
     // This is temporary solution, we can change it later
     (async () => {
       try {

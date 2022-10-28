@@ -1,26 +1,20 @@
-import { FilterParams } from 'core/interface/api';
-import { Project } from 'core/interface/models';
-import { IEditProject } from 'core/interface/project';
-import { queryClient } from 'index';
-import { useMutation, useQuery } from 'react-query';
-import {
-  addResourcesToProject,
-  createProject,
-  getProjectById,
-  getProjects,
-  updateProject,
-} from '../api';
+import { useMutation, useQuery } from "react-query";
+import { FilterParams } from "core/interface/api";
+import { Project } from "core/interface/models";
+import { IEditProjectForm } from "core/interface/project";
+import { queryClient } from "index";
+import { addResourcesToProject, createProject, getProjectById, getProjects, updateProject } from "../api";
 
 export const useCreateProject = () => {
   const { mutate: addProject } = useMutation(createProject, {
     onSuccess: () => {
-      alert('success');
+      alert("success");
     },
     onError: () => {
-      alert('there was an error');
+      alert("there was an error");
     },
     onSettled: () => {
-      queryClient.invalidateQueries('projects');
+      queryClient.invalidateQueries("projects");
     },
   });
 
@@ -28,11 +22,11 @@ export const useCreateProject = () => {
 };
 
 export const useGetProject = (filterParams?: FilterParams<Project>) => {
-  return useQuery(['projects', filterParams], () => getProjects(filterParams), {
-    select: (res) => {
-      return res?.data;
-    },
+  const { data: projects, isFetching } = useQuery(["projects", filterParams], () => getProjects(filterParams), {
+    select: (res) => res?.data,
   });
+
+  return { projects, isFetching };
 };
 
 interface Options {
@@ -41,34 +35,31 @@ interface Options {
 }
 
 export const useGetProjectById = ({ enabled = true, id }: Options) => {
-  return useQuery(
-    ['project', id],
+  const { data: project, isFetching } = useQuery(
+    ["project", id],
     () => {
-      if (!id) return;
-      return getProjectById(id);
+      if (id) return getProjectById(id);
+      return undefined;
     },
     {
-      select: (res) => {
-        return res?.data;
-      },
+      select: (res) => res?.data,
       enabled,
     }
   );
+  return { project, isFetching };
 };
 
 export const useUpdateProject = () => {
-  const { mutate } = useMutation<any, any, IEditProject & { id: number }>(
-    ({ id, ...rest }) => {
-      return updateProject(id, rest);
-    },
+  const { mutate } = useMutation<unknown, unknown, IEditProjectForm & { id: number }>(
+    ({ id, ...rest }) => updateProject(id, rest),
     {
       onSuccess: () => {
-        queryClient.invalidateQueries('projects');
-        queryClient.invalidateQueries('project');
-        alert('success');
+        queryClient.invalidateQueries("projects");
+        queryClient.invalidateQueries("project");
+        alert("success");
       },
       onError: () => {
-        alert('there was an error');
+        alert("there was an error");
       },
     }
   );
@@ -79,13 +70,13 @@ export const useUpdateProject = () => {
 export const useAddResourcesToProject = () => {
   const { mutateAsync: addMembersToProject } = useMutation(addResourcesToProject, {
     onSuccess: () => {
-      queryClient.invalidateQueries('projects');
-      alert('success');
+      queryClient.invalidateQueries("projects");
+      alert("success");
     },
     onError: () => {
-      alert('there was an error');
+      alert("there was an error");
     },
   });
 
   return addMembersToProject;
-}
+};

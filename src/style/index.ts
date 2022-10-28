@@ -1,1 +1,1 @@
-export * from './customScrollBar';
+export * from "./customScrollBar";

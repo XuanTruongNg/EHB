@@ -1,5 +1,5 @@
-import { GetCurrentUserWrapper } from 'common/HOC/GetCurrentUser';
-import Routes from 'core/routes/Routes';
+import { GetCurrentUserWrapper } from "common/HOC/GetCurrentUser";
+import Routes from "core/routes/Routes";
 
 function App() {
   return (

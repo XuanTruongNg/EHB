@@ -1,32 +1,27 @@
-import { TextField, TextFieldProps } from '@mui/material';
-import { Controller, RegisterOptions, useFormContext } from 'react-hook-form';
-import { FieldWrapper } from './FieldWrapper';
-import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
-import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
-import { DatePicker, DatePickerProps } from '@mui/x-date-pickers/DatePicker';
-import { BaseInputProps } from 'core/interface/form/base';
-import { Moment } from 'moment';
+import { TextField, TextFieldProps } from "@mui/material";
+import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+import { DatePicker, DatePickerProps } from "@mui/x-date-pickers/DatePicker";
+import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
+import { Moment } from "moment";
+import { FC } from "react";
+import { Controller, RegisterOptions, useFormContext } from "react-hook-form";
+import { BaseInputProps } from "core/interface/form/base";
+import { FieldWrapper } from "./FieldWrapper";
 
-type IDatePicker = Omit<
-  DatePickerProps<unknown, Moment>,
-  'value' | 'renderInput'
-> &
+type IDatePicker = Omit<DatePickerProps<unknown, Moment>, "value" | "renderInput"> &
   BaseInputProps & {
     name: string;
     inputWidth?: string;
     title?: string;
-    rules?: Exclude<
-      RegisterOptions,
-      'valueAsNumber' | 'valueAsDate' | 'setValueAs'
-    >;
+    rules?: Exclude<RegisterOptions, "valueAsNumber" | "valueAsDate" | "setValueAs">;
     defaultValue?: string | number;
-    inputStyle?: TextFieldProps['sx'];
+    inputStyle?: TextFieldProps["sx"];
   };
 
-export const DatePickerC: React.FunctionComponent<IDatePicker> = ({
+export const DatePickerC: FC<IDatePicker> = ({
   name,
   title,
-  defaultValue = '',
+  defaultValue = "",
   rules,
   inputStyle,
   labelStyle,
@@ -42,13 +37,7 @@ export const DatePickerC: React.FunctionComponent<IDatePicker> = ({
 
   return (
     <LocalizationProvider dateAdapter={AdapterDayjs}>
-      <FieldWrapper
-        name={name}
-        title={title}
-        errorStyle={errorStyle}
-        labelStyle={labelStyle}
-        dir={dir}
-      >
+      <FieldWrapper name={name} title={title} errorStyle={errorStyle} labelStyle={labelStyle} dir={dir}>
         <Controller
           name={name}
           control={control}
@@ -62,11 +51,7 @@ export const DatePickerC: React.FunctionComponent<IDatePicker> = ({
                 if (onChange) onChange(value);
               }}
               renderInput={(params) => (
-                <TextField
-                  {...params}
-                  error={!!errors[name]}
-                  sx={{ width: '150px', ...inputStyle }}
-                />
+                <TextField {...params} error={!!errors[name]} sx={{ width: "150px", ...inputStyle }} />
               )}
               {...rest}
             />

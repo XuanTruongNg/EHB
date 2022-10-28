@@ -1,9 +1,6 @@
-import { Outlet } from 'react-router-dom';
+import { FC } from "react";
+import { Outlet } from "react-router-dom";
 
-interface EmptyLayoutProps {}
-
-const EmptyLayout: React.FunctionComponent<EmptyLayoutProps> = () => {
-  return <Outlet />;
-};
+const EmptyLayout: FC = () => <Outlet />;
 
 export default EmptyLayout;

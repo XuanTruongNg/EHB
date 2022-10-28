@@ -1,15 +1,15 @@
-import { Autocomplete, TextField, AutocompleteProps } from '@mui/material';
-import { UI_DEFAULT_VALUE } from 'core/constant';
-import { BaseInputProps } from 'core/interface/form/base';
-import { Controller, useFormContext } from 'react-hook-form';
-import { FieldWrapper } from './FieldWrapper';
-import { SelectOption } from 'core/interface/select';
+import { Autocomplete, TextField, AutocompleteProps } from "@mui/material";
+import { FC } from "react";
+import { Controller, useFormContext } from "react-hook-form";
+import { UI_DEFAULT_VALUE } from "core/constant";
+import { BaseInputProps } from "core/interface/form/base";
+import { SelectOption } from "core/interface/select";
+import { FieldWrapper } from "./FieldWrapper";
 
-//TODO Autocomplete can only use with multiple options now
-type IAutocomplete = Omit<
-  AutocompleteProps<any, any, any, any>,
-  'renderInput'
-> &
+//TODO: fix Autocomplete to be able to use with single option. (only work with multiple right now)
+//TODO change any to specific type
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+type IAutocomplete = Omit<AutocompleteProps<any, any, any, any>, "renderInput"> &
   BaseInputProps & {
     name: string;
     options: SelectOption[];
@@ -17,11 +17,11 @@ type IAutocomplete = Omit<
     title: string;
   };
 
-export const AutocompleteC: React.FunctionComponent<IAutocomplete> = ({
+export const AutocompleteC: FC<IAutocomplete> = ({
   name,
   title,
   multiple,
-  defaultValue = multiple ? [] : '',
+  defaultValue = multiple ? [] : "",
   placeholder,
   labelStyle,
   errorStyle,
@@ -36,13 +36,7 @@ export const AutocompleteC: React.FunctionComponent<IAutocomplete> = ({
   } = useFormContext();
 
   return (
-    <FieldWrapper
-      dir={dir}
-      name={name}
-      title={title}
-      labelStyle={labelStyle}
-      errorStyle={errorStyle}
-    >
+    <FieldWrapper dir={dir} name={name} title={title} labelStyle={labelStyle} errorStyle={errorStyle}>
       <Controller
         name={name}
         control={control}
@@ -50,13 +44,9 @@ export const AutocompleteC: React.FunctionComponent<IAutocomplete> = ({
         render={({ field: { value, ...fieldRest } }) => {
           let _value;
           if (!multiple) {
-            _value = rest.options.find(
-              (option: SelectOption) => option.value === value
-            );
+            _value = rest.options.find((option: SelectOption) => option.value === value);
           } else {
-            _value = rest.options.filter(
-              (option) => !!value?.includes(option.value)
-            );
+            _value = rest.options.filter((option) => !!value?.includes(option.value));
           }
           return (
             <Autocomplete
@@ -81,21 +71,19 @@ export const AutocompleteC: React.FunctionComponent<IAutocomplete> = ({
                   {option.label}
                 </li>
               )}
-              renderInput={(params) => {
-                return (
-                  <TextField
-                    {...params}
-                    error={!!errors[name]}
-                    variant="outlined"
-                    placeholder={placeholder}
-                    fullWidth
-                    inputProps={{
-                      ...params.inputProps,
-                      autoComplete: 'disabled',
-                    }}
-                  />
-                );
-              }}
+              renderInput={(params) => (
+                <TextField
+                  {...params}
+                  error={!!errors[name]}
+                  variant="outlined"
+                  placeholder={placeholder}
+                  fullWidth
+                  inputProps={{
+                    ...params.inputProps,
+                    autoComplete: "disabled",
+                  }}
+                />
+              )}
               {...rest}
             />
           );

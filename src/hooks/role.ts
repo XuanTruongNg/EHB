@@ -1,10 +1,9 @@
-import { useQuery } from 'react-query';
-import { getRole } from '../api';
+import { useQuery } from "react-query";
+import { getRole } from "../api";
 
 export const useGetRole = () => {
-  return useQuery(['resource-roles'], () => getRole(), {
-    select: (res) => {
-      return res?.data;
-    },
+  const { data: roles, isFetching } = useQuery(["resource-roles"], () => getRole(), {
+    select: (res) => res?.data,
   });
+  return { roles, isFetching };
 };

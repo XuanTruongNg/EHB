@@ -1,8 +1,7 @@
-import { useParams } from 'react-router-dom';
+import { FC } from "react";
+import { useParams } from "react-router-dom";
 
-interface UserDetailProps {}
-
-const UserDetail: React.FunctionComponent<UserDetailProps> = () => {
+const UserDetail: FC = () => {
   const { id } = useParams<{ id: string }>();
   return <>User details with ${id}</>;
 };

@@ -1,4 +1,6 @@
-import { User } from '../models';
+/* eslint-disable @typescript-eslint/no-explicit-any */
+/* TODO: change any to specific type*/
+import { User } from "../models";
 
 export interface TokenResponse {
   access_token: string;
@@ -15,7 +17,9 @@ export interface UserState {
   token: TokenResponse | null;
 }
 
-export interface Properties {}
+export interface Properties {
+  _: boolean;
+}
 
 export interface Role {
   owner: string;

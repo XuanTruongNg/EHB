@@ -1,7 +1,8 @@
-import { Slider, SliderProps } from '@mui/material';
-import { BaseInputProps } from 'core/interface/form/base';
-import { Controller, useFormContext } from 'react-hook-form';
-import { FieldWrapper } from './FieldWrapper';
+import { Slider, SliderProps } from "@mui/material";
+import { FC } from "react";
+import { Controller, useFormContext } from "react-hook-form";
+import { BaseInputProps } from "core/interface/form/base";
+import { FieldWrapper } from "./FieldWrapper";
 
 type ISelect = SliderProps &
   BaseInputProps & {
@@ -9,7 +10,7 @@ type ISelect = SliderProps &
     title?: string;
   };
 
-export const SliderC: React.FunctionComponent<ISelect> = ({
+export const SliderC: FC<ISelect> = ({
   name,
   title,
   defaultValue = [0, 10],
@@ -22,13 +23,7 @@ export const SliderC: React.FunctionComponent<ISelect> = ({
   const { control } = useFormContext();
 
   return (
-    <FieldWrapper
-      dir={dir}
-      name={name}
-      title={title}
-      errorStyle={errorStyle}
-      labelStyle={labelStyle}
-    >
+    <FieldWrapper dir={dir} name={name} title={title} errorStyle={errorStyle} labelStyle={labelStyle}>
       <Controller
         name={name}
         control={control}

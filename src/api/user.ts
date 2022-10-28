@@ -1,4 +1,4 @@
-import { http } from '../core/api';
+import { http } from "../core/api";
 
 export const getUserByIdApi = async (id: string) => {
   try {

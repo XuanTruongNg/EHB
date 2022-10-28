@@ -1,5 +1,5 @@
 export interface SelectionFieldValues<T> {
-  label: any;
+  label: unknown;
   value: T;
   isSelect?: boolean;
 }

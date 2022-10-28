@@ -1,10 +1,9 @@
-import { useQuery } from 'react-query';
-import { getProjectType } from '../api';
+import { useQuery } from "react-query";
+import { getProjectType } from "../api";
 
 export const useGetProjectType = () => {
-  return useQuery(['project-types'], () => getProjectType(), {
-    select: (res) => {
-      return res?.data;
-    },
+  const { data: projectTypes, isFetching } = useQuery(["project-types"], () => getProjectType(), {
+    select: (res) => res?.data,
   });
+  return { projectTypes, isFetching };
 };

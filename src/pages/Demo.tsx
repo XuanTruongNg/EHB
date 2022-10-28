@@ -1,15 +1,14 @@
-import { FormWrapper, TextFieldC } from 'core/form';
-import { useGetUserById } from 'hooks';
-import { useState } from 'react';
-import { useForm } from 'react-hook-form';
+import { FC, useState } from "react";
+import { useForm } from "react-hook-form";
+import { FormWrapper, TextFieldC } from "core/form";
+import { useGetUserById } from "hooks";
 
-interface DemoProps {}
 interface FormDemoI {
   id: string;
 }
-const Demo: React.FunctionComponent<DemoProps> = () => {
+const Demo: FC = () => {
   const methods = useForm<FormDemoI>({});
-  const [id, setId] = useState('');
+  const [id, setId] = useState("");
   const { data } = useGetUserById(id);
   const onSubmit = (data: FormDemoI) => {
     setId(data.id);

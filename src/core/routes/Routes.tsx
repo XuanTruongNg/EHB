@@ -1,12 +1,10 @@
-import * as React from 'react';
-import { Route, Routes as ReactRoutes } from 'react-router-dom';
-import { ROUTES, SingleRoute } from './routesConfig';
+import * as React from "react";
+import { Route, Routes as ReactRoutes } from "react-router-dom";
+import { ROUTES, SingleRoute } from "./routesConfig";
 
-interface RoutesProps {}
-
-const Routes: React.FunctionComponent<RoutesProps> = () => {
-  const _renderRoute = (routes: SingleRoute[]) => {
-    return routes.map((route) => {
+const Routes: React.FunctionComponent = () => {
+  const _renderRoute = (routes: SingleRoute[]) =>
+    routes.map((route) => {
       const { path, component, children } = route;
       return (
         <Route key={path} element={route.guard}>
@@ -16,7 +14,6 @@ const Routes: React.FunctionComponent<RoutesProps> = () => {
         </Route>
       );
     });
-  };
   return <ReactRoutes>{_renderRoute(ROUTES)}</ReactRoutes>;
 };
 

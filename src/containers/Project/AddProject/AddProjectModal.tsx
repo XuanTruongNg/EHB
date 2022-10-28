@@ -1,23 +1,19 @@
-import { yupResolver } from '@hookform/resolvers/yup';
-import InputAdornment from '@mui/material/InputAdornment';
-import SearchIcon from '@mui/icons-material/Search';
-import { Box, Button, Typography } from '@mui/material';
-import Stack from '@mui/material/Stack';
-import {
-  addProjectPlaceholder,
-  addProjectText,
-  buttonText,
-} from 'core/constant';
-import { DatePickerC, FormWrapper, SelectC, TextFieldC } from 'core/form';
-import { AddProject } from 'core/interface/project';
-import { useCreateProject } from 'hooks/project';
-import { useGetProjectType } from 'hooks/projectType';
-import moment, { Moment } from 'moment';
-import { FC, useEffect, useMemo, useState } from 'react';
-import { useForm } from 'react-hook-form';
-import { dataToOptions } from 'util/';
-import ModalWrapper from '../../../components/ModalWrapper';
-import { addProjectSchema } from './formConfig';
+import { yupResolver } from "@hookform/resolvers/yup";
+import SearchIcon from "@mui/icons-material/Search";
+import { Box, Button, Typography } from "@mui/material";
+import InputAdornment from "@mui/material/InputAdornment";
+import Stack from "@mui/material/Stack";
+import moment, { Moment } from "moment";
+import { FC, useEffect, useMemo, useState } from "react";
+import { useForm } from "react-hook-form";
+import ModalWrapper from "components/ModalWrapper";
+import { addProjectPlaceholder, addProjectText, buttonText } from "core/constant";
+import { DatePickerC, FormWrapper, SelectC, TextFieldC } from "core/form";
+import { AddProjectForm } from "core/interface/project";
+import { useCreateProject } from "hooks/project";
+import { useGetProjectType } from "hooks/projectType";
+import { dataToOptions } from "util/";
+import { addProjectSchema } from "./formConfig";
 
 interface Props {
   isOpen: boolean;
@@ -27,22 +23,19 @@ interface Props {
 const AddProjectModal: FC<Props> = ({ isOpen, setIsOpen }) => {
   const [start, setStart] = useState<Moment>();
   const [end, setEnd] = useState<Moment>();
-  const methods = useForm<AddProject>({
+  const methods = useForm<AddProjectForm>({
     resolver: yupResolver(addProjectSchema),
   });
-  const { data: projectTypes } = useGetProjectType();
+  const { projectTypes } = useGetProjectType();
 
-  const projectTypeData = useMemo(
-    () => dataToOptions(projectTypes, 'name', 'id'),
-    [projectTypes]
-  );
+  const projectTypeData = useMemo(() => dataToOptions(projectTypes, "name", "id"), [projectTypes]);
 
   const addProject = useCreateProject();
 
-  const onSubmit = (data: AddProject) => {
-    const startDate = moment(data.startDate.toString()).format('M-D-YYYY');
-    const endDate = moment(data.endDate.toString()).format('M-D-YYYY');
-
+  const onSubmit = (data: AddProjectForm) => {
+    const startDate = moment(data.startDate.toString()).format("M-D-YYYY");
+    const endDate = moment(data.endDate.toString()).format("M-D-YYYY");
+    //TODO: Remove orderBy and interface in the future
     addProject({ ...data, startDate, endDate });
     setIsOpen(false);
   };
@@ -54,26 +47,17 @@ const AddProjectModal: FC<Props> = ({ isOpen, setIsOpen }) => {
   }, [isOpen, methods]);
 
   return (
-    <ModalWrapper
-      isOpen={isOpen}
-      setIsOpen={() => setIsOpen(false)}
-      title={addProjectText.TITLE}
-    >
+    <ModalWrapper isOpen={isOpen} setIsOpen={() => setIsOpen(false)} title={addProjectText.TITLE}>
       <FormWrapper onSubmit={onSubmit} methods={methods}>
-        <Stack spacing={3} sx={{ py: '32px', px: '64px' }}>
+        <Stack spacing={3} sx={{ py: "32px", px: "64px" }}>
           <TextFieldC
             name="name"
             title={addProjectText.NAME}
             placeholder={addProjectPlaceholder.NAME}
             type="text"
-            InputProps={{ sx: { width: '100%', minWidth: '50%' } }}
+            InputProps={{ sx: { width: "100%", minWidth: "50%" } }}
           />
-          <TextFieldC
-            name="code"
-            title={addProjectText.CODE}
-            placeholder={addProjectPlaceholder.CODE}
-            type="text"
-          />
+          <TextFieldC name="code" title={addProjectText.CODE} placeholder={addProjectPlaceholder.CODE} type="text" />
           <TextFieldC
             name="projectManagerId"
             title={addProjectText.PROJECT_MANAGER}
@@ -88,34 +72,32 @@ const AddProjectModal: FC<Props> = ({ isOpen, setIsOpen }) => {
             }}
           />
 
-          <Box sx={{ display: 'flex', alignItems: 'center' }}>
-            <Typography sx={{ width: '200px' }}>
-              {addProjectText.DURATION}
-            </Typography>
+          <Box sx={{ display: "flex", alignItems: "center" }}>
+            <Typography sx={{ width: "200px" }}>{addProjectText.DURATION}</Typography>
             <DatePickerC
               name="startDate"
               maxDate={start}
-              labelStyle={{ width: '0px' }}
+              labelStyle={{ width: "0px" }}
               toolbarPlaceholder={addProjectPlaceholder.START_DATE}
               onChange={(date) => {
                 if (!date || !date.isValid()) {
                   setEnd(undefined);
                 } else {
-                  setEnd(date.add(1, 'days'));
+                  setEnd(date.add(1, "days"));
                 }
               }}
             />
             <DatePickerC
               name="endDate"
               minDate={end}
-              labelStyle={{ width: '60px', margin: '0 0 0 40px' }}
+              labelStyle={{ width: "60px", margin: "0 0 0 40px" }}
               title={addProjectText.END_DATE}
               toolbarPlaceholder={addProjectPlaceholder.END_DATE}
               onChange={(date) => {
                 if (!date || !date.isValid()) {
                   setStart(undefined);
                 } else {
-                  setStart(date.subtract(1, 'days'));
+                  setStart(date.subtract(1, "days"));
                 }
               }}
             />
@@ -130,17 +112,17 @@ const AddProjectModal: FC<Props> = ({ isOpen, setIsOpen }) => {
         </Stack>
         <Box
           sx={{
-            display: 'flex',
-            justifyContent: 'flex-end',
-            gap: '32px',
-            p: '32px',
+            display: "flex",
+            justifyContent: "flex-end",
+            gap: "32px",
+            p: "32px",
           }}
         >
           <Button
             sx={{
-              backgroundColor: 'secondary.light',
-              ':hover': {
-                backgroundColor: 'secondary.light',
+              backgroundColor: "secondary.light",
+              ":hover": {
+                backgroundColor: "secondary.light",
                 opacity: 0.8,
               },
             }}
@@ -150,9 +132,9 @@ const AddProjectModal: FC<Props> = ({ isOpen, setIsOpen }) => {
           </Button>
           <Button
             sx={{
-              backgroundColor: 'primary.main',
-              ':hover': {
-                backgroundColor: 'primary.main',
+              backgroundColor: "primary.main",
+              ":hover": {
+                backgroundColor: "primary.main",
                 opacity: 0.8,
               },
             }}
