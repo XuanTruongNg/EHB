@@ -5,9 +5,10 @@ import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DatePicker, DatePickerProps } from '@mui/x-date-pickers/DatePicker';
 import { BaseInputProps } from 'core/interface/form/base';
+import { Moment } from 'moment';
 
 type IDatePicker = Omit<
-  DatePickerProps<unknown, Date>,
+  DatePickerProps<unknown, Moment>,
   'value' | 'renderInput'
 > &
   BaseInputProps & {

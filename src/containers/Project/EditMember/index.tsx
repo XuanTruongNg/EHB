@@ -7,7 +7,7 @@ import {
 } from 'core/constant';
 import { DatePickerC, FormWrapper, TextFieldC } from 'core/form';
 import { AddProject } from 'core/interface/project';
-import moment from 'moment';
+import moment, { Moment } from 'moment';
 import { FC, useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import ModalWrapper from '../../../components/ModalWrapper';
@@ -18,8 +18,8 @@ interface Props {
 }
 //TODO edit member in project
 const EditMemberModal: FC<Props> = ({ isOpen, setIsOpen }) => {
-  const [start, setStart] = useState<Date>();
-  const [end, setEnd] = useState<Date>();
+  const [start, setStart] = useState<Moment>();
+  const [end, setEnd] = useState<Moment>();
   const methods = useForm<AddProject>();
 
   const onSubmit = (data: any) => {
@@ -57,7 +57,13 @@ const EditMemberModal: FC<Props> = ({ isOpen, setIsOpen }) => {
             maxDate={start}
             title={assignResourceText.START_DATE}
             toolbarPlaceholder={assignResourcePlaceholder.DATE}
-            onChange={(date) => setEnd(date || undefined)}
+            onChange={(date) => {
+              if (!date || !date.isValid()) {
+                setEnd(undefined);
+              } else {
+                setEnd(date.add(1, 'days'));
+              }
+            }}
           />
 
           <DatePickerC
@@ -65,7 +71,13 @@ const EditMemberModal: FC<Props> = ({ isOpen, setIsOpen }) => {
             minDate={end}
             title={assignResourceText.END_DATE}
             toolbarPlaceholder={assignResourcePlaceholder.DATE}
-            onChange={(date) => setStart(date || undefined)}
+            onChange={(date) => {
+              if (!date || !date.isValid()) {
+                setStart(undefined);
+              } else {
+                setStart(date.subtract(1, 'days'));
+              }
+            }}
           />
 
           <TextFieldC

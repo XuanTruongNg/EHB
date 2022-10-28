@@ -21,7 +21,7 @@ import { ResourceInProject as ResourceModel } from 'core/interface/models';
 import { FilterParams, PaginationData } from 'core/interface/api';
 import { Columns, Rows } from 'core/interface/table';
 import { resourceText } from 'core/constant/resource';
-import moment from 'moment';
+import moment, { Moment } from 'moment';
 import EditMemberModal from 'containers/Project/EditMember';
 import { editProjectSchema } from './formConfig';
 
@@ -44,8 +44,8 @@ const EditProject: React.FunctionComponent<EditProjectProps> = () => {
   });
   const { data: projectTypes } = useGetProjectType();
   const updateProject = useUpdateProject();
-  const [start, setStart] = useState<Date>();
-  const [end, setEnd] = useState<Date>();
+  const [start, setStart] = useState<Moment>();
+  const [end, setEnd] = useState<Moment>();
   const { id } = useParams<{ id: string }>();
 
   const { data } = useGetProjectById({
@@ -289,7 +289,13 @@ const EditProject: React.FunctionComponent<EditProjectProps> = () => {
                   name="startDate"
                   disabled={isDisabled}
                   maxDate={start}
-                  onChange={(date) => setEnd(date || undefined)}
+                  onChange={(date) => {
+                    if (!date || !date.isValid()) {
+                      setEnd(undefined);
+                    } else {
+                      setEnd(date.add(1, 'days'));
+                    }
+                  }}
                 />
                 <DatePickerC
                   labelStyle={{ width: 'auto' }}
@@ -298,7 +304,13 @@ const EditProject: React.FunctionComponent<EditProjectProps> = () => {
                   name="endDate"
                   disabled={isDisabled}
                   minDate={end}
-                  onChange={(date) => setStart(date || undefined)}
+                  onChange={(date) => {
+                    if (!date || !date.isValid()) {
+                      setStart(undefined);
+                    } else {
+                      setStart(date.subtract(1, 'days'));
+                    }
+                  }}
                 />
               </Box>
               <TextFieldC

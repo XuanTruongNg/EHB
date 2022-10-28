@@ -12,7 +12,7 @@ import { DatePickerC, FormWrapper, SelectC, TextFieldC } from 'core/form';
 import { AddProject } from 'core/interface/project';
 import { useCreateProject } from 'hooks/project';
 import { useGetProjectType } from 'hooks/projectType';
-import moment from 'moment';
+import moment, { Moment } from 'moment';
 import { FC, useEffect, useMemo, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { dataToOptions } from 'util/';
@@ -25,8 +25,8 @@ interface Props {
 }
 
 const AddProjectModal: FC<Props> = ({ isOpen, setIsOpen }) => {
-  const [start, setStart] = useState<Date>();
-  const [end, setEnd] = useState<Date>();
+  const [start, setStart] = useState<Moment>();
+  const [end, setEnd] = useState<Moment>();
   const methods = useForm<AddProject>({
     resolver: yupResolver(addProjectSchema),
   });
@@ -97,7 +97,13 @@ const AddProjectModal: FC<Props> = ({ isOpen, setIsOpen }) => {
               maxDate={start}
               labelStyle={{ width: '0px' }}
               toolbarPlaceholder={addProjectPlaceholder.START_DATE}
-              onChange={(date) => setEnd(date || undefined)}
+              onChange={(date) => {
+                if (!date || !date.isValid()) {
+                  setEnd(undefined);
+                } else {
+                  setEnd(date.add(1, 'days'));
+                }
+              }}
             />
             <DatePickerC
               name="endDate"
@@ -105,7 +111,13 @@ const AddProjectModal: FC<Props> = ({ isOpen, setIsOpen }) => {
               labelStyle={{ width: '60px', margin: '0 0 0 40px' }}
               title={addProjectText.END_DATE}
               toolbarPlaceholder={addProjectPlaceholder.END_DATE}
-              onChange={(date) => setStart(date || undefined)}
+              onChange={(date) => {
+                if (!date || !date.isValid()) {
+                  setStart(undefined);
+                } else {
+                  setStart(date.subtract(1, 'days'));
+                }
+              }}
             />
           </Box>
 
