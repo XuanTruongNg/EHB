@@ -8,8 +8,8 @@ import { Project as ProjectModel } from "core/interface/models";
 type SFilter = FilterParams<ProjectModel> | undefined;
 
 interface Props {
-  setFilterData: (filterData: SFilter) => void;
-  setIsModalOpen: (isOpen: boolean) => void;
+  setFilterData: (_filterData: SFilter) => void;
+  setIsModalOpen: (_isOpen: boolean) => void;
 }
 
 const ProjectSearchBar: FC<Props> = ({ setFilterData, setIsModalOpen }) => {

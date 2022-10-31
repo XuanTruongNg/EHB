@@ -17,7 +17,7 @@ export interface TableOnChangeData<T> {
 
 interface Props<T extends ObjectLiteral> extends Omit<DataGridProps, "rows"> {
   rows: Rows<T>;
-  onChange?: (paginationData: TableOnChangeData<T>) => void;
+  onChange?: (_paginationData: TableOnChangeData<T>) => void;
 }
 
 const DatagridC = <T extends ObjectLiteral>({

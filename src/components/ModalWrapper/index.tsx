@@ -6,7 +6,7 @@ import { HEADER_MARGIN } from "core/constant/spacing";
 
 interface Props {
   isOpen: boolean;
-  setIsOpen: (isOpen: boolean) => void;
+  setIsOpen: (_isOpen: boolean) => void;
   title: string;
   children: ReactNode;
 }

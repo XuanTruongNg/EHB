@@ -10,7 +10,7 @@ import ModalWrapper from "../../../components/ModalWrapper";
 
 interface Props {
   isOpen: boolean;
-  setIsOpen: (isOpen: boolean) => void;
+  setIsOpen: (_isOpen: boolean) => void;
 }
 const EditMemberModal: FC<Props> = ({ isOpen, setIsOpen }) => {
   const [start, setStart] = useState<Moment>();

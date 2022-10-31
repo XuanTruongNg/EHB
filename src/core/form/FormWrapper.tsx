@@ -3,7 +3,7 @@ import { FieldValues, FormProvider, UseFormReturn } from "react-hook-form";
 
 interface FormWrapperProps<T extends FieldValues> {
   methods: UseFormReturn<T>;
-  onSubmit: (data: T) => void;
+  onSubmit: (_data: T) => void;
   children: ReactNode;
 }
 

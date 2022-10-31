@@ -8,8 +8,8 @@ import { Resource as ResourceModel } from "core/interface/models";
 type SFilter = FilterParams<ResourceModel> | undefined;
 
 interface Props {
-  setFilterData: (filterData: SFilter) => void;
-  setModelControl: (modeControl: "ADD" | "EDIT" | null) => void;
+  setFilterData: (_filterData: SFilter) => void;
+  setModelControl: (_modeControl: "ADD" | "EDIT" | null) => void;
 }
 
 const ResourceSearchBar: FC<Props> = ({ setFilterData, setModelControl }) => {

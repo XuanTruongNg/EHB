@@ -37,7 +37,7 @@ export const useUpdateResource = () => {
         queryClient.invalidateQueries("resource");
         alert("success");
       },
-      onError: (err) => {
+      onError: () => {
         alert("there was an error");
       },
     }

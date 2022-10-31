@@ -13,7 +13,7 @@ import EditProjectHeader from "./EditProjectHeader";
 import { editProjectSchema } from "./formConfig";
 interface Props {
   isEditDisabled: boolean;
-  setIsEditDisabled: (isDisabled: boolean) => void;
+  setIsEditDisabled: (_isDisabled: boolean) => void;
   projectTypeData: SelectOption[];
   project: TempProject | undefined;
   children: ReactNode;

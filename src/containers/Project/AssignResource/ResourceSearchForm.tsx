@@ -14,7 +14,7 @@ type SFilter = FilterParams<ResourceModel> | undefined;
 interface Props {
   roleData: SelectOption[];
   skillData: SelectOption[];
-  setFilterData: (filterData: SFilter) => void;
+  setFilterData: (_filterData: SFilter) => void;
 }
 
 const ResourceSearchForm: FC<Props> = ({ roleData, skillData, setFilterData }) => {

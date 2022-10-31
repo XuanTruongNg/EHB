@@ -15,8 +15,8 @@ interface Props {
   project: TempProject | undefined;
   isFetching: boolean;
   filterData: SFilter;
-  setFilterData: (filterData: SFilter) => void;
-  setIsModalOpen: (isOpen: boolean) => void;
+  setFilterData: (_filterData: SFilter) => void;
+  setIsModalOpen: (_isOpen: boolean) => void;
 }
 
 const ResourceTable: FC<Props> = ({ project, isFetching, filterData, setFilterData, setIsModalOpen }) => {

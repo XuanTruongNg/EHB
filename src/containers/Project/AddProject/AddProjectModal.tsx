@@ -17,7 +17,7 @@ import { addProjectSchema } from "./formConfig";
 
 interface Props {
   isOpen: boolean;
-  setIsOpen: (isOpen: boolean) => void;
+  setIsOpen: (_isOpen: boolean) => void;
 }
 
 const AddProjectModal: FC<Props> = ({ isOpen, setIsOpen }) => {

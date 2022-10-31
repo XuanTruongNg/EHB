@@ -16,7 +16,7 @@ interface Props {
   projects: ProjectsResponse | undefined;
   isFetching: boolean;
   filterData: SFilter;
-  setFilterData: (filterData: SFilter) => void;
+  setFilterData: (_filterData: SFilter) => void;
 }
 
 const ProjectTable: FC<Props> = ({ isFetching, projects, filterData, setFilterData }) => {

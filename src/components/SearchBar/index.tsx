@@ -4,7 +4,7 @@ import TextField from "@mui/material/TextField";
 import { FC, useState } from "react";
 
 interface Props {
-  onChange: (e: string) => void;
+  onChange: (_e: string) => void;
 }
 
 const SearchBar: FC<Props> = ({ onChange }) => {

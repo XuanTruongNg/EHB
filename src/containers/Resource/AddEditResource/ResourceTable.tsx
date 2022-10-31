@@ -14,9 +14,9 @@ type SFilter = FilterParams<ResourceModel> | undefined;
 interface Props {
   resources: ResourcesResponse | undefined;
   isFetching: boolean;
-  onCellClick: (params: GridCellParams) => void;
+  onCellClick: (_params: GridCellParams) => void;
   filterData: SFilter;
-  setFilterData: (filterData: SFilter) => void;
+  setFilterData: (_filterData: SFilter) => void;
 }
 
 const ResourceTable: FC<Props> = ({ resources, isFetching, onCellClick, filterData, setFilterData }) => {
