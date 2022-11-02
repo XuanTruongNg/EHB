@@ -30,6 +30,9 @@ export const theme = createTheme({
         variant: "contained",
       },
       styleOverrides: {
+        root: {
+          minWidth:0,
+        },
         sizeMedium: {
           width: 170,
           height: 36,

@@ -10,4 +10,5 @@ export const buttonText = {
   SAVE: "Save",
   ASSIGN: "Assign",
   SEARCH: "Search",
+  LOGOUT: "Logout"
 };
