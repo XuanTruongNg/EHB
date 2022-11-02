@@ -19,6 +19,8 @@ interface Props {
   setFilterData: (_filterData: SFilter) => void;
 }
 
+// NOTE: onCellClick is temporary disabled, resource editing is not allowed - US224
+// eslint-disable-next-line no-unused-vars
 const ResourceTable: FC<Props> = ({ resources, isFetching, onCellClick, filterData, setFilterData }) => {
   const resourceColumns = useMemo<Columns<ResourceModel>>(
     () => [
@@ -108,7 +110,7 @@ const ResourceTable: FC<Props> = ({ resources, isFetching, onCellClick, filterDa
         columns={resourceColumns}
         rows={resourceRows}
         loading={isFetching}
-        onCellClick={onCellClick}
+        // onCellClick={onCellClick}
         rowCount={resources?.count ?? -1}
         onChange={handleTableChange}
         page={filterData?.page}

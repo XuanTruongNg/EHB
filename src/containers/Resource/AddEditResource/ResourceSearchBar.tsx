@@ -1,7 +1,6 @@
-import { Box, Button } from "@mui/material";
+import { Box } from "@mui/material";
 import { FC, useCallback } from "react";
 import SearchBar from "components/SearchBar";
-import { buttonText } from "core/constant";
 import { FilterParams } from "core/interface/api";
 import { Resource as ResourceModel } from "core/interface/models";
 
@@ -12,6 +11,8 @@ interface Props {
   setModelControl: (_modeControl: "ADD" | "EDIT" | null) => void;
 }
 
+// NOTE: setModelControl is temporary disabled, adding new resource is not allowed - US224
+// eslint-disable-next-line no-unused-vars
 const ResourceSearchBar: FC<Props> = ({ setFilterData, setModelControl }) => {
   const handleSearch = useCallback(
     (searchData: string) => {
@@ -21,8 +22,8 @@ const ResourceSearchBar: FC<Props> = ({ setFilterData, setModelControl }) => {
   );
 
   return (
-    <Box sx={{ display: "flex", justifyContent: "space-between" }}>
-      <Button
+    <Box sx={{ display: "flex", justifyContent: "flex-end" }}>
+      {/* <Button
         sx={{
           backgroundColor: "secondary.main",
           ":hover": {
@@ -33,7 +34,7 @@ const ResourceSearchBar: FC<Props> = ({ setFilterData, setModelControl }) => {
         onClick={() => setModelControl("ADD")}
       >
         {buttonText.ADD_RESOURCE}
-      </Button>
+      </Button> */}
 
       <SearchBar onChange={handleSearch} />
     </Box>
