@@ -1,7 +1,5 @@
 import { yupResolver } from "@hookform/resolvers/yup";
-import SearchIcon from "@mui/icons-material/Search";
 import { Box, Button, Typography } from "@mui/material";
-import InputAdornment from "@mui/material/InputAdornment";
 import Stack from "@mui/material/Stack";
 import moment, { Moment } from "moment";
 import { FC, useEffect, useMemo, useState } from "react";
@@ -21,11 +19,12 @@ interface Props {
 }
 
 const AddProjectModal: FC<Props> = ({ isOpen, setIsOpen }) => {
-  const [start, setStart] = useState<Moment>();
-  const [end, setEnd] = useState<Moment>();
+  const [maxStartDate, setMaxStartDate] = useState<Moment | undefined>();
+  const [minEndDate, setMinEndDate] = useState<Moment | undefined>(moment().add(1, "d"));
   const methods = useForm<AddProjectForm>({
     resolver: yupResolver(addProjectSchema),
   });
+
   const { projectTypes } = useGetProjectType();
 
   const projectTypeData = useMemo(() => dataToOptions(projectTypes, "name", "id"), [projectTypes]);
@@ -35,7 +34,6 @@ const AddProjectModal: FC<Props> = ({ isOpen, setIsOpen }) => {
   const onSubmit = (data: AddProjectForm) => {
     const startDate = moment(data.startDate.toString()).format("M-D-YYYY");
     const endDate = moment(data.endDate.toString()).format("M-D-YYYY");
-    //TODO: Remove orderBy and interface in the future
     addProject({ ...data, startDate, endDate });
     setIsOpen(false);
   };
@@ -57,47 +55,35 @@ const AddProjectModal: FC<Props> = ({ isOpen, setIsOpen }) => {
             type="text"
             InputProps={{ sx: { width: "100%", minWidth: "50%" } }}
           />
-          <TextFieldC name="code" title={addProjectText.CODE} placeholder={addProjectPlaceholder.CODE} type="text" />
-          <TextFieldC
-            name="projectManagerId"
-            title={addProjectText.PROJECT_MANAGER}
-            placeholder={addProjectPlaceholder.PROJECT_MANAGER}
-            type="number"
-            InputProps={{
-              endAdornment: (
-                <InputAdornment position="end">
-                  <SearchIcon />
-                </InputAdornment>
-              ),
-            }}
-          />
 
           <Box sx={{ display: "flex", alignItems: "center" }}>
             <Typography sx={{ width: "200px" }}>{addProjectText.DURATION}</Typography>
             <DatePickerC
               name="startDate"
-              maxDate={start}
+              maxDate={maxStartDate}
+              minDate={moment()}
+              defaultValue={moment().format("L")}
               labelStyle={{ width: "0px" }}
               toolbarPlaceholder={addProjectPlaceholder.START_DATE}
               onChange={(date) => {
                 if (!date || !date.isValid()) {
-                  setEnd(undefined);
+                  setMinEndDate(undefined);
                 } else {
-                  setEnd(date.add(1, "days"));
+                  setMinEndDate(date.add(1, "days"));
                 }
               }}
             />
             <DatePickerC
               name="endDate"
-              minDate={end}
+              minDate={minEndDate}
               labelStyle={{ width: "60px", margin: "0 0 0 40px" }}
               title={addProjectText.END_DATE}
               toolbarPlaceholder={addProjectPlaceholder.END_DATE}
               onChange={(date) => {
                 if (!date || !date.isValid()) {
-                  setStart(undefined);
+                  setMaxStartDate(undefined);
                 } else {
-                  setStart(date.subtract(1, "days"));
+                  setMaxStartDate(date.subtract(1, "days"));
                 }
               }}
             />
@@ -126,7 +112,11 @@ const AddProjectModal: FC<Props> = ({ isOpen, setIsOpen }) => {
                 opacity: 0.8,
               },
             }}
-            onClick={() => setIsOpen(false)}
+            onClick={() => {
+              setMaxStartDate(undefined);
+              setMinEndDate(moment().add(1, "d"));
+              setIsOpen(false);
+            }}
           >
             {buttonText.CANCEL}
           </Button>

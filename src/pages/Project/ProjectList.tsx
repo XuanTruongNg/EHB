@@ -14,8 +14,8 @@ type SFilter = FilterParams<ProjectModel> | undefined;
 
 const Project = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
-
-  const [filterData, setFilterData] = useState<SFilter>({ orderBy: "updatedAt", order: "DESC" });
+  //TODO: Remove orderBy and interface in the future
+  const [filterData, setFilterData] = useState<SFilter>({ orderBy: "createdAt", order: "DESC" });
 
   const { projects, isFetching } = useGetProject(filterData);
 

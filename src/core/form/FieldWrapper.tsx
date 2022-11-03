@@ -11,16 +11,14 @@ interface Props {
 }
 
 export const FieldWrapper: FC<Props> = ({ title, children, name, labelStyle, errorStyle, dir = "row" }) => {
-  const {
-    formState: { errors },
-  } = useFormContext();
+  const { formState } = useFormContext();
 
   const errorText = useMemo(() => {
     if (!name) return null;
-    const error = errors[name]?.message;
+    const error = formState.errors[name]?.message;
     if (typeof error === "string") return error;
     return null;
-  }, [name, errors]);
+  }, [name, formState]);
   return (
     <Box
       sx={{
