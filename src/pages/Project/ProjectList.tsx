@@ -1,7 +1,7 @@
 import { Box } from "@mui/material";
 import { useState } from "react";
 import PageHeader from "components/PageHeader";
-import AddProjectModal from "containers/Project/AddProject/AddProjectModal";
+import ProjectModal from "containers/Project/AddEditProject/ProjectModal";
 import ProjectSearchBar from "containers/Project/ListProject/ProjectSearchBar";
 import ProjectTable from "containers/Project/ListProject/ProjectTable";
 import { pageHeaderText } from "core/constant";
@@ -42,7 +42,7 @@ const Project = () => {
           setFilterData={setFilterData}
         />
       </Box>
-      <AddProjectModal isOpen={isModalOpen} setIsOpen={setIsModalOpen} />
+      <ProjectModal isOpen={isModalOpen} setIsOpen={setIsModalOpen} type={"ADD"} />
     </>
   );
 };

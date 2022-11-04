@@ -1,8 +1,8 @@
 import { useMemo, useState } from "react";
 import { useParams } from "react-router-dom";
+import EditProjectForm from "containers/Project/AddEditProject/EditProjectForm";
+import ResourceTable from "containers/Project/AddEditProject/ResourceTable";
 import EditMemberModal from "containers/Project/EditMember/EditMemberModal";
-import EditProjectForm from "containers/Project/EditProject/EditProjectForm";
-import ResourceTable from "containers/Project/EditProject/ResourceTable";
 import { FilterParams } from "core/interface/api";
 import { ResourceInProject as ResourceModel } from "core/interface/models";
 import { useGetProjectById, useGetProjectType } from "hooks";

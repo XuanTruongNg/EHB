@@ -1,4 +1,3 @@
-import { yupResolver } from "@hookform/resolvers/yup";
 import { Box, Button } from "@mui/material";
 import moment, { Moment } from "moment";
 import { FC, ReactNode, useCallback, useEffect, useState } from "react";
@@ -10,7 +9,7 @@ import { IEditProjectForm, TempProject } from "core/interface/project";
 import { SelectOption } from "core/interface/select";
 import { useUpdateProject } from "hooks";
 import EditProjectHeader from "./EditProjectHeader";
-import { editProjectSchema } from "./formConfig";
+
 interface Props {
   isEditDisabled: boolean;
   setIsEditDisabled: (_isDisabled: boolean) => void;
@@ -24,9 +23,7 @@ const EditProjectForm: FC<Props> = ({ isEditDisabled, setIsEditDisabled, project
   const [start, setStart] = useState<Moment>();
   const [end, setEnd] = useState<Moment>();
   const updateProject = useUpdateProject();
-  const methods = useForm<IEditProjectForm>({
-    resolver: yupResolver(editProjectSchema),
-  });
+  const methods = useForm<IEditProjectForm>({});
   const handleReset = useCallback(
     (data: TempProject | undefined) => {
       if (typeof data == "undefined") {

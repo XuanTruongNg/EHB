@@ -1,6 +1,6 @@
 import * as yup from "yup";
 
-export const addProjectSchema = yup.object({
+export const projectSchema = yup.object({
   name: yup
     .string()
     .matches(/^[a-zA-Z\s]+$/, "Please enter a valid name")
@@ -22,3 +22,7 @@ export const addProjectSchema = yup.object({
     .label("Project Type")
     .nullable(),
 });
+
+export const addProjectModal = projectSchema;
+
+export const editProjectModal = projectSchema;

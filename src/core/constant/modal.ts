@@ -33,8 +33,9 @@ export const resourcePlaceholder = {
   YOE: "Enter a number",
 };
 
-export const addProjectText = {
-  TITLE: "Add new project",
+export const ProjectText = {
+  ADD: "Add new project",
+  EDIT: "Edit project",
   NAME: "Project name",
   CODE: "Project code",
   PROJECT_MANAGER: "Project manager",

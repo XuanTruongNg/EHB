@@ -4,60 +4,83 @@ import Stack from "@mui/material/Stack";
 import moment, { Moment } from "moment";
 import { FC, useEffect, useMemo, useState } from "react";
 import { useForm } from "react-hook-form";
+import { useParams } from "react-router-dom";
 import ModalWrapper from "components/ModalWrapper";
-import { addProjectPlaceholder, addProjectText, buttonText } from "core/constant";
+import { addProjectPlaceholder, ProjectText, buttonText } from "core/constant";
 import { DatePickerC, FormWrapper, SelectC, TextFieldC } from "core/form";
-import { AddProjectForm } from "core/interface/project";
-import { useCreateProject } from "hooks/project";
+import { AddProjectForm, IEditProjectForm } from "core/interface/project";
+import { useCreateProject, useGetProjectById, useUpdateProject } from "hooks/project";
 import { useGetProjectType } from "hooks/projectType";
 import { dataToOptions } from "util/";
-import { addProjectSchema } from "./formConfig";
+import { addProjectModal, editProjectModal } from "./formConfig";
 
 interface Props {
   isOpen: boolean;
   setIsOpen: (_isOpen: boolean) => void;
+  type: "EDIT" | "ADD" | null;
 }
 
-const AddProjectModal: FC<Props> = ({ isOpen, setIsOpen }) => {
+const ProjectModal: FC<Props> = ({ isOpen, setIsOpen, type }) => {
   const [maxStartDate, setMaxStartDate] = useState<Moment | undefined>();
   const [minEndDate, setMinEndDate] = useState<Moment | undefined>(moment().add(1, "d"));
-  const methods = useForm<AddProjectForm>({
-    resolver: yupResolver(addProjectSchema),
+  const methods = useForm<AddProjectForm | IEditProjectForm>({
+    resolver: yupResolver(type === "ADD" ? addProjectModal : editProjectModal),
   });
 
-  const { projectTypes } = useGetProjectType();
+  const { id } = useParams<{ id: string }>();
 
+  const { project } = useGetProjectById({ id: Number(id) });
+
+  const { projectTypes } = useGetProjectType();
   const projectTypeData = useMemo(() => dataToOptions(projectTypes, "name", "id"), [projectTypes]);
 
   const addProject = useCreateProject();
+  const updateProject = useUpdateProject();
 
-  const onSubmit = (data: AddProjectForm) => {
+  const onSubmit = (data: AddProjectForm | IEditProjectForm) => {
     const startDate = moment(data.startDate.toString()).format("M-D-YYYY");
     const endDate = moment(data.endDate.toString()).format("M-D-YYYY");
-    addProject({ ...data, startDate, endDate });
-    setIsOpen(false);
+
+    switch (type) {
+      case "ADD":
+        addProject({ ...data, startDate, endDate });
+        setIsOpen(false);
+        break;
+      case "EDIT":
+        updateProject({ ...data, id: Number(id), startDate, endDate });
+        setIsOpen(false);
+        break;
+      default:
+    }
   };
 
   useEffect(() => {
-    if (!isOpen) {
-      methods.reset();
-    }
-  }, [isOpen, methods]);
+    if (type === "EDIT" && project && isOpen) {
+      methods.setValue("name", project.name);
+      methods.setValue("startDate", project.startDate);
+      methods.setValue("endDate", project.endDate);
+      methods.setValue("projectTypesId", project.projectTypes.id);
+    } else methods.reset();
+  }, [project, isOpen, methods, type]);
 
   return (
-    <ModalWrapper isOpen={isOpen} setIsOpen={() => setIsOpen(false)} title={addProjectText.TITLE}>
+    <ModalWrapper
+      isOpen={isOpen}
+      setIsOpen={() => setIsOpen(false)}
+      title={type === "ADD" ? ProjectText.ADD : ProjectText.EDIT}
+    >
       <FormWrapper onSubmit={onSubmit} methods={methods}>
         <Stack spacing={3} sx={{ py: "32px", px: "64px" }}>
           <TextFieldC
             name="name"
-            title={addProjectText.NAME}
+            title={ProjectText.NAME}
             placeholder={addProjectPlaceholder.NAME}
             type="text"
             InputProps={{ sx: { width: "100%", minWidth: "50%" } }}
           />
 
           <Box sx={{ display: "flex", alignItems: "center" }}>
-            <Typography sx={{ width: "200px" }}>{addProjectText.DURATION}</Typography>
+            <Typography sx={{ width: "200px" }}>{ProjectText.DURATION}</Typography>
             <DatePickerC
               name="startDate"
               maxDate={maxStartDate}
@@ -77,7 +100,7 @@ const AddProjectModal: FC<Props> = ({ isOpen, setIsOpen }) => {
               name="endDate"
               minDate={minEndDate}
               labelStyle={{ width: "60px", margin: "0 0 0 40px" }}
-              title={addProjectText.END_DATE}
+              title={ProjectText.END_DATE}
               toolbarPlaceholder={addProjectPlaceholder.END_DATE}
               onChange={(date) => {
                 if (!date || !date.isValid()) {
@@ -91,7 +114,7 @@ const AddProjectModal: FC<Props> = ({ isOpen, setIsOpen }) => {
 
           <SelectC
             name="projectTypesId"
-            title={addProjectText.TYPE}
+            title={ProjectText.TYPE}
             placeholder={addProjectPlaceholder.TYPE}
             options={projectTypeData || []}
           />
@@ -130,7 +153,7 @@ const AddProjectModal: FC<Props> = ({ isOpen, setIsOpen }) => {
             }}
             type="submit"
           >
-            {buttonText.ADD_NEW}
+            {type === "ADD" ? buttonText.ADD_NEW : buttonText.SAVE}
           </Button>
         </Box>
       </FormWrapper>
@@ -138,4 +161,4 @@ const AddProjectModal: FC<Props> = ({ isOpen, setIsOpen }) => {
   );
 };
 
-export default AddProjectModal;
+export default ProjectModal;

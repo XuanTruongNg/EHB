@@ -5,7 +5,7 @@ import { useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import DatagridC from "components/Datagrid";
 import SearchBar from "components/SearchBar";
-import AddProjectModal from "containers/Project/AddProject/AddProjectModal";
+import ProjectModal from "containers/Project/AddEditProject/ProjectModal";
 import { dashboardText, HEADER_MARGIN, pageHeaderText, PAGE_HEADER_MARGIN, PROJECT } from "core/constant";
 import { buttonText } from "core/constant/button";
 import { OnGoingProject } from "core/interface/models";
@@ -219,7 +219,7 @@ const Dashboard = () => {
           </Slide>
         </Box>
       </Box>
-      <AddProjectModal isOpen={isOpen} setIsOpen={setOpen} />
+      <ProjectModal isOpen={isOpen} setIsOpen={setOpen} type={"ADD"} />
     </>
   );
 };
