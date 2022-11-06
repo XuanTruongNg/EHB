@@ -9,6 +9,7 @@ export interface Project extends Base {
   startDate: string;
   endDate: string;
   creator: User;
+  status: string;
   projectManager: User;
   projectTypes: ProjectType;
   resourcesProjects: Resource[];

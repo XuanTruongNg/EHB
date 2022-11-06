@@ -60,4 +60,5 @@ export const editProjectText = {
   DURATION: "Duration",
   START_DATE: "from",
   END_DATE: "to",
+  PROJECT_OWNER: "Project owner",
 };

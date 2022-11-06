@@ -1,7 +1,7 @@
 import { useMutation, useQuery } from "react-query";
 import { FilterParams } from "core/interface/api";
 import { Project } from "core/interface/models";
-import { IEditProjectForm } from "core/interface/project";
+import { IEditProject } from "core/interface/project";
 import { queryClient } from "index";
 import { addResourcesToProject, createProject, getProjectById, getProjects, updateProject } from "../api";
 
@@ -50,7 +50,7 @@ export const useGetProjectById = ({ enabled = true, id }: Options) => {
 };
 
 export const useUpdateProject = () => {
-  const { mutate } = useMutation<unknown, unknown, IEditProjectForm & { id: number }>(
+  const { mutate } = useMutation<unknown, unknown, IEditProject& { id: number }>(
     ({ id, ...rest }) => updateProject(id, rest),
     {
       onSuccess: () => {

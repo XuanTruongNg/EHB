@@ -43,7 +43,7 @@ const ProjectModal: FC<Props> = ({ isOpen, setIsOpen, type }) => {
 
     switch (type) {
       case "ADD":
-        addProject({ ...data, startDate, endDate });
+        addProject({ ...data, startDate, endDate } as AddProjectForm);
         setIsOpen(false);
         break;
       case "EDIT":

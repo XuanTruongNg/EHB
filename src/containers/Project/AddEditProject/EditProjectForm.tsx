@@ -1,11 +1,12 @@
-import { Box, Button } from "@mui/material";
+import ArrowBackIcon from "@mui/icons-material/ArrowBack";
+import { Box, Button, Typography } from "@mui/material";
 import moment, { Moment } from "moment";
 import { FC, ReactNode, useCallback, useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { useNavigate, useParams } from "react-router-dom";
-import { ASSIGN, buttonText, editProjectText, HEADER_MARGIN, PAGE_HEADER_MARGIN, PROJECT } from "core/constant";
+import { buttonText, editProjectText, HEADER_MARGIN, PAGE_HEADER_MARGIN, PROJECT } from "core/constant";
 import { DatePickerC, FormWrapper, SelectC, TextFieldC } from "core/form";
-import { IEditProjectForm, TempProject } from "core/interface/project";
+import { IEditProject, IEditProjectForm, TempProject } from "core/interface/project";
 import { SelectOption } from "core/interface/select";
 import { useUpdateProject } from "hooks";
 import EditProjectHeader from "./EditProjectHeader";
@@ -17,6 +18,8 @@ interface Props {
   project: TempProject | undefined;
   children: ReactNode;
 }
+
+// eslint-disable-next-line max-lines-per-function
 const EditProjectForm: FC<Props> = ({ isEditDisabled, setIsEditDisabled, projectTypeData, project, children }) => {
   const navigate = useNavigate();
   const { id } = useParams<{ id: string }>();
@@ -32,10 +35,11 @@ const EditProjectForm: FC<Props> = ({ isEditDisabled, setIsEditDisabled, project
       methods.reset({
         code: data.code,
         name: data.name,
-        projectManagerId: data.projectManager.id,
+        projectManagerName: data.projectManager.name,
         projectTypesId: data.projectTypes.id,
         startDate: data.startDate,
         endDate: data.endDate,
+        status: data.status
       });
     },
     [methods]
@@ -44,7 +48,13 @@ const EditProjectForm: FC<Props> = ({ isEditDisabled, setIsEditDisabled, project
     if (!id) return;
     const startDate = moment(data.startDate.toString()).format("MM-DD-YYYY");
     const endDate = moment(data.endDate.toString()).format("MM-DD-YYYY");
-    updateProject({ ...data, id: Number(id), startDate, endDate }, { onError: () => handleReset(project) });
+    const dataToUpdate: IEditProject = {
+      name: data.name,
+      projectTypesId: data.projectTypesId,
+      startDate,
+      endDate
+    };
+    updateProject({ ...dataToUpdate, id: Number(id), startDate, endDate }, { onError: () => handleReset(project) });
     setIsEditDisabled(!isEditDisabled);
   };
   useEffect(() => {
@@ -56,21 +66,59 @@ const EditProjectForm: FC<Props> = ({ isEditDisabled, setIsEditDisabled, project
     <>
       <FormWrapper onSubmit={onSubmit} methods={methods}>
         <EditProjectHeader>
-          <Box sx={{ display: "flex", gap: 4 }}>
+          <Box sx={{ display: "flex", gap: 2 }}>
+            <ArrowBackIcon sx={{ cursor: "pointer" }} onClick={() => navigate(PROJECT)} />
             <TextFieldC
               labelStyle={{ width: 0 }}
-              name="code"
-              sx={{ width: "100%", maxWidth: 150 }}
+              name='code'
+              sx={{ width: "100%", maxWidth: 120 }}
               InputProps={{ style: { fontWeight: "bold", height: 30 } }}
-              disabled={isEditDisabled}
+              disabled={true}
             />
             <TextFieldC
               labelStyle={{ width: 0 }}
-              name="name"
-              sx={{ width: "100%", maxWidth: 150 }}
+              name='name'
+              sx={{ width: "100%", maxWidth: 260 }}
               InputProps={{ style: { fontWeight: "bold", height: 30 } }}
               disabled={isEditDisabled}
             />
+            <Typography sx={{
+              display: "flex", borderRadius: "6px", padding: " 0px 12px",
+              height: 26, color: "white", backgroundColor: "#0F69EF",
+              marginTop: "4px"
+            }}>
+              {project?.status}
+            </Typography>
+          </Box>
+          <Box sx={{ display: "flex", right: "5%", gap: 3 }}>
+            <Button
+              sx={{
+                backgroundColor: "##7d7aff",
+                opacity: 0.8,
+                ":hover": {
+                  backgroundColor: "#7d7aff",
+                  opacity: 0.6
+                },
+                width: "80px",
+                fontSize: "16px"
+              }}
+            >
+              {buttonText.START}
+            </Button>
+            <Button
+              sx={{
+                backgroundColor: "#ff6347",
+                opacity: 0.8,
+                ":hover": {
+                  backgroundColor: "#ff6347",
+                  opacity: 0.6
+                },
+                width: "80px",
+                fontSize: "16px"
+              }}
+            >
+              {buttonText.DELETE}
+            </Button>
           </Box>
         </EditProjectHeader>
         <Box
@@ -78,19 +126,19 @@ const EditProjectForm: FC<Props> = ({ isEditDisabled, setIsEditDisabled, project
             display: "flex",
             flexDirection: "column",
             rowGap: "32px",
-            p: "32px",
+            p: "8px 32px 32px 32px",
             flex: 1,
             overflow: "auto",
-            height: `calc(100vh - ${HEADER_MARGIN + PAGE_HEADER_MARGIN}px)`,
+            height: `calc(100vh - ${HEADER_MARGIN + PAGE_HEADER_MARGIN}px)`
           }}
         >
-          <Box sx={{ display: "flex" }}>
+          <Box sx={{ display: "flex", padding: "16px", border: "1px solid #C1C1C1", borderRadius: "16px" }}>
             <Box
               sx={{
                 display: "flex",
                 flexDirection: "row",
                 flexWrap: "wrap",
-                gap: 15,
+                gap: 8
               }}
             >
               <Box
@@ -98,19 +146,19 @@ const EditProjectForm: FC<Props> = ({ isEditDisabled, setIsEditDisabled, project
                   display: "flex",
                   flexDirection: "column",
                   flexWrap: "wrap",
-                  gap: 3,
+                  gap: 2
                 }}
               >
                 <TextFieldC
-                  name="projectManagerId"
-                  title={editProjectText.PROJECT_MANAGER}
-                  type="number"
+                  name='projectManagerName'
+                  title={editProjectText.PROJECT_OWNER}
+                  type='string'
                   labelStyle={{ width: "130px", fontWeight: 600 }}
                   sx={{ marginLeft: 2, width: 200 }}
-                  disabled={isEditDisabled}
+                  disabled={true}
                 />
                 <SelectC
-                  name="projectTypesId"
+                  name='projectTypesId'
                   title={editProjectText.PROJECT_TYPE}
                   sx={{ width: 200, marginLeft: 2 }}
                   labelStyle={{ width: "130px", fontWeight: 600 }}
@@ -123,7 +171,7 @@ const EditProjectForm: FC<Props> = ({ isEditDisabled, setIsEditDisabled, project
                   display: "flex",
                   flexDirection: "column",
                   flexWrap: "wrap",
-                  gap: 3,
+                  gap: 3
                 }}
               >
                 <Box sx={{ display: "flex" }}>
@@ -131,7 +179,7 @@ const EditProjectForm: FC<Props> = ({ isEditDisabled, setIsEditDisabled, project
                     labelStyle={{ width: "90px", fontWeight: 600 }}
                     inputStyle={{ marginLeft: 2, marginRight: 2 }}
                     title={editProjectText.DURATION}
-                    name="startDate"
+                    name='startDate'
                     disabled={isEditDisabled}
                     maxDate={start}
                     onChange={(date) => {
@@ -146,7 +194,7 @@ const EditProjectForm: FC<Props> = ({ isEditDisabled, setIsEditDisabled, project
                     labelStyle={{ width: "auto" }}
                     inputStyle={{ marginLeft: 2 }}
                     title={editProjectText.END_DATE}
-                    name="endDate"
+                    name='endDate'
                     disabled={isEditDisabled}
                     minDate={end}
                     onChange={(date) => {
@@ -158,19 +206,6 @@ const EditProjectForm: FC<Props> = ({ isEditDisabled, setIsEditDisabled, project
                     }}
                   />
                 </Box>
-                <TextFieldC
-                  title={"Total members"}
-                  type="text"
-                  disabled={isEditDisabled}
-                  value={project?.resourcesProjects.length || 0}
-                  labelStyle={{ width: "130px", fontWeight: 600 }}
-                  sx={{
-                    "& fieldset": { border: "none" },
-                    "& .Mui-disabled": {
-                      WebkitTextFillColor: "#000",
-                    },
-                  }}
-                />
               </Box>
             </Box>
             <Box
@@ -180,7 +215,7 @@ const EditProjectForm: FC<Props> = ({ isEditDisabled, setIsEditDisabled, project
                 flexDirection: "column",
                 justifyContent: "space-between",
                 alignItems: "flex-end",
-                paddingRight: "4%",
+                paddingRight: "1%"
               }}
             >
               {isEditDisabled ? (
@@ -189,31 +224,52 @@ const EditProjectForm: FC<Props> = ({ isEditDisabled, setIsEditDisabled, project
                     backgroundColor: "secondary.main",
                     ":hover": {
                       backgroundColor: "secondary.main",
-                      opacity: 0.8,
+                      opacity: 0.8
                     },
-                    width: "200px",
-                    fontSize: "16px",
+                    width: "80px",
+                    fontSize: "16px"
                   }}
                   onClick={() => setIsEditDisabled(!isEditDisabled)}
                 >
-                  {buttonText.EDIT_PROJECT}
+                  {buttonText.EDIT}
                 </Button>
-              ) : null}
+              ) : (
+                <Box sx={{ width: "80px", fontSize: "16px" }}></Box>
+              )}
               {!isEditDisabled ? (
-                <Button
-                  sx={{
-                    backgroundColor: "secondary.main",
-                    ":hover": {
+                <Box sx={{ display: "flex", gap: 2, alignSelf: "flex-end" }}>
+                  <Button
+                    sx={{
+                      backgroundColor: "secondary.light",
+                      ":hover": {
+                        backgroundColor: "secondary.light",
+                        opacity: 0.8
+                      },
+                      width: "80px",
+                      fontSize: "16px"
+                    }}
+                    onClick={() => {
+                      setIsEditDisabled(true);
+                      handleReset(project);
+                    }}
+                  >
+                    {buttonText.CANCEL}
+                  </Button>
+                  <Button
+                    sx={{
                       backgroundColor: "secondary.main",
-                      opacity: 0.8,
-                    },
-                    width: "200px",
-                    fontSize: "16px",
-                  }}
-                  onClick={() => navigate(`${PROJECT}/${id}${ASSIGN}`)}
-                >
-                  {buttonText.ADD_NEW_MEMBER}
-                </Button>
+                      ":hover": {
+                        backgroundColor: "secondary.main",
+                        opacity: 0.8
+                      },
+                      width: "80px",
+                      fontSize: "16px"
+                    }}
+                    type='submit'
+                  >
+                    {buttonText.SAVE}
+                  </Button>
+                </Box>
               ) : null}
             </Box>
           </Box>
@@ -224,41 +280,9 @@ const EditProjectForm: FC<Props> = ({ isEditDisabled, setIsEditDisabled, project
                 display: "flex",
                 gap: "20px",
                 justifyContent: "end",
-                paddingRight: 2,
+                paddingRight: 2
               }}
-            >
-              <Button
-                sx={{
-                  backgroundColor: "secondary.light",
-                  ":hover": {
-                    backgroundColor: "secondary.light",
-                    opacity: 0.8,
-                  },
-                  width: "150px",
-                  fontSize: "16px",
-                }}
-                onClick={() => {
-                  setIsEditDisabled(true);
-                  handleReset(project);
-                }}
-              >
-                {buttonText.CANCEL}
-              </Button>
-              <Button
-                sx={{
-                  backgroundColor: "secondary.main",
-                  ":hover": {
-                    backgroundColor: "secondary.main",
-                    opacity: 0.8,
-                  },
-                  width: "150px",
-                  fontSize: "16px",
-                }}
-                type="submit"
-              >
-                {buttonText.SAVE}
-              </Button>
-            </Box>
+            ></Box>
           ) : null}
         </Box>
       </FormWrapper>

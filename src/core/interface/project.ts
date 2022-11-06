@@ -1,7 +1,7 @@
 import { GetListResponse } from "./api";
 import { Resource } from "./models";
 import { Base } from "./models/base";
-import { Project } from "./models/project";
+import { Project } from "./models";
 
 // TODO: remove when backend finish DTO
 export interface TempProject extends Omit<Project, "resourcesProjects"> {
@@ -21,7 +21,13 @@ export interface AddProjectForm extends Pick<Project, "name" | "code" | "startDa
   projectTypesId: number;
 }
 
-export interface IEditProjectForm extends Pick<Project, "code" | "name" | "startDate" | "endDate"> {
-  projectManagerId: number;
+export interface IEditProjectForm extends Pick<Project, "code" | "name" | "status" | "startDate" | "endDate"> {
+  projectManagerId?: number;
+  projectTypesId: number;
+  projectManagerName?:string;
+}
+
+export interface IEditProject extends Pick<Project, "name" | "startDate" | "endDate"> {
   projectTypesId: number;
 }
+

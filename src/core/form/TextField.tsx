@@ -24,6 +24,7 @@ export const TextFieldC: FC<ITextField> = ({
   errorStyle,
   dir,
   onChange,
+  sx,
   ...rest
 }) => {
   const {
@@ -50,7 +51,7 @@ export const TextFieldC: FC<ITextField> = ({
                 "& .Mui-disabled": {
                   WebkitTextFillColor: "black",
                 },
-                ...rest.sx,
+                ...sx,
               }}
               error={!!errors[name]}
               onChange={(event) => {
@@ -68,15 +69,15 @@ export const TextFieldC: FC<ITextField> = ({
         />
       ) : (
         <TextField
-          {...rest}
           sx={{
             width: UI_DEFAULT_VALUE.INPUT_WIDTH,
-            ...rest.sx,
+            ...sx,
           }}
           InputProps={{
             inputProps: { min: 0 },
             ...rest.InputProps,
           }}
+          {...rest}
         />
       )}
     </FieldWrapper>
